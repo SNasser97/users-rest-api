@@ -1,4 +1,4 @@
-﻿namespace users_data.Models
+﻿namespace users_data.Entities
 {
     using System;
 
