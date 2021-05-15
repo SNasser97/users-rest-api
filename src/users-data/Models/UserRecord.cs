@@ -2,8 +2,9 @@
 {
     using System;
 
-    public class UserRecord : BaseRecord, IUserRecord
+    public class UserRecord
     {
+        public Guid Id { get; set; }
 
         public string FirstName { get; set; }
 
