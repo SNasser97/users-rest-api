@@ -4,5 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>users_logic</RootNamespace>
   </PropertyGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="../users-data/users-data.csproj" />
+  </ItemGroup>
 </Project>
