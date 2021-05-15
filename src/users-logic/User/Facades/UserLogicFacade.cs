@@ -26,7 +26,7 @@ namespace users_logic.User.Facades
             => await Task.FromResult(records.Any(u => u.Email == email));
 
         public async Task<bool> IsAgeValidAsync(int age)
-            => await Task.FromResult(age < 18 && age > 110);
+            => await Task.FromResult(age >= 18 && age <= 110);
 
         public async Task<int> GetCalculatedUsersAgeAsync(DateTime dateOfBirth)
         {
