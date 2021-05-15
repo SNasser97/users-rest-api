@@ -13,7 +13,7 @@ namespace users_test.Users_logic_tests.Query
     using users_logic.User.Logic.Query.Models.Response;
     using Xunit;
 
-    public class UserQueryGetResponseTests
+    public class UserQueryGetResponseAsyncTests
     {
 
         public static IEnumerable<object[]> emptyRequestModels = new List<object[]>
