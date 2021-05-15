@@ -7,21 +7,21 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
     using Xunit;
     using System.Collections.Generic;
     using System;
-    using Moq;
-    using users_data.Facades;
 
     public class InMemoryUserWriteRepositoryCreateAsyncTests
     {
         [Fact]
-        public async Task InMemoryUserWriteRepository_CreateAsyncWithUniqueEmail_ReturnsAGuid()
+        public async Task InMemoryUserWriteRepository_CreateAsync_ReturnsAGuid()
         {
             //Given
-            var newUser = new CreateUserRecord
+            var newUser = new UserRecord
             {
+                Id = Guid.NewGuid(),
                 FirstName = "Bob",
                 LastName = "Doe",
                 Email = "bdoe@mail.com",
-                DateOfBirth = new DateTime(1997, 12, 06)
+                DateOfBirth = new DateTime(1997, 12, 06),
+                Age = 24
             };
 
             var users = new Dictionary<Guid, UserRecord>
@@ -31,12 +31,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
                 { Guid.NewGuid(), new UserRecord() },
             };
 
-            var mockUserFacade = new Mock<IUserFacade>();
-
-            var usersWriteRepository = new InMemoryUserWriteRepository(users, mockUserFacade.Object);
-            mockUserFacade.Setup(s => s.CanUserBeInsertedAsync(It.IsAny<IEnumerable<UserRecord>>(), It.IsAny<CreateUserRecord>()))
-                .ReturnsAsync(true);
-            mockUserFacade.Setup(s => s.GetUserAgeAsync(It.IsAny<DateTime>())).ReturnsAsync(23);
+            var usersWriteRepository = new InMemoryUserWriteRepository(users);
 
             //When
             Guid actualGuid = await usersWriteRepository.CreateAsync(newUser);
@@ -45,30 +40,43 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
             Assert.True(actualGuid != Guid.Empty);
             Assert.Equal(4, users.Count());
 
-            KeyValuePair<Guid, UserRecord> exists = users.FirstOrDefault(u => u.Key == actualGuid);
-            Assert.NotEqual(new KeyValuePair<Guid, UserRecord>(), exists);
-            Assert.Equal(exists.Key, actualGuid);
+            KeyValuePair<Guid, UserRecord> actualUserKeyValuePair = users.FirstOrDefault(u => u.Key == actualGuid);
+            Assert.NotEqual(default(KeyValuePair<Guid, UserRecord>), actualUserKeyValuePair);
+            Assert.True(actualUserKeyValuePair.Key != Guid.Empty);
+            Assert.Equal(actualUserKeyValuePair.Key, actualGuid);
+
+            UserRecord actualNewUser = actualUserKeyValuePair.Value;
+            Assert.NotNull(actualUserKeyValuePair.Value);
+            Assert.Equal(newUser.Id, actualNewUser.Id);
+            Assert.Equal(newUser.FirstName, actualNewUser.FirstName);
+            Assert.Equal(newUser.LastName, actualNewUser.LastName);
+            Assert.Equal(newUser.Email, actualNewUser.Email);
+            Assert.Equal(newUser.DateOfBirth, actualNewUser.DateOfBirth);
+            Assert.Equal(newUser.Age, actualNewUser.Age);
         }
 
         [Fact]
-        public async Task InMemoryUserWriteRepository_CreateAsyncWithExistingEmail_ReturnsEmptyGuid()
+        public async Task InMemoryUserWriteRepository_CreateAsync_TakesExistingGuidReturnsEmptyGuid()
         {
             //Given
-            var newUser = new CreateUserRecord
+            var newUser = new UserRecord
             {
-                FirstName = "Bob",
-                LastName = "Doe",
-                Email = "bdoe@mail.com",
-                DateOfBirth = new DateTime(1997, 12, 06)
+                Id = Guid.NewGuid(),
+                FirstName = "All",
+                LastName = "Jann",
+                Email = "all.jann@mail.com",
+                DateOfBirth = new DateTime(2001, 12, 06),
+                Age = 24
             };
 
             var existingUser = new UserRecord
             {
-                Id = Guid.NewGuid(),
+                Id = newUser.Id,
                 FirstName = "Bob",
                 LastName = "Doe",
                 Email = "bdoe@mail.com",
-                DateOfBirth = new DateTime(1997, 12, 06)
+                DateOfBirth = new DateTime(1997, 12, 06),
+                Age = 35
             };
 
             var users = new Dictionary<Guid, UserRecord>
@@ -78,12 +86,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
                 { Guid.NewGuid(), new UserRecord() },
             };
 
-            var mockUserFacade = new Mock<IUserFacade>();
-
-            var usersWriteRepository = new InMemoryUserWriteRepository(users, mockUserFacade.Object);
-            mockUserFacade.Setup(s => s.CanUserBeInsertedAsync(It.IsAny<IEnumerable<UserRecord>>(), It.IsAny<CreateUserRecord>()))
-               .ReturnsAsync(false);
-            mockUserFacade.Setup(s => s.GetUserAgeAsync(It.IsAny<DateTime>())).ReturnsAsync(23);
+            var usersWriteRepository = new InMemoryUserWriteRepository(users);
 
             //When
             Guid actualGuid = await usersWriteRepository.CreateAsync(newUser);

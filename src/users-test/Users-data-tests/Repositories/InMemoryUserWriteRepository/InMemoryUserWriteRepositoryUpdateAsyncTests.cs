@@ -5,7 +5,6 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
     using System.Threading.Tasks;
     using Moq;
     using users_data.Repositories.InMemoryUserRepository;
-    using users_data.Facades;
     using users_data.Models;
     using Xunit;
     using System.Linq;
@@ -13,16 +12,17 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
     public class InMemoryUserWriteRepositoryUpdateAsyncTests
     {
         [Fact]
-        public async Task InMemoryUserWriteRepository_UpdateAsync_TakesUpdateUserRecordandReturnsGuid()
+        public async Task InMemoryUserWriteRepository_UpdateAsync_TakesUserRecordandReturnsExistingGuid()
         {
             //Given
-            var userToUpdate = new UpdateUserRecord
+            var userToUpdate = new UserRecord
             {
                 Id = Guid.NewGuid(),
                 FirstName = "Bobby",
                 LastName = "Doenuts",
                 Email = "bobby.doenuts@mail.com",
                 DateOfBirth = new DateTime(2001, 12, 06),
+                Age = 19
             };
 
             var existingUser = new UserRecord
@@ -41,12 +41,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
                 { Guid.NewGuid(), new UserRecord() }
             };
 
-            var mockUserFacade = new Mock<IUserFacade>();
-
-            var usersWriteRepository = new InMemoryUserWriteRepository(users, mockUserFacade.Object);
-            mockUserFacade.Setup(s => s.CanUserBeInsertedAsync(It.IsAny<IEnumerable<UserRecord>>(), It.IsAny<IUserRecord>()))
-                .ReturnsAsync(true);
-            mockUserFacade.Setup(s => s.GetUserAgeAsync(It.IsAny<DateTime>())).ReturnsAsync(19);
+            var usersWriteRepository = new InMemoryUserWriteRepository(users);
 
             //When
             Guid actualGuid = await usersWriteRepository.UpdateAsync(userToUpdate);
@@ -74,21 +69,22 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
         }
 
         [Fact]
-        public async Task InMemoryUserWriteRepository_UpdateAsync_TakesUpdateUserRecordWithNewEmailThatExistsandReturnsEmptyGuid()
+        public async Task InMemoryUserWriteRepository_UpdateAsync_TakesUserRecordReturnsEmptyGuid()
         {
             //Given
-            var userToUpdate = new UpdateUserRecord
+            var noneExistingUser = new UserRecord
             {
                 Id = Guid.NewGuid(),
                 FirstName = "Bobby",
                 LastName = "Doenuts",
                 Email = "bobby.doenuts@mail.com",
                 DateOfBirth = new DateTime(2001, 12, 06),
+                Age = 23
             };
 
             var existingUser = new UserRecord
             {
-                Id = userToUpdate.Id,
+                Id = Guid.NewGuid(),
                 FirstName = "Bob",
                 LastName = "Doe",
                 Email = "bdoe@mail.com",
@@ -96,32 +92,16 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
                 Age = 23
             };
 
-            var anotherUserWithExistingEmail = new UserRecord
-            {
-                Id = Guid.NewGuid(),
-                FirstName = "Alex",
-                LastName = "Divato",
-                Email = "bobby.doenuts@mail.com",
-                DateOfBirth = new DateTime(1984, 03, 28),
-                Age = 38
-            };
-
             var users = new Dictionary<Guid, UserRecord>
             {
                 { existingUser.Id, existingUser},
-                { anotherUserWithExistingEmail.Id, anotherUserWithExistingEmail },
                 { Guid.NewGuid(), new UserRecord() }
             };
 
-            var mockUserFacade = new Mock<IUserFacade>();
-
-            var usersWriteRepository = new InMemoryUserWriteRepository(users, mockUserFacade.Object);
-            mockUserFacade.Setup(s => s.CanUserBeInsertedAsync(It.IsAny<IEnumerable<UserRecord>>(), It.IsAny<IUserRecord>()))
-                .ReturnsAsync(false);
-            mockUserFacade.Setup(s => s.GetUserAgeAsync(It.IsAny<DateTime>())).ReturnsAsync(23);
+            var usersWriteRepository = new InMemoryUserWriteRepository(users);
 
             //When
-            Guid actualGuid = await usersWriteRepository.UpdateAsync(userToUpdate);
+            Guid actualGuid = await usersWriteRepository.UpdateAsync(noneExistingUser);
 
             //Then
             Assert.True(actualGuid == Guid.Empty);
@@ -132,7 +112,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
             Assert.Equal(23, existingUser.Age);
 
             int actualUsersValueCount = users.Values.Count;
-            Assert.Equal(3, actualUsersValueCount);
+            Assert.Equal(2, actualUsersValueCount);
         }
     }
 }

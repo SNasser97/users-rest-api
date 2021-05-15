@@ -5,7 +5,6 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
     using System.Linq;
     using System.Threading.Tasks;
     using Moq;
-    using users_data.Facades;
     using users_data.Models;
     using users_data.Repositories.InMemoryUserRepository;
     using Xunit;
@@ -13,7 +12,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
     public class InMemoryUserWriteRepositoryDeleteAsyncTests
     {
         [Fact]
-        public async Task InMemoryUserWriteRepository_DeleteAsync_TakesUserGuidAndRemovesUser()
+        public async Task InMemoryUserWriteRepository_DeleteAsync_TakesExistingUserGuidAndRemovesUser()
         {
             //Given
             Guid userId = Guid.NewGuid();
@@ -31,14 +30,12 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
             var users = new Dictionary<Guid, UserRecord>
             {
                 { Guid.NewGuid(), new UserRecord() },
-                { userId, existingUser},
+                { existingUser.Id, existingUser},
                 { Guid.NewGuid(), new UserRecord() },
                 { Guid.NewGuid(), new UserRecord() },
             };
 
-            var mockUserFacade = new Mock<IUserFacade>();
-
-            var usersWriteRepository = new InMemoryUserWriteRepository(users, mockUserFacade.Object);
+            var usersWriteRepository = new InMemoryUserWriteRepository(users);
 
             //When
             await usersWriteRepository.DeleteAsync(userId);
@@ -56,7 +53,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
         }
 
         [Fact]
-        public async Task InMemoryUserWriteRepository_DeleteAsync_TakesUserGuidAndDoesNotRemoveUser()
+        public async Task InMemoryUserWriteRepository_DeleteAsync_TakesNonExistingUserGuidAndDoesNotRemoveUser()
         {
             //Given
             var existingUser = new UserRecord
@@ -77,9 +74,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
                 { Guid.NewGuid(), new UserRecord() },
             };
 
-            var mockUserFacade = new Mock<IUserFacade>();
-
-            var usersWriteRepository = new InMemoryUserWriteRepository(users, mockUserFacade.Object);
+            var usersWriteRepository = new InMemoryUserWriteRepository(users);
 
             //When
             await usersWriteRepository.DeleteAsync(Guid.NewGuid());
