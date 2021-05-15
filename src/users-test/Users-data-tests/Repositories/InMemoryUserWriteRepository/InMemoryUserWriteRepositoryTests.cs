@@ -1,8 +1,6 @@
 namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
 {
     using System;
-    using System.Collections.Generic;
-    using users_data.Models;
     using users_data.Repositories.InMemoryUserRepository;
     using Xunit;
 
@@ -13,21 +11,10 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
         {
             // Given
             // When
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(() => new InMemoryUserWriteRepository(null, null));
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(() => new InMemoryUserWriteRepository(null));
 
             // Then
             Assert.Equal("users", ex.ParamName);
-        }
-
-        [Fact]
-        public void InMemoryUserWriteRepository_TakesNullUserFacadeDependency_AndThrowsArgumentNullException()
-        {
-            // Given
-            // When
-            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(() => new InMemoryUserWriteRepository(new Dictionary<Guid, UserRecord>(), null));
-
-            // Then
-            Assert.Equal("userFacade", ex.ParamName);
         }
     }
 }
