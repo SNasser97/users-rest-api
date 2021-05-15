@@ -3,44 +3,32 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using users_data.Extensions;
-    using users_data.Facades;
     using users_data.Models;
 
-    public class InMemoryUserWriteRepository : IWriteRepository
+    public class InMemoryUserWriteRepository : IWriteRepository<UserRecord>
     {
         private readonly IDictionary<Guid, UserRecord> users;
-        private readonly IUserFacade userFacade;
 
         // mocking usage
         public InMemoryUserWriteRepository() : this(
-            new Dictionary<Guid, UserRecord>(),
-            new UserFacade())
+            new Dictionary<Guid, UserRecord>())
         {
         }
 
         public InMemoryUserWriteRepository(
-            IDictionary<Guid, UserRecord> users,
-            IUserFacade userFacade)
+            IDictionary<Guid, UserRecord> users)
         {
             this.users = users ?? throw new ArgumentNullException(nameof(users));
-            this.userFacade = userFacade ?? throw new ArgumentNullException(nameof(userFacade));
         }
 
-        public async Task<Guid> CreateAsync(CreateUserRecord record)
+        public async Task<Guid> CreateAsync(UserRecord record)
         {
-            if (!await this.userFacade.CanUserBeInsertedAsync(this.users.Values, record))
+            if (this.users.TryAdd(record.Id, record))
             {
-                return await Task.FromResult(Guid.Empty);
+                return await Task.FromResult(record.Id);
             }
 
-            int age = await this.userFacade.GetUserAgeAsync(record.DateOfBirth);
-
-            UserRecord userRecord = record.ToUserRecord(age);
-
-            this.users.Add(userRecord.Id, userRecord);
-
-            return await Task.FromResult(userRecord.Id);
+            return await Task.FromResult(Guid.Empty);
         }
 
         public async Task DeleteAsync(Guid id)
@@ -48,26 +36,20 @@
             await Task.FromResult(this.users.Remove(id));
         }
 
-        public async Task<Guid> UpdateAsync(UpdateUserRecord record)
+        public async Task<Guid> UpdateAsync(UserRecord record)
         {
-            bool isValidRecord = await this.userFacade.CanUserBeInsertedAsync(this.users.Values, record);
-            int age = await this.userFacade.GetUserAgeAsync(record.DateOfBirth);
-
-            if (!isValidRecord)
-            {
-                return await Task.FromResult(Guid.Empty);
-            }
-
             if (this.users.TryGetValue(record.Id, out UserRecord found))
             {
                 found.FirstName = record.FirstName;
                 found.LastName = record.LastName;
                 found.Email = record.Email;
                 found.DateOfBirth = record.DateOfBirth;
-                found.Age = age;
+                found.Age = record.Age;
+
+                return await Task.FromResult(found.Id);
             };
 
-            return await Task.FromResult(found.Id);
+            return await Task.FromResult(Guid.Empty);
         }
     }
 }
