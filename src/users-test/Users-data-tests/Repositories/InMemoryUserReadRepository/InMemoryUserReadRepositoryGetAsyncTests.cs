@@ -4,7 +4,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using users_data.Models;
+    using users_data.Entities;
     using users_data.Repositories.InMemoryUserRepository;
     using Xunit;
 

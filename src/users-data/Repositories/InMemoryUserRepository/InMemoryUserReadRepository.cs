@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using users_data.Models;
+    using users_data.Entities;
 
     public class InMemoryUserReadRepository : IReadRepository<UserRecord>
     {

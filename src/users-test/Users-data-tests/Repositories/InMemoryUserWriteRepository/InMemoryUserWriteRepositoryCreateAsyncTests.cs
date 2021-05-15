@@ -2,11 +2,11 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
 {
     using System.Linq;
     using System.Threading.Tasks;
-    using users_data.Models;
     using users_data.Repositories.InMemoryUserRepository;
     using Xunit;
     using System.Collections.Generic;
     using System;
+    using users_data.Entities;
 
     public class InMemoryUserWriteRepositoryCreateAsyncTests
     {

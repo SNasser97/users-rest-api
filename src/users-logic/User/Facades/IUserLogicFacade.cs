@@ -3,7 +3,7 @@ namespace users_logic.User.Facades
     using System.Threading.Tasks;
     using System;
     using System.Collections.Generic;
-    using users_data.Models;
+    using users_data.Entities;
 
     public interface IUserLogicFacade
     {
