@@ -10,7 +10,7 @@ namespace users_test.Users_logic_tests.Facades
     using users_logic.User.Provider;
     using Xunit;
 
-    public class UserLogicFacadeTestsCanUserBeInsertedTests
+    public class UserLogicFacadeDoesUserEmailAlreadyExistAsyncTests
     {
         [Fact]
         public async Task UserLogicFacade_DoesUserEmailAlreadyExistAsync_ExpectsFalseOnUniqueEmail()
