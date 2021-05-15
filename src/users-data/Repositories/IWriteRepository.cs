@@ -2,15 +2,14 @@
 {
     using System;
     using System.Threading.Tasks;
-    using users_data.Models;
 
-    public interface IWriteRepository
+    public interface IWriteRepository<TRecord>
     {
         // Create TRecord
-        Task<Guid> CreateAsync(CreateUserRecord record);
+        Task<Guid> CreateAsync(TRecord record);
 
         // Updata TRecord
-        Task<Guid> UpdateAsync(UpdateUserRecord record);
+        Task<Guid> UpdateAsync(TRecord record);
 
         // Delete TRecord
         Task DeleteAsync(Guid id);
