@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>users_api</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\users-data\users-data.csproj" />
+    <ProjectReference Include="..\users-logic\users-logic.csproj" />
+  </ItemGroup>
+
+
+</Project>
