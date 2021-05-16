@@ -69,7 +69,7 @@ namespace users_test.Users_logic_tests.Command
             //When
             //Then
             await Exceptions<ArgumentNullException>.HandleAsync(async () =>
-                await userCommand.UpdateUserAsync(null),
+                await this.userCommand.UpdateUserAsync(null),
                 (ex) => Assert.Equal("request", ex.ParamName)
             );
         }
@@ -87,7 +87,7 @@ namespace users_test.Users_logic_tests.Command
             this.mockUserWriteRepository.Setup(s => s.UpdateAsync(It.IsAny<UpdateUserRecord>())).ReturnsAsync(userRecordsTestData[0].Id);
 
             //When
-            UpdateUserCommandResponse actualResponse = (UpdateUserCommandResponse)await userCommand.UpdateUserAsync(updateUserCommandRequest);
+            UpdateUserCommandResponse actualResponse = (UpdateUserCommandResponse)await this.userCommand.UpdateUserAsync(updateUserCommandRequest);
 
             //Then
             Assert.NotNull(actualResponse);
@@ -113,7 +113,7 @@ namespace users_test.Users_logic_tests.Command
 
             //When
             await Exceptions<CommandRequestException>.HandleAsync(async ()
-                => await userCommand.UpdateUserAsync(updateUserCommandRequest),
+                => await this.userCommand.UpdateUserAsync(updateUserCommandRequest),
                 (ex) => Assert.Equal("Email to update already exists", ex.Message)
             );
 
@@ -137,7 +137,7 @@ namespace users_test.Users_logic_tests.Command
 
             //When
             await Exceptions<CommandRequestException>.HandleAsync(async ()
-                => await userCommand.UpdateUserAsync(updateUserCommandRequest),
+                => await this.userCommand.UpdateUserAsync(updateUserCommandRequest),
                 (ex) => Assert.Equal("Email to update already exists", ex.Message)
             );
 
@@ -163,7 +163,7 @@ namespace users_test.Users_logic_tests.Command
 
             //When
             await Exceptions<CommandRequestException>.HandleAsync(async ()
-                => await userCommand.UpdateUserAsync(updateUserCommandRequest),
+                => await this.userCommand.UpdateUserAsync(updateUserCommandRequest),
                 (ex) => Assert.Equal("Invalid date of birth", ex.Message)
             );
 
@@ -189,7 +189,7 @@ namespace users_test.Users_logic_tests.Command
 
             //When
             await Exceptions<UserNotFoundException>.HandleAsync(async ()
-                => await userCommand.UpdateUserAsync(updateUserCommandRequest),
+                => await this.userCommand.UpdateUserAsync(updateUserCommandRequest),
                 (ex) => Assert.Equal("User not found", ex.Message)
             );
 
@@ -216,7 +216,7 @@ namespace users_test.Users_logic_tests.Command
 
             //When
             await Exceptions<CommandResponseException>.HandleAsync(async ()
-                => await userCommand.UpdateUserAsync(updateUserCommandRequest),
+                => await this.userCommand.UpdateUserAsync(updateUserCommandRequest),
                 (ex) => Assert.Equal("Response Id was empty", ex.Message)
             );
 
