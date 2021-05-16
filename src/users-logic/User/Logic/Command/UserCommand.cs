@@ -49,15 +49,13 @@ namespace users_logic.User.Logic.Command
                 throw new CommandRequestException("Ages 18 to 110 can only make a user!");
             }
 
-            // TODO: Extension method
-            // TODO: Entities to create data : CreateUserRecord, UpdateUserRecord
             CreateUserRecord newUserRecord = request.ToRecord(age);
 
             Guid recordCreatedId = await this.userWriteRepository.CreateAsync(newUserRecord);
 
             if (recordCreatedId == Guid.Empty)
             {
-                throw new CommandResponseException("No response Id was returned");
+                throw new CommandResponseException("No response Id was created");
             }
 
             return new CreateUserCommandResponse { Id = recordCreatedId };
