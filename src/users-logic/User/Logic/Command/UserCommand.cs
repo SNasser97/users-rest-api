@@ -6,6 +6,7 @@ namespace users_logic.User.Logic.Command
     using users_data.Entities;
     using users_data.Repositories;
     using users_logic.Exceptions.Command;
+    using users_logic.Exceptions.User;
     using users_logic.Extensions;
     using users_logic.User.Facades;
     using users_logic.User.Logic.Command.Models.Request;
@@ -63,7 +64,47 @@ namespace users_logic.User.Logic.Command
 
         public async Task<BaseUserCommandResponse> UpdateUserAsync(BaseUserCommandRequestWithId request)
         {
-            throw new System.NotImplementedException();
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            if (request.Id == Guid.Empty)
+            {
+                throw new CommandRequestException("Request Id cannot be empty");
+            }
+
+            UserRecord foundUserRecord = (UserRecord)await this.userReadRepository.GetAsync(request.Id);
+
+            if (foundUserRecord == null)
+            {
+                throw new UserNotFoundException("User not found");
+            }
+
+            IEnumerable<BaseUserRecordWithId> userRecords = await this.userReadRepository.GetAsync();
+
+            if (foundUserRecord.Email != request.Email && await this.userLogicFacade.DoesUserEmailAlreadyExistAsync(userRecords, request.Email))
+            {
+                throw new CommandRequestException("Email to update already exists");
+            }
+
+            int age = await this.userLogicFacade.GetCalculatedUsersAgeAsync(request.DateOfBirth);
+
+            if (!await this.userLogicFacade.IsAgeValidAsync(age))
+            {
+                throw new CommandRequestException("Invalid date of birth");
+            }
+
+            UpdateUserRecord updatedUserRecord = request.ToRecord(age);
+
+            Guid updatedResponseId = await this.userWriteRepository.UpdateAsync(updatedUserRecord);
+
+            if (updatedResponseId == Guid.Empty)
+            {
+                throw new CommandResponseException("Response Id was empty");
+            }
+
+            return new UpdateUserCommandResponse { Id = updatedResponseId };
         }
 
         public async Task DeleteUserAsync(DeleteUserCommandRequest request)
