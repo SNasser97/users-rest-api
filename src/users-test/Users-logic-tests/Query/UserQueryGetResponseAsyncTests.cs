@@ -6,7 +6,7 @@ namespace users_test.Users_logic_tests.Query
     using Moq;
     using users_data.Entities;
     using users_data.Repositories;
-    using users_logic.Exceptions.Command;
+    using users_logic.Exceptions.Query;
     using users_logic.Exceptions.User;
     using users_logic.User.Logic.Query;
     using users_logic.User.Logic.Query.Models.Request;
