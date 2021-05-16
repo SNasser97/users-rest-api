@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using users_data.Entities;
+    using users_data.Extensions;
 
     public class InMemoryUserWriteRepository : IWriteRepository<BaseUserRecord, BaseUserRecordWithId>
     {
@@ -25,15 +26,7 @@
         {
             Guid recordId = Guid.NewGuid();
 
-            UserRecord userRecord = new UserRecord
-            {
-                Id = recordId,
-                FirstName = record.FirstName,
-                LastName = record.LastName,
-                Email = record.Email,
-                DateOfBirth = record.DateOfBirth,
-                Age = record.Age
-            };
+            UserRecord userRecord = record.ToUserRecord(recordId);
 
             if (this.users.TryAdd(userRecord.Id, userRecord))
             {
@@ -52,11 +45,7 @@
         {
             if (this.users.TryGetValue(record.Id, out UserRecord found))
             {
-                found.FirstName = record.FirstName;
-                found.LastName = record.LastName;
-                found.Email = record.Email;
-                found.DateOfBirth = record.DateOfBirth;
-                found.Age = record.Age;
+                found.UpdateUserRecord(ref record);
 
                 return await Task.FromResult(found.Id);
             };
