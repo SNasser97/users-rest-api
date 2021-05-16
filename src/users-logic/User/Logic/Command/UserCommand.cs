@@ -109,7 +109,24 @@ namespace users_logic.User.Logic.Command
 
         public async Task DeleteUserAsync(DeleteUserCommandRequest request)
         {
-            throw new System.NotImplementedException();
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            if (request.Id == Guid.Empty)
+            {
+                throw new CommandRequestException("Request Id cannot be empty");
+            }
+
+            UserRecord recordExists = (UserRecord)await this.userReadRepository.GetAsync(request.Id);
+
+            if (recordExists == null)
+            {
+                throw new UserNotFoundException("User not found");
+            }
+
+            await this.userWriteRepository.DeleteAsync(recordExists.Id);
         }
     }
 }
