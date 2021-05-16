@@ -22,7 +22,7 @@ namespace users_logic.User.Facades
             this.dateTimeParser = dateTimeParser ?? throw new ArgumentNullException(nameof(dateTimeParser));
         }
 
-        public async Task<bool> DoesUserEmailAlreadyExistAsync(IEnumerable<UserRecord> records, string email)
+        public async Task<bool> DoesUserEmailAlreadyExistAsync(IEnumerable<BaseUserRecordWithId> records, string email)
             => await Task.FromResult(records.Any(u => u.Email == email));
 
         public async Task<bool> IsAgeValidAsync(int age)

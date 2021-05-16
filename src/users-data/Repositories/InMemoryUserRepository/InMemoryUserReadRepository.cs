@@ -5,7 +5,7 @@
     using System.Threading.Tasks;
     using users_data.Entities;
 
-    public class InMemoryUserReadRepository : IReadRepository<UserRecord>
+    public class InMemoryUserReadRepository : IReadRepository<BaseUserRecordWithId>
     {
         private readonly IDictionary<Guid, UserRecord> users;
 
@@ -18,10 +18,10 @@
             this.users = users ?? throw new ArgumentNullException(nameof(users));
         }
 
-        public async Task<IEnumerable<UserRecord>> GetAsync()
+        public async Task<IEnumerable<BaseUserRecordWithId>> GetAsync()
             => await Task.FromResult(this.users.Values);
 
-        public async Task<UserRecord> GetAsync(Guid id)
+        public async Task<BaseUserRecordWithId> GetAsync(Guid id)
         {
             this.users.TryGetValue(id, out UserRecord userRecord);
 

@@ -19,8 +19,8 @@ namespace users_test.Users_logic_tests.Command
         public async Task UserCommand_CreateUserAsync_TakesNullCreateUserCommandRequest_ExpectsArgumentNullException()
         {
             //Given
-            var mockUserWriteRepository = new Mock<IWriteRepository<UserRecord>>();
-            var mockUserReadRepository = new Mock<IReadRepository<UserRecord>>();
+            var mockUserWriteRepository = new Mock<IWriteRepository<BaseUserRecord, BaseUserRecordWithId>>();
+            var mockUserReadRepository = new Mock<IReadRepository<BaseUserRecordWithId>>();
             var mockUserLogicFacade = new Mock<IUserLogicFacade>();
             var userCommand = new UserCommand(mockUserWriteRepository.Object, mockUserReadRepository.Object, mockUserLogicFacade.Object);
 
@@ -46,8 +46,8 @@ namespace users_test.Users_logic_tests.Command
                 DateOfBirth = new DateTime(1992, 6, 12)
             };
 
-            var mockUserWriteRepository = new Mock<IWriteRepository<UserRecord>>();
-            var mockUserReadRepository = new Mock<IReadRepository<UserRecord>>();
+            var mockUserWriteRepository = new Mock<IWriteRepository<BaseUserRecord, BaseUserRecordWithId>>();
+            var mockUserReadRepository = new Mock<IReadRepository<BaseUserRecordWithId>>();
             var mockUserLogicFacade = new Mock<IUserLogicFacade>();
             var userCommand = new UserCommand(mockUserWriteRepository.Object, mockUserReadRepository.Object, mockUserLogicFacade.Object);
 
@@ -56,7 +56,7 @@ namespace users_test.Users_logic_tests.Command
                 .ReturnsAsync(false);
             mockUserLogicFacade.Setup(s => s.GetCalculatedUsersAgeAsync(It.IsAny<DateTime>())).ReturnsAsync(21);
             mockUserLogicFacade.Setup(s => s.IsAgeValidAsync(It.IsAny<int>())).ReturnsAsync(true);
-            mockUserWriteRepository.Setup(s => s.CreateAsync(It.IsAny<UserRecord>())).ReturnsAsync(responseId);
+            mockUserWriteRepository.Setup(s => s.CreateAsync(It.IsAny<CreateUserRecord>())).ReturnsAsync(responseId);
             //When
             CreateUserCommandResponse actualResponse = (CreateUserCommandResponse)await userCommand.CreateUserAsync(createUserCommandRequest);
 
@@ -68,7 +68,7 @@ namespace users_test.Users_logic_tests.Command
             mockUserLogicFacade.Verify(s => s.DoesUserEmailAlreadyExistAsync(It.IsAny<IEnumerable<UserRecord>>(), It.IsAny<string>()), Times.Once);
             mockUserLogicFacade.Verify(s => s.GetCalculatedUsersAgeAsync(It.IsAny<DateTime>()), Times.Once);
             mockUserLogicFacade.Verify(s => s.IsAgeValidAsync(It.IsAny<int>()), Times.Once);
-            mockUserWriteRepository.Verify(s => s.CreateAsync(It.IsAny<UserRecord>()), Times.Once);
+            mockUserWriteRepository.Verify(s => s.CreateAsync(It.IsAny<CreateUserRecord>()), Times.Once);
         }
     }
 }

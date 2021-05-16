@@ -28,7 +28,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
             var userReadRepository = new InMemoryUserReadRepository(expectedUsersData);
 
             //When
-            IEnumerable<UserRecord> actualUsers = await userReadRepository.GetAsync();
+            IEnumerable<BaseUserRecordWithId> actualUsers = await userReadRepository.GetAsync();
 
             //Then
             Assert.NotNull(actualUsers);
@@ -61,7 +61,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
             var userReadRepository = new InMemoryUserReadRepository(expectedUsersData);
 
             //When
-            IEnumerable<UserRecord> actualUsers = await userReadRepository.GetAsync();
+            IEnumerable<BaseUserRecordWithId> actualUsers = await userReadRepository.GetAsync();
 
             //Then
             Assert.Empty(actualUsers);

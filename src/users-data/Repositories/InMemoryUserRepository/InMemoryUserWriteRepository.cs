@@ -5,7 +5,7 @@
     using System.Threading.Tasks;
     using users_data.Entities;
 
-    public class InMemoryUserWriteRepository : IWriteRepository
+    public class InMemoryUserWriteRepository : IWriteRepository<BaseUserRecord, BaseUserRecordWithId>
     {
         private readonly IDictionary<Guid, UserRecord> users;
 
@@ -21,7 +21,7 @@
             this.users = users ?? throw new ArgumentNullException(nameof(users));
         }
 
-        public async Task<Guid> CreateAsync(CreateUserRecord record)
+        public async Task<Guid> CreateAsync(BaseUserRecord record)
         {
             Guid recordId = Guid.NewGuid();
 
@@ -48,7 +48,7 @@
             await Task.FromResult(this.users.Remove(id));
         }
 
-        public async Task<Guid> UpdateAsync(UpdateUserRecord record)
+        public async Task<Guid> UpdateAsync(BaseUserRecordWithId record)
         {
             if (this.users.TryGetValue(record.Id, out UserRecord found))
             {

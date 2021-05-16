@@ -6,19 +6,21 @@ namespace users_logic.User.Logic.Command
     using users_data.Entities;
     using users_data.Repositories;
     using users_logic.Exceptions.Command;
+    using users_logic.Extensions;
     using users_logic.User.Facades;
     using users_logic.User.Logic.Command.Models.Request;
+    using users_logic.User.Logic.Command.Models.Request.Common;
     using users_logic.User.Logic.Command.Models.Response;
 
-    public class UserCommand : IUserCommand<CreateUserCommandRequest, UpdateUserCommandRequest, DeleteUserCommandRequest, BaseUserCommandResponse>
+    public class UserCommand : IUserCommand<BaseUserCommandResponse>
     {
-        private readonly IWriteRepository<UserRecord> userWriteRepository;
-        private readonly IReadRepository<UserRecord> userReadRepository;
+        private readonly IWriteRepository<BaseUserRecord, BaseUserRecordWithId> userWriteRepository;
+        private readonly IReadRepository<BaseUserRecordWithId> userReadRepository;
         private readonly IUserLogicFacade userLogicFacade;
 
         public UserCommand(
-            IWriteRepository<UserRecord> userWriteRepository,
-            IReadRepository<UserRecord> userReadRepository,
+            IWriteRepository<BaseUserRecord, BaseUserRecordWithId> userWriteRepository,
+            IReadRepository<BaseUserRecordWithId> userReadRepository,
             IUserLogicFacade userLogicFacade)
         {
             this.userWriteRepository = userWriteRepository ?? throw new System.ArgumentNullException(nameof(userWriteRepository));
@@ -26,14 +28,14 @@ namespace users_logic.User.Logic.Command
             this.userLogicFacade = userLogicFacade ?? throw new System.ArgumentNullException(nameof(userLogicFacade));
         }
 
-        public async Task<BaseUserCommandResponse> CreateUserAsync(CreateUserCommandRequest request)
+        public async Task<BaseUserCommandResponse> CreateUserAsync(BaseUserCommandRequest request)
         {
             if (request == null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
-            IEnumerable<UserRecord> records = await this.userReadRepository.GetAsync();
+            IEnumerable<BaseUserRecordWithId> records = await this.userReadRepository.GetAsync();
 
             if (await this.userLogicFacade.DoesUserEmailAlreadyExistAsync(records, request.Email))
             {
@@ -49,15 +51,9 @@ namespace users_logic.User.Logic.Command
 
             // TODO: Extension method
             // TODO: Entities to create data : CreateUserRecord, UpdateUserRecord
-            UserRecord newRecord = new UserRecord
-            {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Email = request.Email,
-                DateOfBirth = request.DateOfBirth,
-            };
+            CreateUserRecord newUserRecord = request.ToRecord(age);
 
-            Guid recordCreatedId = await this.userWriteRepository.CreateAsync(newRecord);
+            Guid recordCreatedId = await this.userWriteRepository.CreateAsync(newUserRecord);
 
             if (recordCreatedId == Guid.Empty)
             {
@@ -67,7 +63,7 @@ namespace users_logic.User.Logic.Command
             return new CreateUserCommandResponse { Id = recordCreatedId };
         }
 
-        public async Task<BaseUserCommandResponse> UpdateUserAsync(UpdateUserCommandRequest request)
+        public async Task<BaseUserCommandResponse> UpdateUserAsync(BaseUserCommandRequestWithId request)
         {
             throw new System.NotImplementedException();
         }

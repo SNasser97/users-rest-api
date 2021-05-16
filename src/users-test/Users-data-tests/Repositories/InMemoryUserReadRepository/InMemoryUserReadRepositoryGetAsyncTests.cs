@@ -35,7 +35,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
             var userReadRepository = new InMemoryUserReadRepository(users);
 
             //When
-            UserRecord actualUser = await userReadRepository.GetAsync(expectedUser.Id);
+            UserRecord actualUser = (UserRecord)await userReadRepository.GetAsync(expectedUser.Id);
 
             //Then
             Assert.NotNull(actualUser);
@@ -64,7 +64,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
             var userReadRepository = new InMemoryUserReadRepository(users);
 
             //When
-            UserRecord actualUser = await userReadRepository.GetAsync(Guid.NewGuid());
+            UserRecord actualUser = (UserRecord)await userReadRepository.GetAsync(Guid.NewGuid());
 
             //Then
             Assert.Null(actualUser);
@@ -81,7 +81,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
             var userReadRepository = new InMemoryUserReadRepository(users);
 
             //When
-            UserRecord actualUser = await userReadRepository.GetAsync(Guid.NewGuid());
+            UserRecord actualUser = (UserRecord)await userReadRepository.GetAsync(Guid.NewGuid());
 
             //Then
             Assert.Null(actualUser);

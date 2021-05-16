@@ -1,9 +1,6 @@
 namespace users_data.Entities
 {
-    using System;
-
-    public class UpdateUserRecord : BaseUserRecord, IUserRecordId
+    public class UpdateUserRecord : BaseUserRecordWithId
     {
-        public Guid Id { get; set; }
     }
 }

@@ -4,7 +4,6 @@ namespace users_logic.User.Facades
     using System;
     using System.Collections.Generic;
     using users_data.Entities;
-    using users_logic.User.Logic.Command.Models.Request;
 
     public interface IUserLogicFacade
     {
@@ -13,7 +12,7 @@ namespace users_logic.User.Facades
         /// </summary>
         /// <param name="records">The user records that contain user properties</param>
         /// <param name="email">The updated request email to be checked</param>
-        Task<bool> DoesUserEmailAlreadyExistAsync(IEnumerable<UserRecord> userId, string email);
+        Task<bool> DoesUserEmailAlreadyExistAsync(IEnumerable<BaseUserRecordWithId> userId, string email);
 
         Task<bool> IsAgeValidAsync(int age);
 
