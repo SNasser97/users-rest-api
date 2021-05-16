@@ -1,7 +1,6 @@
 namespace users_logic.User.Logic.Query
 {
     using System;
-
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -12,7 +11,7 @@ namespace users_logic.User.Logic.Query
     using users_logic.User.Logic.Query.Models.Request;
     using users_logic.User.Logic.Query.Models.Response;
 
-    public class UserQuery : IUserQuery<GetUserRequestModel, GetUserResponseModel>
+    public class UserQuery : IUserQuery<GetUserRequestModel, GetUserResponseModel, GetUsersResponseModel>
     {
         private readonly IReadRepository<UserRecord> userReadRepository;
 
@@ -43,19 +42,21 @@ namespace users_logic.User.Logic.Query
             return new GetUserResponseModel().ToUserResponseModel(userRecord);
         }
 
-        public async Task<IEnumerable<GetUserResponseModel>> GetReponsesAsync()
+        public async Task<GetUsersResponseModel> GetReponsesAsync()
         {
             IEnumerable<UserRecord> userRecords = await this.userReadRepository.GetAsync();
+            return await this.MapResponseDataAsync(userRecords);
+        }
 
-            var userResponses = new List<Task<GetUserResponseModel>>();
+        private async Task<GetUsersResponseModel> MapResponseDataAsync(IEnumerable<UserRecord> records)
+        {
+            IEnumerable<GetUserResponseModel> userResponsesList = await (Task.WhenAll(records.Select(r
+                => Task.Run(() => new GetUserResponseModel().ToUserResponseModel(r)))));
 
-            foreach (UserRecord userRecord in userRecords)
-            {
-                Task<GetUserResponseModel> userResponse = Task.Run(() => new GetUserResponseModel().ToUserResponseModel(userRecord));
-                userResponses.Add(userResponse);
-            }
+            var userResponses = new GetUsersResponseModel();
+            userResponses.Users = userResponsesList;
 
-            return await Task.WhenAll(userResponses);
+            return userResponses;
         }
     }
 }
