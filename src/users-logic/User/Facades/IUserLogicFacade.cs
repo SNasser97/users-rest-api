@@ -4,6 +4,7 @@ namespace users_logic.User.Facades
     using System;
     using System.Collections.Generic;
     using users_data.Entities;
+    using users_logic.User.Logic.Command.Models.Request;
 
     public interface IUserLogicFacade
     {
