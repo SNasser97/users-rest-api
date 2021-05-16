@@ -10,7 +10,6 @@
     {
         private readonly IDictionary<Guid, UserRecord> users;
 
-        // mocking usage
         public InMemoryUserWriteRepository() : this(
             new Dictionary<Guid, UserRecord>())
         {
