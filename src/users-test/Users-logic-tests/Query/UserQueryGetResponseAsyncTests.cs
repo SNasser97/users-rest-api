@@ -18,16 +18,16 @@ namespace users_test.Users_logic_tests.Query
 
         public static IEnumerable<object[]> emptyRequestModels = new List<object[]>
         {
-            new object[] { new GetUserRequestModel() },
-            new object[] { new GetUserRequestModel { Id = Guid.Empty } }
+            new object[] { new GetUserQueryRequestModel() },
+            new object[] { new GetUserQueryRequestModel { Id = Guid.Empty } }
         };
 
         [Fact]
-        public async Task UserQuery_GetResponseAsync_TakesGetUserRequestModelAndReturnsGetUserResponseModel()
+        public async Task UserQuery_GetResponseAsync_TakesGetUserQueryRequestModelAndReturnsGetUserQueryResponseModel()
         {
             //Given
             Guid userId = Guid.NewGuid();
-            var userRequestModel = new GetUserRequestModel { Id = userId };
+            var userRequestModel = new GetUserQueryRequestModel { Id = userId };
             var existingUser = new UserRecord
             {
                 Id = userId,
@@ -44,7 +44,7 @@ namespace users_test.Users_logic_tests.Query
             var userQuery = new UserQuery(mockUserReadRepository.Object);
 
             //When
-            GetUserResponseModel actualUserResponse = await userQuery.GetReponseAsync(userRequestModel);
+            GetUserQueryResponseModel actualUserResponse = await userQuery.GetReponseAsync(userRequestModel);
 
             //Then
             Assert.Equal(userRequestModel.Id, actualUserResponse.Id);
@@ -57,7 +57,7 @@ namespace users_test.Users_logic_tests.Query
         }
 
         [Fact]
-        public async Task UserQuery_GetResponseAsync_TakesNullGetUserRequestModelAndThrowsArgumentNullException()
+        public async Task UserQuery_GetResponseAsync_TakesNullGetUserQueryRequestModelAndThrowsArgumentNullException()
         {
             //Given
             var mockUserReadRepository = new Mock<IReadRepository<UserRecord>>();
@@ -73,7 +73,7 @@ namespace users_test.Users_logic_tests.Query
 
         [Theory]
         [MemberData(nameof(emptyRequestModels))]
-        public async Task UserQuery_GetResponseAsync_TakesGetUserRequestModelAndThrowsQueryResponseException(GetUserRequestModel requestModelTest)
+        public async Task UserQuery_GetResponseAsync_TakesGetUserRequestModelAndThrowsQueryResponseException(GetUserQueryRequestModel requestModelTest)
         {
             //Given
             var mockUserReadRepository = new Mock<IReadRepository<UserRecord>>();
@@ -88,11 +88,11 @@ namespace users_test.Users_logic_tests.Query
         }
 
         [Fact]
-        public async Task UserQuery_GetResponseAsync_TakesGetUserRequestModelAndThrowsUserNotFoundException()
+        public async Task UserQuery_GetResponseAsync_TakesGetUserQueryRequestModelAndThrowsUserNotFoundException()
         {
             //Given
             Guid userId = Guid.NewGuid();
-            var userRequestModel = new GetUserRequestModel { Id = userId };
+            var userRequestModel = new GetUserQueryRequestModel { Id = userId };
             var mockUserReadRepository = new Mock<IReadRepository<UserRecord>>();
             var userQuery = new UserQuery(mockUserReadRepository.Object);
             mockUserReadRepository.Setup(s => s.GetAsync(It.IsAny<Guid>())).ReturnsAsync(null as UserRecord);

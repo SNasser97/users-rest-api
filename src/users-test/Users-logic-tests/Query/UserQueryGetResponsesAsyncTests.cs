@@ -14,7 +14,7 @@ namespace users_test.Users_logic_tests.Query
     public class UserQueryGetResponsesAsyncTests
     {
         [Fact]
-        public async Task UserQuery_GetResponsesAsync_ReturnsListOfGetUserResponseModel()
+        public async Task UserQuery_GetResponsesAsync_ReturnsGetUsersQueryResponseModel()
         {
             //Given
             var existingUserRecords = new List<UserRecord>
@@ -53,12 +53,12 @@ namespace users_test.Users_logic_tests.Query
             mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(existingUserRecords);
 
             //When
-            GetUsersResponseModel actualUsersResponse = await userQuery.GetReponsesAsync();
+            GetUsersQueryResponseModel actualUsersResponse = await userQuery.GetReponsesAsync();
 
             //Then
             Assert.NotNull(actualUsersResponse);
             Assert.NotEmpty(actualUsersResponse.Users);
-            foreach (GetUserResponseModel actualUserResponse in actualUsersResponse.Users)
+            foreach (GetUserQueryResponseModel actualUserResponse in actualUsersResponse.Users)
             {
                 UserRecord expectedUserMapped = existingUserRecords.FirstOrDefault(u => u.Id == actualUserResponse.Id);
                 Assert.NotNull(expectedUserMapped);
@@ -78,7 +78,7 @@ namespace users_test.Users_logic_tests.Query
         }
 
         [Fact]
-        public async Task UserQuery_GetResponsesAsync_ReturnsEmptyListOfGetUserResponseModel()
+        public async Task UserQuery_GetResponsesAsync_ReturnsEmptyGetUsersQueryResponseModel()
         {
             //Given
             var mockUserReadRepository = new Mock<IReadRepository<UserRecord>>();
@@ -86,7 +86,7 @@ namespace users_test.Users_logic_tests.Query
             mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(Enumerable.Empty<UserRecord>());
 
             //When
-            GetUsersResponseModel actualUsersResponse = await userQuery.GetReponsesAsync();
+            GetUsersQueryResponseModel actualUsersResponse = await userQuery.GetReponsesAsync();
 
             //Then
             Assert.NotNull(actualUsersResponse);

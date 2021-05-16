@@ -3,7 +3,7 @@ namespace users_logic.User.Logic.Query.Models.Response
     using System;
     using users_data.Entities;
 
-    public class GetUserResponseModel
+    public class GetUserQueryResponseModel
     {
         public Guid Id { get; set; }
 
@@ -17,9 +17,9 @@ namespace users_logic.User.Logic.Query.Models.Response
 
         public int Age { get; set; }
 
-        public GetUserResponseModel ToUserResponseModel(UserRecord userRecord)
+        public GetUserQueryResponseModel ToUserResponseModel(UserRecord userRecord)
         {
-            return new GetUserResponseModel
+            return new GetUserQueryResponseModel
             {
                 Id = userRecord.Id,
                 FirstName = userRecord.FirstName,

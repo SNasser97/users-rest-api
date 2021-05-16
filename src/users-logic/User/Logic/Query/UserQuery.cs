@@ -11,7 +11,7 @@ namespace users_logic.User.Logic.Query
     using users_logic.User.Logic.Query.Models.Request;
     using users_logic.User.Logic.Query.Models.Response;
 
-    public class UserQuery : IUserQuery<GetUserRequestModel, GetUserResponseModel, GetUsersResponseModel>
+    public class UserQuery : IUserQuery<GetUserQueryRequestModel, GetUserQueryResponseModel, GetUsersQueryResponseModel>
     {
         private readonly IReadRepository<UserRecord> userReadRepository;
 
@@ -20,7 +20,7 @@ namespace users_logic.User.Logic.Query
             this.userReadRepository = userReadRepository ?? throw new System.ArgumentNullException(nameof(userReadRepository));
         }
 
-        public async Task<GetUserResponseModel> GetReponseAsync(GetUserRequestModel request)
+        public async Task<GetUserQueryResponseModel> GetReponseAsync(GetUserQueryRequestModel request)
         {
             if (request == null)
             {
@@ -39,24 +39,24 @@ namespace users_logic.User.Logic.Query
                 throw new UserNotFoundException("user not found");
             }
 
-            return new GetUserResponseModel().ToUserResponseModel(userRecord);
+            return new GetUserQueryResponseModel().ToUserResponseModel(userRecord);
         }
 
-        public async Task<GetUsersResponseModel> GetReponsesAsync()
+        public async Task<GetUsersQueryResponseModel> GetReponsesAsync()
         {
             IEnumerable<UserRecord> userRecords = await this.userReadRepository.GetAsync();
-            return await this.MapResponseDataAsync(userRecords);
+            return await this.MapToGetUsersQueryResponseModel(userRecords);
         }
 
-        private async Task<GetUsersResponseModel> MapResponseDataAsync(IEnumerable<UserRecord> records)
+        private async Task<GetUsersQueryResponseModel> MapToGetUsersQueryResponseModel(IEnumerable<UserRecord> records)
         {
-            IEnumerable<GetUserResponseModel> userResponsesList = await (Task.WhenAll(records.Select(r
-                => Task.Run(() => new GetUserResponseModel().ToUserResponseModel(r)))));
+            IEnumerable<GetUserQueryResponseModel> userQueryResponseList = await (Task.WhenAll(records.Select(r
+                => Task.Run(() => new GetUserQueryResponseModel().ToUserResponseModel(r)))));
 
-            var userResponses = new GetUsersResponseModel();
-            userResponses.Users = userResponsesList;
+            var usersQueryResponse = new GetUsersQueryResponseModel();
+            usersQueryResponse.Users = userQueryResponseList;
 
-            return userResponses;
+            return usersQueryResponse;
         }
     }
 }
