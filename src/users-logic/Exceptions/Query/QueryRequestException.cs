@@ -1,4 +1,4 @@
-namespace users_logic.Exceptions.Command
+namespace users_logic.Exceptions.Query
 {
     using System;
     using System.Runtime.Serialization;
