@@ -14,7 +14,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
         public async Task InMemoryUserWriteRepository_UpdateAsync_TakesUserRecordandReturnsExistingGuid()
         {
             //Given
-            var userToUpdate = new UserRecord
+            var userToUpdate = new UpdateUserRecord
             {
                 Id = Guid.NewGuid(),
                 FirstName = "Bobby",
@@ -71,7 +71,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
         public async Task InMemoryUserWriteRepository_UpdateAsync_TakesUserRecordReturnsEmptyGuid()
         {
             //Given
-            var noneExistingUser = new UserRecord
+            var noneExistingUser = new UpdateUserRecord
             {
                 Id = Guid.NewGuid(),
                 FirstName = "Bobby",
