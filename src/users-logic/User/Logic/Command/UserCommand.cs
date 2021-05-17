@@ -42,8 +42,7 @@ namespace users_logic.User.Logic.Command
 
             int age = await this.userLogicFacade.GetCalculatedUsersAgeAsync(request.DateOfBirth);
 
-            await ExecuteLogic.ThrowExceptionAsync<InvalidDateOfBirthException>(async ()
-                => !await this.userLogicFacade.IsAgeValidAsync(age));
+            await ExecuteLogic.ThrowExceptionAsync<InvalidDateOfBirthException>(async () => !await this.userLogicFacade.IsAgeValidAsync(age));
 
             CreateUserRecord newUserRecord = request.ToRecord(age);
 
@@ -61,7 +60,6 @@ namespace users_logic.User.Logic.Command
             ExecuteLogic.ThrowException<CommandRequestException>(() => request.Id == Guid.Empty);
 
             UserRecord foundUserRecord = (UserRecord)await this.userReadRepository.GetAsync(request.Id);
-
             ExecuteLogic.ThrowException<UserNotFoundException>(() => foundUserRecord == null);
 
             IEnumerable<BaseUserRecordWithId> userRecords = await this.userReadRepository.GetAsync();
@@ -71,15 +69,13 @@ namespace users_logic.User.Logic.Command
 
             int age = await this.userLogicFacade.GetCalculatedUsersAgeAsync(request.DateOfBirth);
 
-            await ExecuteLogic.ThrowExceptionAsync<InvalidAgeException>(async ()
-                => !await this.userLogicFacade.IsAgeValidAsync(age));
+            await ExecuteLogic.ThrowExceptionAsync<InvalidAgeException>(async () => !await this.userLogicFacade.IsAgeValidAsync(age));
 
             UpdateUserRecord updatedUserRecord = request.ToRecord(age);
 
             Guid updatedResponseId = await this.userWriteRepository.UpdateAsync(updatedUserRecord);
 
-            ExecuteLogic.ThrowException<CommandResponseException>(()
-                => updatedResponseId == Guid.Empty);
+            ExecuteLogic.ThrowException<CommandResponseException>(() => updatedResponseId == Guid.Empty);
 
             return new UpdateUserCommandResponse { Id = updatedResponseId };
         }
@@ -87,14 +83,11 @@ namespace users_logic.User.Logic.Command
         public async Task DeleteUserAsync(DeleteUserCommandRequest request)
         {
             ExecuteLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
-
-            ExecuteLogic.ThrowException<CommandRequestException>(()
-                => request.Id == Guid.Empty);
+            ExecuteLogic.ThrowException<CommandRequestException>(() => request.Id == Guid.Empty);
 
             UserRecord recordExists = (UserRecord)await this.userReadRepository.GetAsync(request.Id);
 
-            ExecuteLogic.ThrowException<UserNotFoundException>(()
-                => recordExists == null);
+            ExecuteLogic.ThrowException<UserNotFoundException>(() => recordExists == null);
 
             await this.userWriteRepository.DeleteAsync(recordExists.Id);
         }
