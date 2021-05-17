@@ -36,6 +36,8 @@ namespace users_logic.Extensions
                     return "Response Id was empty";
                 case "CommandRequestException":
                     return "Request Id was empty";
+                case "QueryRequestException":
+                    return "Request Id was empty";
                 case "UserNotFoundException":
                     return "User not found";
                 case "EmailExistsException":
