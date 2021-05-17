@@ -7,7 +7,9 @@ namespace users_logic.User.Logic.Command
     using users_data.Repositories;
     using users_logic.Exceptions.Command;
     using users_logic.Exceptions.User;
+    using users_logic.Exceptions.Validation;
     using users_logic.Extensions;
+    using users_logic.User.Exceptions.Validation;
     using users_logic.User.Facades;
     using users_logic.User.Logic.Command.Models.Request;
     using users_logic.User.Logic.Command.Models.Request.Common;
@@ -31,100 +33,68 @@ namespace users_logic.User.Logic.Command
 
         public async Task<BaseUserCommandResponse> CreateUserAsync(BaseUserCommandRequest request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
+            ExecuteLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
 
             IEnumerable<BaseUserRecordWithId> records = await this.userReadRepository.GetAsync();
 
-            if (await this.userLogicFacade.DoesUserEmailAlreadyExistAsync(records, request.Email))
-            {
-                throw new CommandRequestException("Email already exists");
-            }
+            await ExecuteLogic.ThrowExceptionAsync<EmailExistsException>(async ()
+                => await this.userLogicFacade.DoesUserEmailAlreadyExistAsync(records, request.Email));
 
             int age = await this.userLogicFacade.GetCalculatedUsersAgeAsync(request.DateOfBirth);
 
-            if (!await this.userLogicFacade.IsAgeValidAsync(age))
-            {
-                throw new CommandRequestException("Ages 18 to 110 can only make a user!");
-            }
+            await ExecuteLogic.ThrowExceptionAsync<InvalidDateOfBirthException>(async ()
+                => !await this.userLogicFacade.IsAgeValidAsync(age));
 
             CreateUserRecord newUserRecord = request.ToRecord(age);
 
             Guid recordCreatedId = await this.userWriteRepository.CreateAsync(newUserRecord);
 
-            if (recordCreatedId == Guid.Empty)
-            {
-                throw new CommandResponseException("No response Id was created");
-            }
+            ExecuteLogic.ThrowException<CommandResponseException>(() => recordCreatedId == Guid.Empty);
+
 
             return new CreateUserCommandResponse { Id = recordCreatedId };
         }
 
         public async Task<BaseUserCommandResponse> UpdateUserAsync(BaseUserCommandRequestWithId request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
-
-            if (request.Id == Guid.Empty)
-            {
-                throw new CommandRequestException("Request Id cannot be empty");
-            }
+            ExecuteLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
+            ExecuteLogic.ThrowException<CommandRequestException>(() => request.Id == Guid.Empty);
 
             UserRecord foundUserRecord = (UserRecord)await this.userReadRepository.GetAsync(request.Id);
 
-            if (foundUserRecord == null)
-            {
-                throw new UserNotFoundException("User not found");
-            }
+            ExecuteLogic.ThrowException<UserNotFoundException>(() => foundUserRecord == null);
 
             IEnumerable<BaseUserRecordWithId> userRecords = await this.userReadRepository.GetAsync();
 
-            if (foundUserRecord.Email != request.Email && await this.userLogicFacade.DoesUserEmailAlreadyExistAsync(userRecords, request.Email))
-            {
-                throw new CommandRequestException("Email to update already exists");
-            }
+            await ExecuteLogic.ThrowExceptionAsync<EmailExistsException>(async ()
+                => foundUserRecord.Email != request.Email && await this.userLogicFacade.DoesUserEmailAlreadyExistAsync(userRecords, request.Email));
 
             int age = await this.userLogicFacade.GetCalculatedUsersAgeAsync(request.DateOfBirth);
 
-            if (!await this.userLogicFacade.IsAgeValidAsync(age))
-            {
-                throw new CommandRequestException("Invalid date of birth");
-            }
+            await ExecuteLogic.ThrowExceptionAsync<InvalidAgeException>(async ()
+                => !await this.userLogicFacade.IsAgeValidAsync(age));
 
             UpdateUserRecord updatedUserRecord = request.ToRecord(age);
 
             Guid updatedResponseId = await this.userWriteRepository.UpdateAsync(updatedUserRecord);
 
-            if (updatedResponseId == Guid.Empty)
-            {
-                throw new CommandResponseException("Response Id was empty");
-            }
+            ExecuteLogic.ThrowException<CommandResponseException>(()
+                => updatedResponseId == Guid.Empty);
 
             return new UpdateUserCommandResponse { Id = updatedResponseId };
         }
 
         public async Task DeleteUserAsync(DeleteUserCommandRequest request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
+            ExecuteLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
 
-            if (request.Id == Guid.Empty)
-            {
-                throw new CommandRequestException("Request Id cannot be empty");
-            }
+            ExecuteLogic.ThrowException<CommandRequestException>(()
+                => request.Id == Guid.Empty);
 
             UserRecord recordExists = (UserRecord)await this.userReadRepository.GetAsync(request.Id);
 
-            if (recordExists == null)
-            {
-                throw new UserNotFoundException("User not found");
-            }
+            ExecuteLogic.ThrowException<UserNotFoundException>(()
+                => recordExists == null);
 
             await this.userWriteRepository.DeleteAsync(recordExists.Id);
         }
