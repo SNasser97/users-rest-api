@@ -13,6 +13,8 @@ namespace users_test.Users_logic_tests.Command
     using System.Collections.Generic;
     using users_logic.Exceptions.Command;
     using users_logic.Exceptions.User;
+    using users_logic.Exceptions.Validation;
+    using users_logic.User.Exceptions.Validation;
 
     public class UserCommandUpdateUserAsyncTests
     {
@@ -112,9 +114,9 @@ namespace users_test.Users_logic_tests.Command
                 .ReturnsAsync(true);
 
             //When
-            await Exceptions<CommandRequestException>.HandleAsync(async ()
+            await Exceptions<EmailExistsException>.HandleAsync(async ()
                 => await this.userCommand.UpdateUserAsync(updateUserCommandRequest),
-                (ex) => Assert.Equal("Email to update already exists", ex.Message)
+                (ex) => Assert.Equal("Email already exists", ex.Message)
             );
 
             //Then
@@ -136,9 +138,9 @@ namespace users_test.Users_logic_tests.Command
                 .ReturnsAsync(true);
 
             //When
-            await Exceptions<CommandRequestException>.HandleAsync(async ()
+            await Exceptions<EmailExistsException>.HandleAsync(async ()
                 => await this.userCommand.UpdateUserAsync(updateUserCommandRequest),
-                (ex) => Assert.Equal("Email to update already exists", ex.Message)
+                (ex) => Assert.Equal("Email already exists", ex.Message)
             );
 
             //Then
@@ -162,7 +164,7 @@ namespace users_test.Users_logic_tests.Command
             this.mockUserLogicFacade.Setup(s => s.IsAgeValidAsync(It.IsAny<int>())).ReturnsAsync(false);
 
             //When
-            await Exceptions<CommandRequestException>.HandleAsync(async ()
+            await Exceptions<InvalidAgeException>.HandleAsync(async ()
                 => await this.userCommand.UpdateUserAsync(updateUserCommandRequest),
                 (ex) => Assert.Equal("Invalid date of birth", ex.Message)
             );

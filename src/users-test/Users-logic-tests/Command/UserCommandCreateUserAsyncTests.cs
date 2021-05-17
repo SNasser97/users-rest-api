@@ -12,6 +12,8 @@ namespace users_test.Users_logic_tests.Command
     using users_logic.User.Logic.Command.Models.Response;
     using System.Collections.Generic;
     using users_logic.Exceptions.Command;
+    using users_logic.Exceptions.Validation;
+    using users_logic.User.Exceptions.Validation;
 
     public class UserCommandCreateUserAsyncTests
     {
@@ -95,7 +97,7 @@ namespace users_test.Users_logic_tests.Command
 
             //When
             //Then
-            await Exceptions<CommandRequestException>.HandleAsync(async ()
+            await Exceptions<EmailExistsException>.HandleAsync(async ()
                 => await userCommand.CreateUserAsync(createUserCommandRequest),
                 (ex) => Assert.Equal("Email already exists", ex.Message)
             );
@@ -137,7 +139,7 @@ namespace users_test.Users_logic_tests.Command
 
             //When
             //Then
-            await Exceptions<CommandRequestException>.HandleAsync(async ()
+            await Exceptions<InvalidDateOfBirthException>.HandleAsync(async ()
                 => await userCommand.CreateUserAsync(createUserCommandRequest),
                 (ex) => Assert.Equal("Ages 18 to 110 can only make a user!", ex.Message)
             );
@@ -177,7 +179,7 @@ namespace users_test.Users_logic_tests.Command
             //Then
             await Exceptions<CommandResponseException>.HandleAsync(async ()
                 => await userCommand.CreateUserAsync(createUserCommandRequest),
-                (ex) => Assert.Equal("No response Id was created", ex.Message)
+                (ex) => Assert.Equal("Response Id was empty", ex.Message)
             );
 
             mockUserReadRepository.Verify(s => s.GetAsync(), Times.Once);

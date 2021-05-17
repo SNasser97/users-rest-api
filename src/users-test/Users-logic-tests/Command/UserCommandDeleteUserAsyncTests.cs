@@ -47,7 +47,7 @@ namespace users_test.Users_logic_tests.Command
             //Then
             await Exceptions<CommandRequestException>.HandleAsync(async () =>
                 await this.userCommand.DeleteUserAsync(new DeleteUserCommandRequest()),
-                (ex) => Assert.Equal("Request Id cannot be empty", ex.Message)
+                (ex) => Assert.Equal("Request Id was empty", ex.Message)
             );
         }
 
