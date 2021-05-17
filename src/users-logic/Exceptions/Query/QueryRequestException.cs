@@ -5,6 +5,11 @@ namespace users_logic.Exceptions.Query
 
     public class QueryRequestException : Exception
     {
+        public QueryRequestException()
+        {
+
+        }
+
         public QueryRequestException(string message) : base(message)
         {
         }
