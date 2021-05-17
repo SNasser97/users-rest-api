@@ -5,7 +5,7 @@ namespace users_logic.Extensions
 
     public static class ExecuteLogic
     {
-        public static void ThrowException<TException>(Func<bool> func, string? message = null)
+        public static void ThrowException<TException>(Func<bool> func, string message = null)
             where TException : Exception, new()
         {
             if (func())
@@ -15,7 +15,7 @@ namespace users_logic.Extensions
             }
         }
 
-        public static async Task ThrowExceptionAsync<TException>(Func<Task<bool>> func, string? message = null)
+        public static async Task ThrowExceptionAsync<TException>(Func<Task<bool>> func, string message = null)
             where TException : Exception, new()
         {
             if (await func())
