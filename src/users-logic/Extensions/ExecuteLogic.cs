@@ -10,7 +10,8 @@ namespace users_logic.Extensions
         {
             if (func())
             {
-                TException exception = Activator.CreateInstance(typeof(TException), GetMessage(typeof(TException)) ?? message) as TException;
+                TException exception = Activator.CreateInstance(typeof(TException),
+                    GetDefaultMessageFromCustomException(typeof(TException)) ?? message) as TException;
                 throw exception;
             }
         }
@@ -20,13 +21,14 @@ namespace users_logic.Extensions
         {
             if (await func())
             {
-                TException exception = Activator.CreateInstance(typeof(TException), GetMessage(typeof(TException)) ?? message) as TException;
+                TException exception = Activator.CreateInstance(typeof(TException),
+                    GetDefaultMessageFromCustomException(typeof(TException)) ?? message) as TException;
                 throw exception;
             }
         }
 
         // TODO: Refacotr, breaks OCP
-        private static string GetMessage(Type ex)
+        private static string GetDefaultMessageFromCustomException(Type ex)
         {
             switch (ex.Name)
             {
