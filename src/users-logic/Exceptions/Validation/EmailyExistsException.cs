@@ -5,7 +5,7 @@ namespace users_logic.Exceptions.Validation
 
     public class EmailExistsException : Exception
     {
-        public EmailExistsException()
+        public EmailExistsException() : base("Email already exists")
         {
         }
 

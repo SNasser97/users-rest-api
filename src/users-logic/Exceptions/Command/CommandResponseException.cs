@@ -5,7 +5,7 @@ namespace users_logic.Exceptions.Command
 
     public class CommandResponseException : Exception
     {
-        public CommandResponseException()
+        public CommandResponseException() : base("Response Id was empty")
         {
         }
 

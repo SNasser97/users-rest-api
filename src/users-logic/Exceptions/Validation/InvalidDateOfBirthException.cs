@@ -5,7 +5,7 @@ namespace users_logic.Exceptions.Validation
 
     public class InvalidDateOfBirthException : Exception
     {
-        public InvalidDateOfBirthException()
+        public InvalidDateOfBirthException() : base("Invalid date of birth")
         {
         }
 

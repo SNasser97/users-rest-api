@@ -5,7 +5,7 @@ namespace users_logic.User.Exceptions.Validation
 
     public class InvalidAgeException : Exception
     {
-        public InvalidAgeException()
+        public InvalidAgeException() : base("Ages 18 to 110 can only make a user!")
         {
         }
 

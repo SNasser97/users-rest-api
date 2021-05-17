@@ -5,7 +5,7 @@ namespace users_logic.Exceptions.Command
 
     public class CommandRequestException : Exception
     {
-        public CommandRequestException()
+        public CommandRequestException() : base("Request Id was empty")
         {
         }
 
