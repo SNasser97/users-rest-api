@@ -8,6 +8,7 @@ namespace users_logic.User.Logic.Query
     using users_data.Repositories;
     using users_logic.Exceptions.Query;
     using users_logic.Exceptions.User;
+    using users_logic.Extensions;
     using users_logic.User.Logic.Query.Models.Request;
     using users_logic.User.Logic.Query.Models.Response;
 
@@ -22,23 +23,12 @@ namespace users_logic.User.Logic.Query
 
         public async Task<GetUserQueryResponseModel> GetReponseAsync(GetUserQueryRequestModel request)
         {
-            if (request == null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
-
-            if (request.Id == Guid.Empty)
-            {
-                throw new QueryRequestException("Request Id cannot be empty");
-            }
+            ExecuteLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
+            ExecuteLogic.ThrowException<QueryRequestException>(() => request.Id == Guid.Empty);
 
             UserRecord userRecord = await this.userReadRepository.GetAsync(request.Id);
 
-            if (userRecord == null)
-            {
-                throw new UserNotFoundException("user not found");
-            }
-
+            ExecuteLogic.ThrowException<UserNotFoundException>(() => userRecord == null);
             return new GetUserQueryResponseModel().ToUserResponseModel(userRecord);
         }
 

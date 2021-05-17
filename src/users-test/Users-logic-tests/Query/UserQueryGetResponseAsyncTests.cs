@@ -81,7 +81,7 @@ namespace users_test.Users_logic_tests.Query
 
             //When
             await Exceptions<QueryRequestException>.HandleAsync(async () => await userQuery.GetReponseAsync(requestModelTest),
-                (ex) => Assert.Equal("Request Id cannot be empty", ex.Message));
+                (ex) => Assert.Equal("Request Id was empty", ex.Message));
 
             //Then
             mockUserReadRepository.Verify(s => s.GetAsync(It.IsAny<Guid>()), Times.Never);
@@ -99,7 +99,7 @@ namespace users_test.Users_logic_tests.Query
 
             //When
             await Exceptions<UserNotFoundException>.HandleAsync(async () => await userQuery.GetReponseAsync(userRequestModel),
-                (ex) => Assert.Equal("user not found", ex.Message));
+                (ex) => Assert.Equal("User not found", ex.Message));
 
             //Then
             mockUserReadRepository.Verify(s => s.GetAsync(It.IsAny<Guid>()), Times.Once);
