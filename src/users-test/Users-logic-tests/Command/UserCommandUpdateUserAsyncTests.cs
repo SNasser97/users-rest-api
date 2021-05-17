@@ -14,7 +14,6 @@ namespace users_test.Users_logic_tests.Command
     using users_logic.Exceptions.Command;
     using users_logic.Exceptions.User;
     using users_logic.Exceptions.Validation;
-    using users_logic.User.Exceptions.Validation;
 
     public class UserCommandUpdateUserAsyncTests
     {
