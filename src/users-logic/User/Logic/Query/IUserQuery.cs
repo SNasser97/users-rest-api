@@ -6,6 +6,6 @@ namespace users_logic.User.Logic.Query
     {
         Task<TResponse> GetReponseAsync(TRequest request);
 
-        Task<TResponses> GetReponsesAsync();
+        Task<TResponses> GetResponsesAsync();
     }
 }

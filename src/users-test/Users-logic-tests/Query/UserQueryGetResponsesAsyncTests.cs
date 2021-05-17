@@ -53,7 +53,7 @@ namespace users_test.Users_logic_tests.Query
             mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(existingUserRecords);
 
             //When
-            GetUsersQueryResponseModel actualUsersResponse = await userQuery.GetReponsesAsync();
+            GetUsersQueryResponseModel actualUsersResponse = await userQuery.GetResponsesAsync();
 
             //Then
             Assert.NotNull(actualUsersResponse);
@@ -86,7 +86,7 @@ namespace users_test.Users_logic_tests.Query
             mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(Enumerable.Empty<UserRecord>());
 
             //When
-            GetUsersQueryResponseModel actualUsersResponse = await userQuery.GetReponsesAsync();
+            GetUsersQueryResponseModel actualUsersResponse = await userQuery.GetResponsesAsync();
 
             //Then
             Assert.NotNull(actualUsersResponse);

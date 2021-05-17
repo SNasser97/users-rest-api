@@ -32,7 +32,7 @@ namespace users_logic.User.Logic.Query
             return new GetUserQueryResponseModel().ToUserResponseModel(userRecord);
         }
 
-        public async Task<GetUsersQueryResponseModel> GetReponsesAsync()
+        public async Task<GetUsersQueryResponseModel> GetResponsesAsync()
         {
             IEnumerable<UserRecord> userRecords = await this.userReadRepository.GetAsync();
             return await this.MapToGetUsersQueryResponseModel(userRecords);
