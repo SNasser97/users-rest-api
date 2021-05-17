@@ -52,47 +52,5 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
             Assert.Equal(newUser.DateOfBirth, actualNewUser.DateOfBirth);
             Assert.Equal(newUser.Age, actualNewUser.Age);
         }
-
-        // TODO: Remove dedundant
-        // [Fact]
-        // public async Task InMemoryUserWriteRepository_CreateAsync_TakesExistingGuidReturnsEmptyGuid()
-        // {
-        //     //Given
-        //     var mappedUserRecord = new UserRecord
-        //     {
-        //         Id = Guid.NewGuid(),
-        //         FirstName = "All",
-        //         LastName = "Jann",
-        //         Email = "all.jann@mail.com",
-        //         DateOfBirth = new DateTime(2001, 12, 06),
-        //         Age = 24
-        //     };
-
-        //     var existingUser = new UserRecord
-        //     {
-        //         Id = mappedUserRecord.Id,
-        //         FirstName = "Bob",
-        //         LastName = "Doe",
-        //         Email = "bdoe@mail.com",
-        //         DateOfBirth = new DateTime(1997, 12, 06),
-        //         Age = 35
-        //     };
-
-        //     var users = new Dictionary<Guid, UserRecord>
-        //     {
-        //         { existingUser.Id, existingUser },
-        //         { Guid.NewGuid(), new UserRecord() },
-        //         { Guid.NewGuid(), new UserRecord() },
-        //     };
-
-        //     var usersWriteRepository = new InMemoryUserWriteRepository(users);
-
-        //     //When
-        //     Guid actualGuid = await usersWriteRepository.CreateAsync(newUser);
-
-        //     //Then
-        //     Assert.True(actualGuid == Guid.Empty);
-        //     Assert.Equal(3, users.Count());
-        // }
     }
 }
