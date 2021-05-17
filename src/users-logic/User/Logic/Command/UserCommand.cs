@@ -44,9 +44,7 @@ namespace users_logic.User.Logic.Command
 
             await ExecuteLogic.ThrowExceptionAsync<InvalidAgeException>(async () => !await this.userLogicFacade.IsAgeValidAsync(age));
 
-            CreateUserRecord newUserRecord = request.ToRecord(age);
-
-            Guid recordCreatedId = await this.userWriteRepository.CreateAsync(newUserRecord);
+            Guid recordCreatedId = await this.userWriteRepository.CreateAsync(request.ToRecord(age));
 
             ExecuteLogic.ThrowException<CommandResponseException>(() => recordCreatedId == Guid.Empty);
             return new CreateUserCommandResponse { Id = recordCreatedId };
@@ -69,9 +67,7 @@ namespace users_logic.User.Logic.Command
 
             await ExecuteLogic.ThrowExceptionAsync<InvalidDateOfBirthException>(async () => !await this.userLogicFacade.IsAgeValidAsync(age));
 
-            UpdateUserRecord updatedUserRecord = request.ToRecord(age);
-
-            Guid updatedResponseId = await this.userWriteRepository.UpdateAsync(updatedUserRecord);
+            Guid updatedResponseId = await this.userWriteRepository.UpdateAsync(request.ToRecord(age));
 
             ExecuteLogic.ThrowException<CommandResponseException>(() => updatedResponseId == Guid.Empty);
             return new UpdateUserCommandResponse { Id = updatedResponseId };
