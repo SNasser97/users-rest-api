@@ -49,8 +49,6 @@ namespace users_logic.User.Logic.Command
             Guid recordCreatedId = await this.userWriteRepository.CreateAsync(newUserRecord);
 
             ExecuteLogic.ThrowException<CommandResponseException>(() => recordCreatedId == Guid.Empty);
-
-
             return new CreateUserCommandResponse { Id = recordCreatedId };
         }
 
@@ -76,7 +74,6 @@ namespace users_logic.User.Logic.Command
             Guid updatedResponseId = await this.userWriteRepository.UpdateAsync(updatedUserRecord);
 
             ExecuteLogic.ThrowException<CommandResponseException>(() => updatedResponseId == Guid.Empty);
-
             return new UpdateUserCommandResponse { Id = updatedResponseId };
         }
 
@@ -88,7 +85,6 @@ namespace users_logic.User.Logic.Command
             UserRecord recordExists = (UserRecord)await this.userReadRepository.GetAsync(request.Id);
 
             ExecuteLogic.ThrowException<UserNotFoundException>(() => recordExists == null);
-
             await this.userWriteRepository.DeleteAsync(recordExists.Id);
         }
     }
