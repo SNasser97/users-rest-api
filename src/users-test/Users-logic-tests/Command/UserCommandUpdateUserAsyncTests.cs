@@ -164,7 +164,7 @@ namespace users_test.Users_logic_tests.Command
             this.mockUserLogicFacade.Setup(s => s.IsAgeValidAsync(It.IsAny<int>())).ReturnsAsync(false);
 
             //When
-            await Exceptions<InvalidAgeException>.HandleAsync(async ()
+            await Exceptions<InvalidDateOfBirthException>.HandleAsync(async ()
                 => await this.userCommand.UpdateUserAsync(updateUserCommandRequest),
                 (ex) => Assert.Equal("Invalid date of birth", ex.Message)
             );

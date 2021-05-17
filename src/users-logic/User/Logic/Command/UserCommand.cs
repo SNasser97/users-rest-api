@@ -42,7 +42,7 @@ namespace users_logic.User.Logic.Command
 
             int age = await this.userLogicFacade.GetCalculatedUsersAgeAsync(request.DateOfBirth);
 
-            await ExecuteLogic.ThrowExceptionAsync<InvalidDateOfBirthException>(async () => !await this.userLogicFacade.IsAgeValidAsync(age));
+            await ExecuteLogic.ThrowExceptionAsync<InvalidAgeException>(async () => !await this.userLogicFacade.IsAgeValidAsync(age));
 
             CreateUserRecord newUserRecord = request.ToRecord(age);
 
@@ -67,7 +67,7 @@ namespace users_logic.User.Logic.Command
 
             int age = await this.userLogicFacade.GetCalculatedUsersAgeAsync(request.DateOfBirth);
 
-            await ExecuteLogic.ThrowExceptionAsync<InvalidAgeException>(async () => !await this.userLogicFacade.IsAgeValidAsync(age));
+            await ExecuteLogic.ThrowExceptionAsync<InvalidDateOfBirthException>(async () => !await this.userLogicFacade.IsAgeValidAsync(age));
 
             UpdateUserRecord updatedUserRecord = request.ToRecord(age);
 

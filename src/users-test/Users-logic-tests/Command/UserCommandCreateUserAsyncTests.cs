@@ -139,7 +139,7 @@ namespace users_test.Users_logic_tests.Command
 
             //When
             //Then
-            await Exceptions<InvalidDateOfBirthException>.HandleAsync(async ()
+            await Exceptions<InvalidAgeException>.HandleAsync(async ()
                 => await userCommand.CreateUserAsync(createUserCommandRequest),
                 (ex) => Assert.Equal("Ages 18 to 110 can only make a user!", ex.Message)
             );
