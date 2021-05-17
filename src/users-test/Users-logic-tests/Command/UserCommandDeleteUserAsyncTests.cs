@@ -24,7 +24,7 @@ namespace users_test.Users_logic_tests.Command
             this.mockUserWriteRepository = new Mock<IWriteRepository<BaseUserRecord, BaseUserRecordWithId>>();
             this.mockUserReadRepository = new Mock<IReadRepository<BaseUserRecordWithId>>();
             this.mockUserLogicFacade = new Mock<IUserLogicFacade>();
-            this.userCommand = new UserCommand(mockUserWriteRepository.Object, mockUserReadRepository.Object, mockUserLogicFacade.Object);
+            this.userCommand = new UserCommand(this.mockUserWriteRepository.Object, this.mockUserReadRepository.Object, this.mockUserLogicFacade.Object);
         }
 
         [Fact]
@@ -74,8 +74,8 @@ namespace users_test.Users_logic_tests.Command
             await this.userCommand.DeleteUserAsync(deleteUserCommandRequest);
 
             //Then
-            mockUserReadRepository.Verify(s => s.GetAsync(It.IsAny<Guid>()), Times.Once);
-            mockUserWriteRepository.Verify(s => s.DeleteAsync(It.IsAny<Guid>()), Times.Once);
+            this.mockUserReadRepository.Verify(s => s.GetAsync(It.IsAny<Guid>()), Times.Once);
+            this.mockUserWriteRepository.Verify(s => s.DeleteAsync(It.IsAny<Guid>()), Times.Once);
         }
 
         [Fact]
@@ -94,8 +94,8 @@ namespace users_test.Users_logic_tests.Command
             );
 
             //Then
-            mockUserReadRepository.Verify(s => s.GetAsync(It.IsAny<Guid>()), Times.Once);
-            mockUserWriteRepository.Verify(s => s.DeleteAsync(It.IsAny<Guid>()), Times.Never);
+            this.mockUserReadRepository.Verify(s => s.GetAsync(It.IsAny<Guid>()), Times.Once);
+            this.mockUserWriteRepository.Verify(s => s.DeleteAsync(It.IsAny<Guid>()), Times.Never);
         }
     }
 }
