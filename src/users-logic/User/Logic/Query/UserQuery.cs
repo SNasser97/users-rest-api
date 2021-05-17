@@ -45,7 +45,6 @@ namespace users_logic.User.Logic.Query
 
             var usersQueryResponse = new GetUsersQueryResponseModel();
             usersQueryResponse.Users = userQueryResponseList;
-
             return usersQueryResponse;
         }
     }
