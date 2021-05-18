@@ -17,7 +17,7 @@ namespace users_logic.User.Logic.Query.Models.Response
 
         public int Age { get; set; }
 
-        public GetUserQueryResponseModel ToUserResponseModel(UserRecord userRecord)
+        public GetUserQueryResponseModel ToUserResponseModel(BaseUserRecordWithId userRecord)
         {
             return new GetUserQueryResponseModel
             {
