@@ -10,17 +10,11 @@
 
     public class InMemoryUserWriteRepository : IWriteRepository<BaseUserRecord, BaseUserRecordWithId>
     {
-        private readonly IDictionary<Guid, UserRecord> users;
+        private readonly IRecordData<BaseUserRecordWithId> recordData;
 
-        public InMemoryUserWriteRepository() : this(
-            new Dictionary<Guid, UserRecord>())
+        public InMemoryUserWriteRepository(IRecordData<BaseUserRecordWithId> recordData)
         {
-        }
-
-        public InMemoryUserWriteRepository(
-            IDictionary<Guid, UserRecord> users)
-        {
-            this.users = users ?? throw new ArgumentNullException(nameof(users));
+            this.recordData = recordData ?? throw new ArgumentNullException(nameof(recordData));
         }
 
         public async Task<Guid> CreateAsync(BaseUserRecord record)
@@ -29,7 +23,7 @@
 
             UserRecord userRecord = record.ToUserRecord(recordId);
 
-            if (this.users.TryAdd(userRecord.Id, userRecord))
+            if (this.recordData.Users.TryAdd(userRecord.Id, userRecord))
             {
                 return await Task.FromResult(userRecord.Id);
             }
@@ -39,15 +33,14 @@
 
         public async Task DeleteAsync(Guid id)
         {
-            await Task.FromResult(this.users.Remove(id));
+            await Task.FromResult(this.recordData.Users.Remove(id));
         }
 
         public async Task<Guid> UpdateAsync(BaseUserRecordWithId record)
         {
-            if (this.users.TryGetValue(record.Id, out UserRecord found))
+            if (this.recordData.Users.TryGetValue(record.Id, out BaseUserRecordWithId found))
             {
                 found.UpdateUserRecord(ref record);
-
                 return await Task.FromResult(found.Id);
             };
 
