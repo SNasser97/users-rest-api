@@ -7,14 +7,14 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
     public class InMemoryUserWriteRepositoryTests
     {
         [Fact]
-        public void InMemoryUserWriteRepository_TakesNullUsersDependency_AndThrowsArgumentNullException()
+        public void InMemoryUserWriteRepository_TakesNullRecordDataDependency_AndThrowsArgumentNullException()
         {
             // Given
             // When
             ArgumentNullException ex = Assert.Throws<ArgumentNullException>(() => new InMemoryUserWriteRepository(null));
 
             // Then
-            Assert.Equal("users", ex.ParamName);
+            Assert.Equal("recordData", ex.ParamName);
         }
     }
 }

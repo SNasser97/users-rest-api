@@ -4,7 +4,9 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Moq;
     using users_data.Entities;
+    using users_data.Repositories;
     using users_data.Repositories.InMemoryUserRepository;
     using Xunit;
 
@@ -25,7 +27,9 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
                 { userThree, new UserRecord { Id = userThree, FirstName = "Mary", LastName = "Poppins", Email = "m.poppins@outlook.com", DateOfBirth = DateTime.Now, Age = 24 } }
             };
 
-            var userReadRepository = new InMemoryUserReadRepository(expectedUsersData);
+            var mockRecordData = new Mock<IRecordData<BaseUserRecordWithId>>();
+            var userReadRepository = new InMemoryUserReadRepository(mockRecordData.Object);
+            mockRecordData.SetupGet(s => s.Users).Returns(expectedUsersData);
 
             //When
             IEnumerable<BaseUserRecordWithId> actualUsers = await userReadRepository.GetAsync();
@@ -58,7 +62,9 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
             //Given
             var expectedUsersData = new Dictionary<Guid, BaseUserRecordWithId>();
 
-            var userReadRepository = new InMemoryUserReadRepository(expectedUsersData);
+            var mockRecordData = new Mock<IRecordData<BaseUserRecordWithId>>();
+            var userReadRepository = new InMemoryUserReadRepository(mockRecordData.Object);
+            mockRecordData.SetupGet(s => s.Users).Returns(expectedUsersData);
 
             //When
             IEnumerable<BaseUserRecordWithId> actualUsers = await userReadRepository.GetAsync();
@@ -67,6 +73,8 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
             Assert.Empty(actualUsers);
             int actualUsersInList = actualUsers.Count();
             Assert.Equal(0, actualUsersInList);
+
+            mockRecordData.VerifyGet(s => s.Users, Times.Once);
         }
     }
 }

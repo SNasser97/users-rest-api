@@ -4,7 +4,9 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Moq;
     using users_data.Entities;
+    using users_data.Repositories;
     using users_data.Repositories.InMemoryUserRepository;
     using Xunit;
 
@@ -26,7 +28,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
                 Age = 23
             };
 
-            var users = new Dictionary<Guid, UserRecord>
+            var users = new Dictionary<Guid, BaseUserRecordWithId>
             {
                 { Guid.NewGuid(), new UserRecord() },
                 { existingUser.Id, existingUser},
@@ -34,7 +36,9 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
                 { Guid.NewGuid(), new UserRecord() },
             };
 
-            var usersWriteRepository = new InMemoryUserWriteRepository(users);
+            var mockRecordData = new Mock<IRecordData<BaseUserRecordWithId>>();
+            var usersWriteRepository = new InMemoryUserWriteRepository(mockRecordData.Object);
+            mockRecordData.SetupGet(s => s.Users).Returns(users);
 
             //When
             await usersWriteRepository.DeleteAsync(userId);
@@ -45,10 +49,11 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
             int actualUsersValueCount = users.Values.Count;
             Assert.Equal(3, actualUsersValueCount);
 
-            KeyValuePair<Guid, UserRecord> actualUserRecord = users.FirstOrDefault(c => c.Key == userId);
+            KeyValuePair<Guid, BaseUserRecordWithId> actualUserRecord = users.FirstOrDefault(c => c.Key == userId);
             Assert.Equal(new KeyValuePair<Guid, UserRecord>().Key, actualUserRecord.Key);
             Assert.Equal(new KeyValuePair<Guid, UserRecord>().Value, actualUserRecord.Value);
             Assert.Null(actualUserRecord.Value);
+            mockRecordData.VerifyGet(s => s.Users, Times.Once);
         }
 
         [Fact]
@@ -65,7 +70,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
                 Age = 23
             };
 
-            var users = new Dictionary<Guid, UserRecord>
+            var users = new Dictionary<Guid, BaseUserRecordWithId>
             {
                 { Guid.NewGuid(), new UserRecord() },
                 { existingUser.Id, existingUser},
@@ -73,7 +78,9 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
                 { Guid.NewGuid(), new UserRecord() },
             };
 
-            var usersWriteRepository = new InMemoryUserWriteRepository(users);
+            var mockRecordData = new Mock<IRecordData<BaseUserRecordWithId>>();
+            var usersWriteRepository = new InMemoryUserWriteRepository(mockRecordData.Object);
+            mockRecordData.SetupGet(s => s.Users).Returns(users);
 
             //When
             await usersWriteRepository.DeleteAsync(Guid.NewGuid());
@@ -83,6 +90,8 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
             Assert.NotEmpty(users.Values);
             int actualUsersValueCount = users.Values.Count;
             Assert.Equal(4, actualUsersValueCount);
+
+            mockRecordData.VerifyGet(s => s.Users, Times.Once);
         }
     }
 }

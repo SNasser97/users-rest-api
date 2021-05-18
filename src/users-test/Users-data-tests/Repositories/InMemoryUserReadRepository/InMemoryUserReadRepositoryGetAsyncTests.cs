@@ -4,7 +4,9 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Moq;
     using users_data.Entities;
+    using users_data.Repositories;
     using users_data.Repositories.InMemoryUserRepository;
     using Xunit;
 
@@ -32,7 +34,9 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
                 { Guid.NewGuid(), new UserRecord() }
             };
 
-            var userReadRepository = new InMemoryUserReadRepository(users);
+            var mockRecordData = new Mock<IRecordData<BaseUserRecordWithId>>();
+            var userReadRepository = new InMemoryUserReadRepository(mockRecordData.Object);
+            mockRecordData.SetupGet(s => s.Users).Returns(users);
 
             //When
             UserRecord actualUser = (UserRecord)await userReadRepository.GetAsync(expectedUser.Id);
@@ -47,6 +51,8 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
             Assert.Equal(expectedUser.Age, actualUser.Age);
             int actualUsersInList = users.Count();
             Assert.Equal(4, actualUsersInList);
+
+            mockRecordData.VerifyGet(s => s.Users, Times.Once);
         }
 
         [Fact]
@@ -61,8 +67,9 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
                 { Guid.NewGuid(), new UserRecord() }
             };
 
-            var userReadRepository = new InMemoryUserReadRepository(users);
-
+            var mockRecordData = new Mock<IRecordData<BaseUserRecordWithId>>();
+            var userReadRepository = new InMemoryUserReadRepository(mockRecordData.Object);
+            mockRecordData.SetupGet(s => s.Users).Returns(users);
             //When
             UserRecord actualUser = (UserRecord)await userReadRepository.GetAsync(Guid.NewGuid());
 
@@ -70,6 +77,8 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
             Assert.Null(actualUser);
             int actualUsersInList = users.Count();
             Assert.Equal(4, actualUsersInList);
+
+            mockRecordData.VerifyGet(s => s.Users, Times.Once);
         }
 
         [Fact]
@@ -78,7 +87,9 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
             //Given
             var users = new Dictionary<Guid, BaseUserRecordWithId>();
 
-            var userReadRepository = new InMemoryUserReadRepository(users);
+            var mockRecordData = new Mock<IRecordData<BaseUserRecordWithId>>();
+            var userReadRepository = new InMemoryUserReadRepository(mockRecordData.Object);
+            mockRecordData.SetupGet(s => s.Users).Returns(users);
 
             //When
             UserRecord actualUser = (UserRecord)await userReadRepository.GetAsync(Guid.NewGuid());
@@ -87,6 +98,8 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
             Assert.Null(actualUser);
             int actualUsersInList = users.Count();
             Assert.Equal(0, actualUsersInList);
+
+            mockRecordData.VerifyGet(s => s.Users, Times.Once);
         }
     }
 }

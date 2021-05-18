@@ -14,7 +14,7 @@
             ArgumentNullException ex = Assert.Throws<ArgumentNullException>(() => new InMemoryUserReadRepository(null));
 
             // Then
-            Assert.Equal("users", ex.ParamName);
+            Assert.Equal("recordData", ex.ParamName);
         }
     }
 }

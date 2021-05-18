@@ -24,7 +24,7 @@ namespace users_test.Users_logic_tests.Command
             //Given
             //When
             ArgumentNullException ex = Assert.Throws<ArgumentNullException>(() =>
-                new UserCommand(new InMemoryUserWriteRepository(), null, null));
+                new UserCommand(new InMemoryUserWriteRepository(new InMemoryUsersRecordData()), null, null));
 
             //Then
             Assert.Equal("userReadRepository", ex.ParamName);
@@ -36,7 +36,10 @@ namespace users_test.Users_logic_tests.Command
             //Given
             //When
             ArgumentNullException ex = Assert.Throws<ArgumentNullException>(() =>
-                new UserCommand(new InMemoryUserWriteRepository(), new InMemoryUserReadRepository(), null));
+                new UserCommand(new InMemoryUserWriteRepository(new InMemoryUsersRecordData()),
+                new InMemoryUserReadRepository(new InMemoryUsersRecordData()),
+                null)
+            );
 
             //Then
             Assert.Equal("userLogicFacade", ex.ParamName);
