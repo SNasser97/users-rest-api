@@ -18,7 +18,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
             Guid userTwo = Guid.NewGuid();
             Guid userThree = Guid.NewGuid();
 
-            var expectedUsersData = new Dictionary<Guid, UserRecord>
+            var expectedUsersData = new Dictionary<Guid, BaseUserRecordWithId>
             {
                 { userOne , new UserRecord { Id = userOne, FirstName = "Bob", LastName = "Doe", Email = "b.doe@hotmail.co.uk", DateOfBirth = DateTime.Now, Age = 21 } },
                 { userTwo, new UserRecord { Id = userTwo, FirstName = "Tony", LastName = "Slark", Email = "t.slark@yahoomail.com", DateOfBirth = DateTime.Now, Age = 45 } },
@@ -38,10 +38,10 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
 
             foreach (UserRecord actualUser in actualUsers)
             {
-                KeyValuePair<Guid, UserRecord> expected = expectedUsersData.FirstOrDefault(u => u.Key == actualUser.Id);
-                Assert.NotEqual(new KeyValuePair<Guid, UserRecord>(), expected);
+                KeyValuePair<Guid, BaseUserRecordWithId> expected = expectedUsersData.FirstOrDefault(u => u.Key == actualUser.Id);
+                Assert.NotEqual(new KeyValuePair<Guid, BaseUserRecordWithId>(), expected);
 
-                UserRecord expectedUser = expected.Value;
+                BaseUserRecordWithId expectedUser = expected.Value;
                 Assert.NotNull(expected.Value);
                 Assert.Equal(expectedUser.Id, actualUser.Id);
                 Assert.Equal(expectedUser.FirstName, actualUser.FirstName);
@@ -56,7 +56,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
         public async Task InMemoryUserReadRepository_GetAsync_ReturnsEmptyUsersList()
         {
             //Given
-            var expectedUsersData = new Dictionary<Guid, UserRecord>();
+            var expectedUsersData = new Dictionary<Guid, BaseUserRecordWithId>();
 
             var userReadRepository = new InMemoryUserReadRepository(expectedUsersData);
 

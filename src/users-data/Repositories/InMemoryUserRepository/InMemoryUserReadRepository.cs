@@ -7,13 +7,13 @@
 
     public class InMemoryUserReadRepository : IReadRepository<BaseUserRecordWithId>
     {
-        private readonly IDictionary<Guid, UserRecord> users;
+        private readonly IDictionary<Guid, BaseUserRecordWithId> users;
 
-        public InMemoryUserReadRepository() : this(new Dictionary<Guid, UserRecord>())
+        public InMemoryUserReadRepository() : this(new Dictionary<Guid, BaseUserRecordWithId>())
         {
         }
 
-        public InMemoryUserReadRepository(IDictionary<Guid, UserRecord> users)
+        public InMemoryUserReadRepository(IDictionary<Guid, BaseUserRecordWithId> users)
         {
             this.users = users ?? throw new ArgumentNullException(nameof(users));
         }
@@ -23,7 +23,7 @@
 
         public async Task<BaseUserRecordWithId> GetAsync(Guid id)
         {
-            this.users.TryGetValue(id, out UserRecord userRecord);
+            this.users.TryGetValue(id, out BaseUserRecordWithId userRecord);
 
             return await Task.FromResult(userRecord);
         }

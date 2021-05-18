@@ -24,7 +24,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
                 Age = 23
             };
 
-            var users = new Dictionary<Guid, UserRecord>
+            var users = new Dictionary<Guid, BaseUserRecordWithId>
             {
                 { expectedUser.Id, expectedUser },
                 { Guid.NewGuid(), new UserRecord() },
@@ -53,7 +53,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
         public async Task InMemoryUserReadRepository_GetAsync_ReturnsNoUserByGuid()
         {
             //Given
-            var users = new Dictionary<Guid, UserRecord>
+            var users = new Dictionary<Guid, BaseUserRecordWithId>
             {
                 { Guid.NewGuid(), new UserRecord() },
                 { Guid.NewGuid(), new UserRecord() },
@@ -76,7 +76,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
         public async Task InMemoryUserReadRepository_GetAsync_ReturnsNoUserByGuidOnEmptyList()
         {
             //Given
-            var users = new Dictionary<Guid, UserRecord>();
+            var users = new Dictionary<Guid, BaseUserRecordWithId>();
 
             var userReadRepository = new InMemoryUserReadRepository(users);
 
