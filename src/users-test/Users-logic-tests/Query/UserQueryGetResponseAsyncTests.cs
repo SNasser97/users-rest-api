@@ -38,7 +38,7 @@ namespace users_test.Users_logic_tests.Query
                 Age = 37
             };
 
-            var mockUserReadRepository = new Mock<IReadRepository<UserRecord>>();
+            var mockUserReadRepository = new Mock<IReadRepository<BaseUserRecordWithId>>();
             mockUserReadRepository.Setup(s => s.GetAsync(It.IsAny<Guid>())).ReturnsAsync(existingUser);
 
             var userQuery = new UserQuery(mockUserReadRepository.Object);
@@ -60,7 +60,7 @@ namespace users_test.Users_logic_tests.Query
         public async Task UserQuery_GetResponseAsync_TakesNullGetUserQueryRequestModelAndThrowsArgumentNullException()
         {
             //Given
-            var mockUserReadRepository = new Mock<IReadRepository<UserRecord>>();
+            var mockUserReadRepository = new Mock<IReadRepository<BaseUserRecordWithId>>();
             var userQuery = new UserQuery(mockUserReadRepository.Object);
 
             //When
@@ -76,7 +76,7 @@ namespace users_test.Users_logic_tests.Query
         public async Task UserQuery_GetResponseAsync_TakesGetUserRequestModelAndThrowsQueryResponseException(GetUserQueryRequestModel requestModelTest)
         {
             //Given
-            var mockUserReadRepository = new Mock<IReadRepository<UserRecord>>();
+            var mockUserReadRepository = new Mock<IReadRepository<BaseUserRecordWithId>>();
             var userQuery = new UserQuery(mockUserReadRepository.Object);
 
             //When
@@ -93,7 +93,7 @@ namespace users_test.Users_logic_tests.Query
             //Given
             Guid userId = Guid.NewGuid();
             var userRequestModel = new GetUserQueryRequestModel { Id = userId };
-            var mockUserReadRepository = new Mock<IReadRepository<UserRecord>>();
+            var mockUserReadRepository = new Mock<IReadRepository<BaseUserRecordWithId>>();
             var userQuery = new UserQuery(mockUserReadRepository.Object);
             mockUserReadRepository.Setup(s => s.GetAsync(It.IsAny<Guid>())).ReturnsAsync(null as UserRecord);
 

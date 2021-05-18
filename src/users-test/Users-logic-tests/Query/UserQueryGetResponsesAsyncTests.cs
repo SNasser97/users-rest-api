@@ -48,7 +48,7 @@ namespace users_test.Users_logic_tests.Query
                 }
             };
 
-            var mockUserReadRepository = new Mock<IReadRepository<UserRecord>>();
+            var mockUserReadRepository = new Mock<IReadRepository<BaseUserRecordWithId>>();
             var userQuery = new UserQuery(mockUserReadRepository.Object);
             mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(existingUserRecords);
 
@@ -60,7 +60,7 @@ namespace users_test.Users_logic_tests.Query
             Assert.NotEmpty(actualUsersResponse.Users);
             foreach (GetUserQueryResponseModel actualUserResponse in actualUsersResponse.Users)
             {
-                UserRecord expectedUserMapped = existingUserRecords.FirstOrDefault(u => u.Id == actualUserResponse.Id);
+                BaseUserRecordWithId expectedUserMapped = existingUserRecords.FirstOrDefault(u => u.Id == actualUserResponse.Id);
                 Assert.NotNull(expectedUserMapped);
                 Assert.Equal(expectedUserMapped.FirstName, actualUserResponse.FirstName);
                 Assert.Equal(expectedUserMapped.LastName, actualUserResponse.LastName);
@@ -81,9 +81,9 @@ namespace users_test.Users_logic_tests.Query
         public async Task UserQuery_GetResponsesAsync_ReturnsEmptyGetUsersQueryResponseModel()
         {
             //Given
-            var mockUserReadRepository = new Mock<IReadRepository<UserRecord>>();
+            var mockUserReadRepository = new Mock<IReadRepository<BaseUserRecordWithId>>();
             var userQuery = new UserQuery(mockUserReadRepository.Object);
-            mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(Enumerable.Empty<UserRecord>());
+            mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(Enumerable.Empty<BaseUserRecordWithId>());
 
             //When
             GetUsersQueryResponseModel actualUsersResponse = await userQuery.GetResponsesAsync();
