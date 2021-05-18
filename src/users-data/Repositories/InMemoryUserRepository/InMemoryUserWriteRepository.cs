@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Text.Json;
     using System.Threading.Tasks;
     using users_data.Entities;
     using users_data.Extensions;
@@ -31,7 +33,7 @@
             {
                 return await Task.FromResult(userRecord.Id);
             }
-
+            Debug.WriteLine("Created: {0}", JsonSerializer.Serialize(userRecord));
             return await Task.FromResult(Guid.Empty);
         }
 
