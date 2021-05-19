@@ -6,10 +6,10 @@ namespace users_logic.User.Logic.Command
 
     public interface IUserCommand<TResponse>
     {
-        Task<TResponse> CreateUserAsync(BaseUserCommandRequest request);
+        Task<TResponse> CreateUserAsync(BaseUserCommandRequestModel request);
 
-        Task<TResponse> UpdateUserAsync(BaseUserCommandRequestWithId request);
+        Task<TResponse> UpdateUserAsync(BaseUserCommandRequestWithIdModel request);
 
-        Task DeleteUserAsync(DeleteUserCommandRequest request);
+        Task DeleteUserAsync(DeleteUserCommandRequestModel request);
     }
 }

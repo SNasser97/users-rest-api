@@ -15,7 +15,7 @@ namespace users_logic.User.Logic.Command
     using users_logic.User.Logic.Command.Models.Request.Common;
     using users_logic.User.Logic.Command.Models.Response;
 
-    public class UserCommand : IUserCommand<BaseUserCommandResponse>
+    public class UserCommand : IUserCommand<BaseUserCommandResponseModel>
     {
         private readonly IWriteRepository<BaseUserRecord, BaseUserRecordWithId> userWriteRepository;
         private readonly IReadRepository<BaseUserRecordWithId> userReadRepository;
@@ -31,7 +31,7 @@ namespace users_logic.User.Logic.Command
             this.userLogicFacade = userLogicFacade ?? throw new System.ArgumentNullException(nameof(userLogicFacade));
         }
 
-        public async Task<BaseUserCommandResponse> CreateUserAsync(BaseUserCommandRequest request)
+        public async Task<BaseUserCommandResponseModel> CreateUserAsync(BaseUserCommandRequestModel request)
         {
             ExecuteLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
 
@@ -47,10 +47,10 @@ namespace users_logic.User.Logic.Command
             Guid recordCreatedId = await this.userWriteRepository.CreateAsync(request.ToRecord(age));
 
             ExecuteLogic.ThrowException<CommandResponseException>(() => recordCreatedId == Guid.Empty);
-            return new CreateUserCommandResponse { Id = recordCreatedId };
+            return new CreateUserCommandResponseModel { Id = recordCreatedId };
         }
 
-        public async Task<BaseUserCommandResponse> UpdateUserAsync(BaseUserCommandRequestWithId request)
+        public async Task<BaseUserCommandResponseModel> UpdateUserAsync(BaseUserCommandRequestWithIdModel request)
         {
             ExecuteLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
             ExecuteLogic.ThrowException<CommandRequestException>(() => request.Id == Guid.Empty);
@@ -70,10 +70,10 @@ namespace users_logic.User.Logic.Command
             Guid updatedResponseId = await this.userWriteRepository.UpdateAsync(request.ToRecord(age));
 
             ExecuteLogic.ThrowException<CommandResponseException>(() => updatedResponseId == Guid.Empty);
-            return new UpdateUserCommandResponse { Id = updatedResponseId };
+            return new UpdateUserCommandResponseModel { Id = updatedResponseId };
         }
 
-        public async Task DeleteUserAsync(DeleteUserCommandRequest request)
+        public async Task DeleteUserAsync(DeleteUserCommandRequestModel request)
         {
             ExecuteLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
             ExecuteLogic.ThrowException<CommandRequestException>(() => request.Id == Guid.Empty);
