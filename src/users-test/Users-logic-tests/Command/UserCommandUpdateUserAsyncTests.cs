@@ -24,7 +24,7 @@ namespace users_test.Users_logic_tests.Command
 
         public readonly static Guid mockRequestId = Guid.NewGuid();
 
-        public static UpdateUserCommandRequest updateUserCommandRequest => new UpdateUserCommandRequest
+        public static UpdateUserCommandRequestModel updateUserCommandRequest => new UpdateUserCommandRequestModel
         {
             Id = mockRequestId,
             FirstName = "Jamie",
@@ -88,7 +88,7 @@ namespace users_test.Users_logic_tests.Command
             this.mockUserWriteRepository.Setup(s => s.UpdateAsync(It.IsAny<UpdateUserRecord>())).ReturnsAsync(userRecordsTestData[0].Id);
 
             //When
-            UpdateUserCommandResponse actualResponse = (UpdateUserCommandResponse)await this.userCommand.UpdateUserAsync(updateUserCommandRequest);
+            UpdateUserCommandResponseModel actualResponse = (UpdateUserCommandResponseModel)await this.userCommand.UpdateUserAsync(updateUserCommandRequest);
 
             //Then
             Assert.NotNull(actualResponse);

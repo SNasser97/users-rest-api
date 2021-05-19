@@ -46,7 +46,7 @@ namespace users_test.Users_logic_tests.Command
             //When
             //Then
             await Exceptions<CommandRequestException>.HandleAsync(async () =>
-                await this.userCommand.DeleteUserAsync(new DeleteUserCommandRequest()),
+                await this.userCommand.DeleteUserAsync(new DeleteUserCommandRequestModel()),
                 (ex) => Assert.Equal("Request Id was empty", ex.Message)
             );
         }
@@ -56,7 +56,7 @@ namespace users_test.Users_logic_tests.Command
         {
             //Given
             Guid requestId = Guid.NewGuid();
-            var deleteUserCommandRequest = new DeleteUserCommandRequest { Id = requestId };
+            var deleteUserCommandRequest = new DeleteUserCommandRequestModel { Id = requestId };
             var userRecord = new UserRecord
             {
                 Id = requestId,
@@ -82,7 +82,7 @@ namespace users_test.Users_logic_tests.Command
         public async Task UserCommand_DeleteUserAsync_TakesDeleteUserCommandRequest_ThrowsUserNotFoundException()
         {
             //Given
-            var deleteUserCommandRequest = new DeleteUserCommandRequest { Id = Guid.NewGuid() };
+            var deleteUserCommandRequest = new DeleteUserCommandRequestModel { Id = Guid.NewGuid() };
 
             this.mockUserReadRepository.Setup(s => s.GetAsync(It.IsAny<Guid>())).ReturnsAsync(null as UserRecord);
             this.mockUserWriteRepository.Setup(s => s.DeleteAsync(It.IsAny<Guid>()));

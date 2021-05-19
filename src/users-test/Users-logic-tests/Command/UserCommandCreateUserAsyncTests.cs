@@ -47,7 +47,7 @@ namespace users_test.Users_logic_tests.Command
         {
             //Given
             Guid responseId = Guid.NewGuid();
-            var createUserCommandRequest = new CreateUserCommandRequest
+            var createUserCommandRequest = new CreateUserCommandRequestModel
             {
                 FirstName = "Bob",
                 LastName = "Doe",
@@ -63,7 +63,7 @@ namespace users_test.Users_logic_tests.Command
             this.mockUserWriteRepository.Setup(s => s.CreateAsync(It.IsAny<CreateUserRecord>())).ReturnsAsync(responseId);
 
             //When
-            CreateUserCommandResponse actualResponse = (CreateUserCommandResponse)await userCommand.CreateUserAsync(createUserCommandRequest);
+            CreateUserCommandResponseModel actualResponse = (CreateUserCommandResponseModel)await userCommand.CreateUserAsync(createUserCommandRequest);
 
             //Then
             Assert.NotNull(actualResponse);
@@ -80,7 +80,7 @@ namespace users_test.Users_logic_tests.Command
         public async Task UserCommand_CreateUserAsync_TakesExistingEmailInCreateUserCommandRequest_ExpectsCommandRequestException()
         {
             //Given
-            var createUserCommandRequest = new CreateUserCommandRequest
+            var createUserCommandRequest = new CreateUserCommandRequestModel
             {
                 FirstName = "Bob",
                 LastName = "Doe",
@@ -115,7 +115,7 @@ namespace users_test.Users_logic_tests.Command
         public async Task UserCommand_CreateUserAsync_TakesInvalidDateOfBirthInCreateUserCommandRequest_ExpectsCommandRequestException(int mockTestAge)
         {
             //Given
-            var createUserCommandRequest = new CreateUserCommandRequest
+            var createUserCommandRequest = new CreateUserCommandRequestModel
             {
                 FirstName = "Bob",
                 LastName = "Doe",
@@ -147,7 +147,7 @@ namespace users_test.Users_logic_tests.Command
         public async Task UserCommand_CreateUserAsync_TakesCreateUserCommandRequest_ReturnsEmptyGuidExpectsCommandRequestException()
         {
             //Given
-            var createUserCommandRequest = new CreateUserCommandRequest
+            var createUserCommandRequest = new CreateUserCommandRequestModel
             {
                 FirstName = "Bob",
                 LastName = "Doe",
