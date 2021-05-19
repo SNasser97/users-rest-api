@@ -5,7 +5,7 @@ namespace users_logic.Extensions
 
     public static class UserCommandRequestExtensions
     {
-        public static CreateUserRecord ToRecord(this BaseUserCommandRequest source, int age)
+        public static CreateUserRecord ToRecord(this BaseUserCommandRequestModel source, int age)
         {
             return new CreateUserRecord
             {
@@ -17,7 +17,7 @@ namespace users_logic.Extensions
             };
         }
 
-        public static UpdateUserRecord ToRecord(this BaseUserCommandRequestWithId source, int age)
+        public static UpdateUserRecord ToRecord(this BaseUserCommandRequestWithIdModel source, int age)
         {
             return new UpdateUserRecord
             {
