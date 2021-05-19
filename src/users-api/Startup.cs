@@ -59,7 +59,7 @@ namespace users_api
             services.AddScoped<IWriteRepository<BaseUserRecord, BaseUserRecordWithId>, InMemoryUserWriteRepository>();
             services.AddScoped<IReadRepository<BaseUserRecordWithId>, InMemoryUserReadRepository>();
             services.AddScoped<IUserQuery<GetUserQueryRequestModel, GetUserQueryResponseModel, GetUsersQueryResponseModel>, UserQuery>();
-            services.AddScoped<IUserCommand<BaseUserCommandResponse>, UserCommand>();
+            services.AddScoped<IUserCommand<BaseUserCommandResponseModel>, UserCommand>();
             services.AddScoped<IDateTimeParser, DateTimeParser>();
             services.AddScoped<IDateTimeProvider, DateTimeProvider>();
             services.AddScoped<IUserLogicFacade, UserLogicFacade>();
