@@ -1,9 +1,8 @@
 namespace users_api.UserControllers.CommandControllers.Models.Response
 {
-    using System;
+    using users_api.UserControllers.CommandControllers.Models.Response.Common;
 
-    public class CreateUserControllerResponseModel
+    public class CreateUserControllerResponseModel : BaseUserControllerResponseModel
     {
-        public Guid Id { get; set; }
     }
 }
