@@ -1,8 +1,6 @@
 namespace users_api.UserControllers.QueryControllers
 {
     using System;
-    using System.Diagnostics;
-    using System.Text.Json;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using users_logic.User.Logic.Query;
@@ -23,15 +21,15 @@ namespace users_api.UserControllers.QueryControllers
         [HttpGet]
         public async Task<GetUsersQueryResponseModel> GetAsync()
         {
-            GetUsersQueryResponseModel userResponses = await this.userQuery.GetResponsesAsync();
-            return userResponses;
+            GetUsersQueryResponseModel userQueryResponses = await this.userQuery.GetResponsesAsync();
+            return userQueryResponses;
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] Guid id)
         {
-            var b = await this.userQuery.GetReponseAsync(new GetUserQueryRequestModel { Id = id });
-            return this.Ok(b);
+            GetUserQueryResponseModel userQueryResponse = await this.userQuery.GetResponseAsync(new GetUserQueryRequestModel { Id = id });
+            return this.Ok(userQueryResponse);
         }
     }
 }
