@@ -1,25 +1,8 @@
 namespace users_logic.Exceptions.Query
 {
-    using System;
-    using System.Runtime.Serialization;
+    using users_logic.Exceptions.Common;
 
-    public class QueryRequestException : Exception
+    public class QueryRequestException : BaseRequestException
     {
-        public QueryRequestException() : base("Request Id was empty")
-        {
-
-        }
-
-        public QueryRequestException(string message) : base(message)
-        {
-        }
-
-        public QueryRequestException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
-
-        protected QueryRequestException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
     }
 }
