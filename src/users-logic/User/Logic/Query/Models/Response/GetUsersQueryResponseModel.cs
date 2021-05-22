@@ -4,6 +4,13 @@
 
     public class GetUsersQueryResponseModel
     {
-        public IEnumerable<GetUserQueryResponseModel> Users { get; set; }
+        public IEnumerable<GetUserQueryResponseModel> Users { get => this.users; }
+
+        private readonly IList<GetUserQueryResponseModel> users = new List<GetUserQueryResponseModel>();
+
+        public void AddResponse(GetUserQueryResponseModel model)
+        {
+            this.users.Add(model);
+        }
     }
 }
