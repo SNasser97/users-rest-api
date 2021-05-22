@@ -1,7 +1,6 @@
 namespace users_logic.User.Logic.Query.Models.Response
 {
     using System;
-    using users_data.Entities;
 
     public class GetUserQueryResponseModel
     {
