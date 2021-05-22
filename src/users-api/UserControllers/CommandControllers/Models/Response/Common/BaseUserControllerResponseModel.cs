@@ -5,5 +5,7 @@ namespace users_api.UserControllers.CommandControllers.Models.Response.Common
     public abstract class BaseUserControllerResponseModel
     {
         public Guid Id { get; set; }
+
+        public string? Error { get; set; }
     }
 }
