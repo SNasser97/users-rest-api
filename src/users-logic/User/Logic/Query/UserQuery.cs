@@ -29,7 +29,7 @@ namespace users_logic.User.Logic.Query
             BaseUserRecordWithId userRecord = await this.userReadRepository.GetAsync(request.Id);
 
             ExecuteLogic.ThrowException<UserNotFoundException>(() => userRecord == null);
-            return new GetUserQueryResponseModel().ToUserResponseModel(userRecord);
+            return userRecord.ToResponseModel();
         }
 
         public async Task<GetUsersQueryResponseModel> GetResponsesAsync()
@@ -40,12 +40,13 @@ namespace users_logic.User.Logic.Query
 
         private async Task<GetUsersQueryResponseModel> MapToGetUsersQueryResponseModel(IEnumerable<BaseUserRecordWithId> records)
         {
-            IEnumerable<GetUserQueryResponseModel> userQueryResponseList = await (Task.WhenAll(records.Select(r
-                => Task.Run(() => new GetUserQueryResponseModel().ToUserResponseModel(r)))));
+            IList<GetUserQueryResponseModel> responses = await (Task.WhenAll(records.Select(r
+                => Task.Run(() => r.ToResponseModel()))));
 
-            var usersQueryResponse = new GetUsersQueryResponseModel();
-            usersQueryResponse.Users = userQueryResponseList;
-            return usersQueryResponse;
+            var usersQueryResponseModel = new GetUsersQueryResponseModel();
+
+            responses.ForEachResponse(async r => await Task.Run(() => usersQueryResponseModel.AddResponse(r)));
+            return usersQueryResponseModel;
         }
     }
 }
