@@ -26,8 +26,8 @@ namespace users_api.UserControllers.CommandControllers
         {
             try
             {
-                CreateUserCommandResponseModel a = (CreateUserCommandResponseModel)await this.userCommand.CreateUserAsync(request.ToUserCommandRequest());
-                return this.Ok(a.Id);
+                CreateUserCommandResponseModel createUserCommandResponse = (CreateUserCommandResponseModel)await this.userCommand.CreateUserAsync(request.ToUserCommandRequest());
+                return this.Ok(createUserCommandResponse.Id);
 
             }
             catch (EmailExistsException ex)
@@ -43,8 +43,8 @@ namespace users_api.UserControllers.CommandControllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, UpdateUserControllerRequestModel request)
         {
-            UpdateUserCommandResponseModel commandResponseModel = (UpdateUserCommandResponseModel)await this.userCommand.UpdateUserAsync(request.ToUserCommandRequest(id));
-            return this.Ok(commandResponseModel.Id);
+            UpdateUserCommandResponseModel updateUserResponse = (UpdateUserCommandResponseModel)await this.userCommand.UpdateUserAsync(request.ToUserCommandRequest(id));
+            return this.Ok(updateUserResponse.Id);
         }
 
         [HttpDelete("{id}")]
