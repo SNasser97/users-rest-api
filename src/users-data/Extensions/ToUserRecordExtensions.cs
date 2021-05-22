@@ -20,7 +20,6 @@ namespace users_data.Extensions
 
         public static void UpdateUserRecord(this BaseUserRecord user, ref BaseUserRecordWithId userUpdated)
         {
-            // Will only update if Id matches
             user.FirstName = userUpdated.FirstName;
             user.LastName = userUpdated.LastName;
             user.Email = userUpdated.Email;
