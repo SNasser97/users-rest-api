@@ -9,10 +9,6 @@
     {
         private readonly IRecordData<BaseUserRecordWithId> recordData;
 
-        // public InMemoryUserReadRepository() : this(new InMemoryUsersRecordData())
-        // {
-        // }
-
         public InMemoryUserReadRepository(IRecordData<BaseUserRecordWithId> recordData)
         {
             this.recordData = recordData ?? throw new ArgumentNullException(nameof(recordData));
@@ -24,7 +20,6 @@
         public async Task<BaseUserRecordWithId> GetAsync(Guid id)
         {
             this.recordData.Users.TryGetValue(id, out BaseUserRecordWithId userRecord);
-
             return await Task.FromResult(userRecord);
         }
     }
