@@ -3,7 +3,7 @@ namespace users_logic.Extensions
     using users_data.Entities;
     using users_logic.User.Logic.Command.Models.Request.Common;
 
-    public static class UserCommandRequestExtensions
+    public static class UserLogicRequestExtensions
     {
         public static CreateUserRecord ToRecord(this BaseUserCommandRequestModel source, int age)
         {
