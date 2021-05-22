@@ -16,18 +16,5 @@ namespace users_logic.User.Logic.Query.Models.Response
         public DateTime DateOfBirth { get; set; }
 
         public int Age { get; set; }
-
-        public GetUserQueryResponseModel ToUserResponseModel(BaseUserRecordWithId userRecord)
-        {
-            return new GetUserQueryResponseModel
-            {
-                Id = userRecord.Id,
-                FirstName = userRecord.FirstName,
-                LastName = userRecord.LastName,
-                Email = userRecord.Email,
-                DateOfBirth = userRecord.DateOfBirth,
-                Age = userRecord.Age
-            };
-        }
     }
 }
