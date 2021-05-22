@@ -32,7 +32,6 @@ namespace users_logic.User.Facades
         {
             DateTime current = this.dateTimeProvider.Now;
             int age = await this.dateTimeParser.ParseDateOfBirthAsAgeAsync(current, dateOfBirth);
-
             return age;
         }
     }
