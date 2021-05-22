@@ -5,7 +5,7 @@ namespace users_api.UserControllers.CommandControllers
     using Microsoft.AspNetCore.Mvc;
     using users_api.Extensions;
     using users_api.UserControllers.CommandControllers.Models.Request;
-    using users_logic.Exceptions.Validation;
+    using users_api.UserControllers.CommandControllers.Models.Response;
     using users_logic.User.Logic.Command;
     using users_logic.User.Logic.Command.Models.Request;
     using users_logic.User.Logic.Command.Models.Response;
@@ -24,27 +24,29 @@ namespace users_api.UserControllers.CommandControllers
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreateUserControllerRequestModel request)
         {
-            try
-            {
-                CreateUserCommandResponseModel createUserCommandResponse = (CreateUserCommandResponseModel)await this.userCommand.CreateUserAsync(request.ToUserCommandRequest());
-                return this.Ok(createUserCommandResponse.Id);
+            CreateUserControllerResponseModel response = await ControllerResponseModelExtensions.CaptureResponse<CreateUserControllerResponseModel, CreateUserCommandResponseModel>(async ()
+                => (CreateUserCommandResponseModel)await this.userCommand.CreateUserAsync(request.ToUserCommandRequest()));
 
-            }
-            catch (EmailExistsException ex)
+            if (!string.IsNullOrWhiteSpace(response?.Error))
             {
-                return this.BadRequest(ex.Message);
+                return this.BadRequest(response.Error);
             }
-            catch (Exception ex)
-            {
-                return this.BadRequest(ex.Message);
-            }
+
+            return this.Ok(response.Id);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, UpdateUserControllerRequestModel request)
         {
-            UpdateUserCommandResponseModel updateUserResponse = (UpdateUserCommandResponseModel)await this.userCommand.UpdateUserAsync(request.ToUserCommandRequest(id));
-            return this.Ok(updateUserResponse.Id);
+            UpdateUserControllerResponseModel response = await ControllerResponseModelExtensions.CaptureResponse<UpdateUserControllerResponseModel, UpdateUserCommandResponseModel>(async ()
+                => (UpdateUserCommandResponseModel)await this.userCommand.UpdateUserAsync(request.ToUserCommandRequest(id)));
+
+            if (!string.IsNullOrWhiteSpace(response?.Error))
+            {
+                return this.BadRequest(response.Error);
+            }
+
+            return this.Ok(response.Id);
         }
 
         [HttpDelete("{id}")]
