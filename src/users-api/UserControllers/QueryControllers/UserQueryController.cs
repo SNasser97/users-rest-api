@@ -1,8 +1,11 @@
 namespace users_api.UserControllers.QueryControllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
+    using users_api.Extensions;
+    using users_api.UserControllers.QueryControllers.Models.Response;
     using users_logic.User.Logic.Query;
     using users_logic.User.Logic.Query.Models.Request;
     using users_logic.User.Logic.Query.Models.Response;
@@ -19,17 +22,25 @@ namespace users_api.UserControllers.QueryControllers
         }
 
         [HttpGet]
-        public async Task<GetUsersQueryResponseModel> GetAsync()
+        public async Task<GetUserControllerResponsesModel> GetAsync()
         {
             GetUsersQueryResponseModel userQueryResponses = await this.userQuery.GetResponsesAsync();
-            return userQueryResponses;
+            IEnumerable<GetUserControllerResponseModel> responseModels = await userQueryResponses.Users.MapListToControllerResponsesAsync();
+            return new GetUserControllerResponsesModel { Users = responseModels };
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] Guid id)
         {
-            GetUserQueryResponseModel userQueryResponse = await this.userQuery.GetResponseAsync(new GetUserQueryRequestModel { Id = id });
-            return this.Ok(userQueryResponse);
+            GetUserControllerResponseModel getUserResponse = await ControllerResponseModelExtensions.CaptureGetResponseAsync(async ()
+                => await this.userQuery.GetResponseAsync(new GetUserQueryRequestModel { Id = id }));
+
+            if (!string.IsNullOrWhiteSpace(getUserResponse?.Error))
+            {
+                return this.BadRequest(getUserResponse.Error);
+            }
+
+            return this.Ok(getUserResponse);
         }
     }
 }
