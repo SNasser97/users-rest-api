@@ -23,9 +23,8 @@ namespace users_api.UserControllers.QueryControllers
         [HttpGet]
         public async Task<GetUsersQueryResponseModel> GetAsync()
         {
-            var a = await this.userQuery.GetResponsesAsync();
-            Debug.WriteLine(JsonSerializer.Serialize(a.Users));
-            return a;
+            GetUsersQueryResponseModel userResponses = await this.userQuery.GetResponsesAsync();
+            return userResponses;
         }
 
         [HttpGet("{id}")]
