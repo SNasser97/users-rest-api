@@ -24,35 +24,42 @@ namespace users_api.UserControllers.CommandControllers
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreateUserControllerRequestModel request)
         {
-            CreateUserControllerResponseModel response = await ControllerResponseModelExtensions.CaptureResponse<CreateUserControllerResponseModel, CreateUserCommandResponseModel>(async ()
+            CreateUserControllerResponseModel createResponse = await ControllerResponseModelExtensions.CaptureResponseAsync<CreateUserControllerResponseModel, CreateUserCommandResponseModel>(async ()
                 => (CreateUserCommandResponseModel)await this.userCommand.CreateUserAsync(request.ToUserCommandRequest()));
 
-            if (!string.IsNullOrWhiteSpace(response?.Error))
+            if (!string.IsNullOrWhiteSpace(createResponse?.Error))
             {
-                return this.BadRequest(response.Error);
+                return this.BadRequest(createResponse.Error);
             }
 
-            return this.Ok(response.Id);
+            return this.Ok(createResponse.Id);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, UpdateUserControllerRequestModel request)
         {
-            UpdateUserControllerResponseModel response = await ControllerResponseModelExtensions.CaptureResponse<UpdateUserControllerResponseModel, UpdateUserCommandResponseModel>(async ()
+            UpdateUserControllerResponseModel updateResponse = await ControllerResponseModelExtensions.CaptureResponseAsync<UpdateUserControllerResponseModel, UpdateUserCommandResponseModel>(async ()
                 => (UpdateUserCommandResponseModel)await this.userCommand.UpdateUserAsync(request.ToUserCommandRequest(id)));
 
-            if (!string.IsNullOrWhiteSpace(response?.Error))
+            if (!string.IsNullOrWhiteSpace(updateResponse?.Error))
             {
-                return this.BadRequest(response.Error);
+                return this.BadRequest(updateResponse.Error);
             }
 
-            return this.Ok(response.Id);
+            return this.Ok(updateResponse.Id);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
         {
-            await this.userCommand.DeleteUserAsync(new DeleteUserCommandRequestModel { Id = id });
+            DeleteUserControllerResponseModel deleteResponse = await ControllerResponseModelExtensions.CaptureDeleteResponseAsync(async ()
+                => await this.userCommand.DeleteUserAsync(new DeleteUserCommandRequestModel { Id = id }));
+
+            if (!string.IsNullOrWhiteSpace(deleteResponse?.Error))
+            {
+                return this.BadRequest(deleteResponse.Error);
+            }
+
             return this.Ok();
         }
     }
