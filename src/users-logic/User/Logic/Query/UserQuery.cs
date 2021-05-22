@@ -21,7 +21,7 @@ namespace users_logic.User.Logic.Query
             this.userReadRepository = userReadRepository ?? throw new System.ArgumentNullException(nameof(userReadRepository));
         }
 
-        public async Task<GetUserQueryResponseModel> GetReponseAsync(GetUserQueryRequestModel request)
+        public async Task<GetUserQueryResponseModel> GetResponseAsync(GetUserQueryRequestModel request)
         {
             ExecuteLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
             ExecuteLogic.ThrowException<QueryRequestException>(() => request.Id == Guid.Empty);

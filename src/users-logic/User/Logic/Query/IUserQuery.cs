@@ -4,7 +4,7 @@ namespace users_logic.User.Logic.Query
 
     public interface IUserQuery<TRequest, TResponse, TResponses>
     {
-        Task<TResponse> GetReponseAsync(TRequest request);
+        Task<TResponse> GetResponseAsync(TRequest request);
 
         Task<TResponses> GetResponsesAsync();
     }
