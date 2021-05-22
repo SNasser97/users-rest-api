@@ -43,8 +43,8 @@ namespace users_api.UserControllers.CommandControllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, UpdateUserControllerRequestModel request)
         {
-            UpdateUserCommandResponseModel a = (UpdateUserCommandResponseModel)await this.userCommand.UpdateUserAsync(request.ToUserCommandRequest(id));
-            return this.Ok(a.Id);
+            UpdateUserCommandResponseModel commandResponseModel = (UpdateUserCommandResponseModel)await this.userCommand.UpdateUserAsync(request.ToUserCommandRequest(id));
+            return this.Ok(commandResponseModel.Id);
         }
 
         [HttpDelete("{id}")]
