@@ -33,54 +33,54 @@ namespace users_logic.User.Logic.Command
 
         public async Task<BaseUserCommandResponseModel> CreateUserAsync(BaseUserCommandRequestModel request)
         {
-            ExecuteLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
+            UserLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
 
             IEnumerable<BaseUserRecordWithId> records = await this.userReadRepository.GetAsync();
 
-            await ExecuteLogic.ThrowExceptionAsync<EmailExistsException>(async ()
+            await UserLogic.ThrowExceptionAsync<EmailExistsException>(async ()
                 => await this.userLogicFacade.DoesUserEmailAlreadyExistAsync(records, request.Email));
 
             int age = await this.userLogicFacade.GetCalculatedUsersAgeAsync(request.DateOfBirth);
 
-            await ExecuteLogic.ThrowExceptionAsync<InvalidAgeException>(async () => !await this.userLogicFacade.IsAgeValidAsync(age));
+            await UserLogic.ThrowExceptionAsync<InvalidAgeException>(async () => !await this.userLogicFacade.IsAgeValidAsync(age));
 
             Guid recordCreatedId = await this.userWriteRepository.CreateAsync(request.ToRecord(age));
 
-            ExecuteLogic.ThrowException<CommandResponseException>(() => recordCreatedId == Guid.Empty);
+            UserLogic.ThrowException<CommandResponseException>(() => recordCreatedId == Guid.Empty);
             return new CreateUserCommandResponseModel { Id = recordCreatedId };
         }
 
         public async Task<BaseUserCommandResponseModel> UpdateUserAsync(BaseUserCommandRequestWithIdModel request)
         {
-            ExecuteLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
-            ExecuteLogic.ThrowException<CommandRequestException>(() => request.Id == Guid.Empty);
+            UserLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
+            UserLogic.ThrowException<CommandRequestException>(() => request.Id == Guid.Empty);
 
             UserRecord foundUserRecord = (UserRecord)await this.userReadRepository.GetAsync(request.Id);
-            ExecuteLogic.ThrowException<UserNotFoundException>(() => foundUserRecord == null);
+            UserLogic.ThrowException<UserNotFoundException>(() => foundUserRecord == null);
 
             IEnumerable<BaseUserRecordWithId> userRecords = await this.userReadRepository.GetAsync();
 
-            await ExecuteLogic.ThrowExceptionAsync<EmailExistsException>(async ()
+            await UserLogic.ThrowExceptionAsync<EmailExistsException>(async ()
                 => foundUserRecord.Email != request.Email && await this.userLogicFacade.DoesUserEmailAlreadyExistAsync(userRecords, request.Email));
 
             int age = await this.userLogicFacade.GetCalculatedUsersAgeAsync(request.DateOfBirth);
 
-            await ExecuteLogic.ThrowExceptionAsync<InvalidDateOfBirthException>(async () => !await this.userLogicFacade.IsAgeValidAsync(age));
+            await UserLogic.ThrowExceptionAsync<InvalidDateOfBirthException>(async () => !await this.userLogicFacade.IsAgeValidAsync(age));
 
             Guid updatedResponseId = await this.userWriteRepository.UpdateAsync(request.ToRecord(age));
 
-            ExecuteLogic.ThrowException<CommandResponseException>(() => updatedResponseId == Guid.Empty);
+            UserLogic.ThrowException<CommandResponseException>(() => updatedResponseId == Guid.Empty);
             return new UpdateUserCommandResponseModel { Id = updatedResponseId };
         }
 
         public async Task DeleteUserAsync(DeleteUserCommandRequestModel request)
         {
-            ExecuteLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
-            ExecuteLogic.ThrowException<CommandRequestException>(() => request.Id == Guid.Empty);
+            UserLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
+            UserLogic.ThrowException<CommandRequestException>(() => request.Id == Guid.Empty);
 
             UserRecord recordExists = (UserRecord)await this.userReadRepository.GetAsync(request.Id);
 
-            ExecuteLogic.ThrowException<UserNotFoundException>(() => recordExists == null);
+            UserLogic.ThrowException<UserNotFoundException>(() => recordExists == null);
             await this.userWriteRepository.DeleteAsync(recordExists.Id);
         }
     }

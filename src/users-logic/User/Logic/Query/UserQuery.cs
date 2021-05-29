@@ -23,12 +23,12 @@ namespace users_logic.User.Logic.Query
 
         public async Task<GetUserQueryResponseModel> GetResponseAsync(GetUserQueryRequestModel request)
         {
-            ExecuteLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
-            ExecuteLogic.ThrowException<QueryRequestException>(() => request.Id == Guid.Empty);
+            UserLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
+            UserLogic.ThrowException<QueryRequestException>(() => request.Id == Guid.Empty);
 
             BaseUserRecordWithId userRecord = await this.userReadRepository.GetAsync(request.Id);
 
-            ExecuteLogic.ThrowException<UserNotFoundException>(() => userRecord == null);
+            UserLogic.ThrowException<UserNotFoundException>(() => userRecord == null);
             return userRecord.ToResponseModel();
         }
 

@@ -3,7 +3,7 @@ namespace users_logic.Extensions
     using System;
     using System.Threading.Tasks;
 
-    public static class ExecuteLogic
+    public static class UserLogic
     {
         public static void ThrowException<TException>(Func<bool> func)
             where TException : Exception, new()
