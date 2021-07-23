@@ -53,12 +53,13 @@ namespace users_test.Users_logic_tests.Query
             mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(existingUserRecords);
 
             //When
-            GetUsersQueryResponseModel actualUsersResponse = await userQuery.GetResponsesAsync();
+            IEnumerable<GetUserQueryResponseModel> actualUsersResponse = await userQuery.GetResponsesAsync();
 
             //Then
             Assert.NotNull(actualUsersResponse);
-            Assert.NotEmpty(actualUsersResponse.Users);
-            foreach (GetUserQueryResponseModel actualUserResponse in actualUsersResponse.Users)
+            Assert.NotEmpty(actualUsersResponse);
+
+            foreach (GetUserQueryResponseModel actualUserResponse in actualUsersResponse)
             {
                 BaseUserRecordWithId expectedUserMapped = existingUserRecords.FirstOrDefault(u => u.Id == actualUserResponse.Id);
                 Assert.NotNull(expectedUserMapped);
@@ -69,7 +70,7 @@ namespace users_test.Users_logic_tests.Query
                 Assert.Equal(expectedUserMapped.Age, actualUserResponse.Age);
             }
 
-            int actualUserResponseListCount = actualUsersResponse.Users.Count();
+            int actualUserResponseListCount = actualUsersResponse.Count();
             Assert.Equal(3, actualUserResponseListCount);
             int existingUserRecordsListCount = existingUserRecords.Count();
             Assert.Equal(3, existingUserRecordsListCount);
@@ -86,12 +87,12 @@ namespace users_test.Users_logic_tests.Query
             mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(Enumerable.Empty<BaseUserRecordWithId>());
 
             //When
-            GetUsersQueryResponseModel actualUsersResponse = await userQuery.GetResponsesAsync();
+            IEnumerable<GetUserQueryResponseModel> actualUsersResponse = await userQuery.GetResponsesAsync();
 
             //Then
             Assert.NotNull(actualUsersResponse);
-            Assert.Empty(actualUsersResponse.Users);
-            int actualUserResponseListCount = actualUsersResponse.Users.Count();
+            Assert.Empty(actualUsersResponse);
+            int actualUserResponseListCount = actualUsersResponse.Count();
             Assert.Equal(0, actualUserResponseListCount);
 
             mockUserReadRepository.Verify(s => s.GetAsync(), Times.Once);
