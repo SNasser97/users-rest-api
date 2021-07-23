@@ -14,9 +14,9 @@ namespace users_api.UserControllers.QueryControllers
     [Route("users")]
     public class UserQueryController : ControllerBase
     {
-        private readonly IUserQuery<GetUserQueryRequestModel, GetUserQueryResponseModel, GetUsersQueryResponseModel> userQuery;
+        private readonly IUserQuery<GetUserQueryRequestModel, GetUserQueryResponseModel> userQuery;
         public UserQueryController(
-            IUserQuery<GetUserQueryRequestModel, GetUserQueryResponseModel, GetUsersQueryResponseModel> userQuery)
+            IUserQuery<GetUserQueryRequestModel, GetUserQueryResponseModel> userQuery)
         {
             this.userQuery = userQuery ?? throw new System.ArgumentNullException(nameof(userQuery));
         }
@@ -24,8 +24,8 @@ namespace users_api.UserControllers.QueryControllers
         [HttpGet]
         public async Task<GetUserControllerResponsesModel> GetAsync()
         {
-            GetUsersQueryResponseModel userQueryResponses = await this.userQuery.GetResponsesAsync();
-            IEnumerable<GetUserControllerResponseModel> responseModels = await userQueryResponses.Users.MapListToControllerResponsesAsync();
+            IEnumerable<GetUserQueryResponseModel> userQueryResponses = await this.userQuery.GetResponsesAsync();
+            IEnumerable<GetUserControllerResponseModel> responseModels = await userQueryResponses.MapListToControllerResponsesAsync();
             return new GetUserControllerResponsesModel { Users = responseModels };
         }
 
