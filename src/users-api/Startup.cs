@@ -58,7 +58,7 @@ namespace users_api
             services.AddSingleton<IRecordData<BaseUserRecordWithId>, InMemoryUsersRecordData>();
             services.AddScoped<IWriteRepository<BaseUserRecord, BaseUserRecordWithId>, InMemoryUserWriteRepository>();
             services.AddScoped<IReadRepository<BaseUserRecordWithId>, InMemoryUserReadRepository>();
-            services.AddScoped<IUserQuery<GetUserQueryRequestModel, GetUserQueryResponseModel, GetUsersQueryResponseModel>, UserQuery>();
+            services.AddScoped<IUserQuery<GetUserQueryRequestModel, GetUserQueryResponseModel>, UserQuery>();
             services.AddScoped<IUserCommand<BaseUserCommandResponseModel>, UserCommand>();
             services.AddScoped<IDateTimeParser, DateTimeParser>();
             services.AddScoped<IDateTimeProvider, DateTimeProvider>();

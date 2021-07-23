@@ -12,7 +12,7 @@ namespace users_logic.User.Logic.Query
     using users_logic.User.Logic.Query.Models.Request;
     using users_logic.User.Logic.Query.Models.Response;
 
-    public class UserQuery : IUserQuery<GetUserQueryRequestModel, GetUserQueryResponseModel, GetUsersQueryResponseModel>
+    public class UserQuery : IUserQuery<GetUserQueryRequestModel, GetUserQueryResponseModel>
     {
         private readonly IReadRepository<BaseUserRecordWithId> userReadRepository;
 
@@ -32,21 +32,24 @@ namespace users_logic.User.Logic.Query
             return userRecord.ToResponseModel();
         }
 
-        public async Task<GetUsersQueryResponseModel> GetResponsesAsync()
+        public async Task<IEnumerable<GetUserQueryResponseModel>> GetResponsesAsync()
         {
             IEnumerable<BaseUserRecordWithId> userRecords = await this.userReadRepository.GetAsync();
             return await this.MapToGetUsersQueryResponseModel(userRecords);
         }
 
-        private async Task<GetUsersQueryResponseModel> MapToGetUsersQueryResponseModel(IEnumerable<BaseUserRecordWithId> records)
+        private async Task<IEnumerable<GetUserQueryResponseModel>> MapToGetUsersQueryResponseModel(IEnumerable<BaseUserRecordWithId> records)
         {
-            IList<GetUserQueryResponseModel> responses = await (Task.WhenAll(records.Select(r
+            // IList<GetUserQueryResponseModel> responses = await (Task.WhenAll(records.Select(r
+            // => Task.Run(() => r.ToResponseModel()))))
+            // var coll = new List<Task<GetUserQueryResponseModel>>();
+
+            // records.ForEach
+            // var usersQueryResponseModel = new GetUsersQueryResponseModel();
+
+            // responses.ForEachResponse(async r => await Task.Run(() => usersQueryResponseModel.AddResponse(r)));
+            return await (Task.WhenAll(records.Select(r
                 => Task.Run(() => r.ToResponseModel()))));
-
-            var usersQueryResponseModel = new GetUsersQueryResponseModel();
-
-            responses.ForEachResponse(async r => await Task.Run(() => usersQueryResponseModel.AddResponse(r)));
-            return usersQueryResponseModel;
         }
     }
 }
