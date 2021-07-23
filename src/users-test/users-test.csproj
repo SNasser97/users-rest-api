@@ -1,16 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>users_test</RootNamespace>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
-    <PackageReference Include="Moq" Version="4.16.1" />
-    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1"/>
+    <PackageReference Include="Moq" Version="4.16.1"/>
+    <PackageReference Include="xunit" Version="2.4.1"/>
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -19,17 +16,15 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="SpecFlow.xUnit" Version="3.9.8"/>
   </ItemGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\users-api\users-api.csproj" />
-    <ProjectReference Include="..\users-data\users-data.csproj" />
-    <ProjectReference Include="..\users-logic\users-logic.csproj" />
+    <ProjectReference Include="..\users-api\users-api.csproj"/>
+    <ProjectReference Include="..\users-data\users-data.csproj"/>
+    <ProjectReference Include="..\users-logic\users-logic.csproj"/>
   </ItemGroup>
-
   <ItemGroup>
-    <Folder Include="Users-data-tests\Repositories\InMemory\Write\" />
-    <Folder Include="Users-logic-tests\" />
+    <Folder Include="Users-data-tests\Repositories\InMemory\Write\"/>
+    <Folder Include="Users-logic-tests\"/>
   </ItemGroup>
-
 </Project>
