@@ -32,14 +32,7 @@ namespace users_api.UserControllers.QueryControllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] Guid id)
         {
-            GetUserControllerResponseModel getUserResponse = await ControllerResponseModelExtensions.CaptureGetResponseAsync(async ()
-                => await this.userQuery.GetResponseAsync(new GetUserQueryRequestModel { Id = id }));
-
-            if (!string.IsNullOrWhiteSpace(getUserResponse?.Error))
-            {
-                return this.BadRequest(getUserResponse.Error);
-            }
-
+            GetUserQueryResponseModel getUserResponse = (GetUserQueryResponseModel)await this.userQuery.GetResponseAsync(new GetUserQueryRequestModel { Id = id });
             return this.Ok(getUserResponse);
         }
     }
