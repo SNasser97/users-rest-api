@@ -6,25 +6,28 @@ namespace users_api.UserControllers.QueryControllers
     using Microsoft.AspNetCore.Mvc;
     using users_api.Extensions;
     using users_api.UserControllers.QueryControllers.Models.Response;
-    using users_logic.User.Logic.Query;
-    using users_logic.User.Logic.Query.Models.Request;
-    using users_logic.User.Logic.Query.Models.Response;
+    using users_logic.Logic.Query;
+    using users_logic.Logic.Query.GetUserQuery;
+    using users_logic.Logic.Query.GetUsersQuery;
 
     [ApiController]
     [Route("users")]
     public class UserQueryController : ControllerBase
     {
-        private readonly IUserQuery<GetUserQueryRequestModel, GetUserQueryResponseModel> userQuery;
-        public UserQueryController(
-            IUserQuery<GetUserQueryRequestModel, GetUserQueryResponseModel> userQuery)
+        private readonly IGetUserQuery getUserQuery;
+        private readonly IGetUsersQuery getUsersQuery;
+
+        public UserQueryController(IGetUserQuery getUserQuery, IGetUsersQuery getUsersQuery)
         {
-            this.userQuery = userQuery ?? throw new System.ArgumentNullException(nameof(userQuery));
+            this.getUserQuery = getUserQuery ?? throw new ArgumentNullException(nameof(getUserQuery));
+            this.getUsersQuery = getUsersQuery ?? throw new ArgumentNullException(nameof(getUsersQuery));
         }
 
         [HttpGet]
         public async Task<GetUserControllerResponsesModel> GetAsync()
         {
-            IEnumerable<GetUserQueryResponseModel> userQueryResponses = await this.userQuery.GetResponsesAsync();
+            IEnumerable<GetUserQueryResponse> userQueryResponses = await this.getUsersQuery.ExecuteAsync(null as GetUserQueryRequest);
+            // TODO: Rework response models
             IEnumerable<GetUserControllerResponseModel> responseModels = await userQueryResponses.MapListToControllerResponsesAsync();
             return new GetUserControllerResponsesModel { Users = responseModels };
         }
@@ -32,7 +35,7 @@ namespace users_api.UserControllers.QueryControllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAsync([FromRoute] Guid id)
         {
-            GetUserQueryResponseModel getUserResponse = (GetUserQueryResponseModel)await this.userQuery.GetResponseAsync(new GetUserQueryRequestModel { Id = id });
+            GetUserQueryResponse getUserResponse = await this.getUserQuery.ExecuteAsync(new GetUserQueryRequest { Id = id });
             return this.Ok(getUserResponse);
         }
     }

@@ -7,10 +7,9 @@ namespace users_test.Users_logic_tests.Query
     using users_data.Entities;
     using users_data.Repositories;
     using users_logic.Exceptions.Query;
-    using users_logic.Exceptions.User;
-    using users_logic.User.Logic.Query;
-    using users_logic.User.Logic.Query.Models.Request;
-    using users_logic.User.Logic.Query.Models.Response;
+    using users_logic.Exceptions.UserExceptions;
+    using users_logic.Logic.Query;
+    using users_logic.Logic.Query.GetUserQuery;
     using Xunit;
 
     public class UserQueryGetResponseAsyncTests
@@ -18,8 +17,8 @@ namespace users_test.Users_logic_tests.Query
 
         public static IEnumerable<object[]> emptyRequestModels = new List<object[]>
         {
-            new object[] { new GetUserQueryRequestModel() },
-            new object[] { new GetUserQueryRequestModel { Id = Guid.Empty } }
+            new object[] { new GetUserQueryRequest() },
+            new object[] { new GetUserQueryRequest { Id = Guid.Empty } }
         };
 
         [Fact]
@@ -27,7 +26,7 @@ namespace users_test.Users_logic_tests.Query
         {
             //Given
             Guid userId = Guid.NewGuid();
-            var userRequestModel = new GetUserQueryRequestModel { Id = userId };
+            var userRequestModel = new GetUserQueryRequest { Id = userId };
             var existingUser = new User
             {
                 Id = userId,
@@ -41,10 +40,10 @@ namespace users_test.Users_logic_tests.Query
             var mockUserReadRepository = new Mock<IReadRepository<User>>();
             mockUserReadRepository.Setup(s => s.GetAsync(It.IsAny<Guid>())).ReturnsAsync(existingUser);
 
-            var userQuery = new UserQuery(mockUserReadRepository.Object);
+            var userQuery = new GetUserQuery(mockUserReadRepository.Object);
 
             //When
-            GetUserQueryResponseModel actualUserResponse = await userQuery.GetResponseAsync(userRequestModel);
+            GetUserQueryResponse actualUserResponse = await userQuery.ExecuteAsync(userRequestModel);
 
             //Then
             Assert.Equal(userRequestModel.Id, actualUserResponse.Id);
@@ -61,10 +60,10 @@ namespace users_test.Users_logic_tests.Query
         {
             //Given
             var mockUserReadRepository = new Mock<IReadRepository<User>>();
-            var userQuery = new UserQuery(mockUserReadRepository.Object);
+            var userQuery = new GetUserQuery(mockUserReadRepository.Object);
 
             //When
-            await Exceptions<ArgumentNullException>.HandleAsync(async () => await userQuery.GetResponseAsync(null),
+            await Exceptions<ArgumentNullException>.HandleAsync(async () => await userQuery.ExecuteAsync(null),
                 (ex) => Assert.Equal("request", ex.ParamName));
 
             //Then
@@ -73,14 +72,14 @@ namespace users_test.Users_logic_tests.Query
 
         [Theory]
         [MemberData(nameof(emptyRequestModels))]
-        public async Task UserQuery_GetResponseAsync_TakesGetUserRequestModelAndThrowsQueryResponseException(GetUserQueryRequestModel requestModelTest)
+        public async Task UserQuery_GetResponseAsync_TakesGetUserRequestModelAndThrowsQueryResponseException(GetUserQueryRequest requestModelTest)
         {
             //Given
             var mockUserReadRepository = new Mock<IReadRepository<User>>();
-            var userQuery = new UserQuery(mockUserReadRepository.Object);
+            var userQuery = new GetUserQuery(mockUserReadRepository.Object);
 
             //When
-            await Exceptions<QueryRequestException>.HandleAsync(async () => await userQuery.GetResponseAsync(requestModelTest),
+            await Exceptions<QueryRequestException>.HandleAsync(async () => await userQuery.ExecuteAsync(requestModelTest),
                 (ex) => Assert.Equal("Request Id was empty", ex.Message));
 
             //Then
@@ -92,13 +91,13 @@ namespace users_test.Users_logic_tests.Query
         {
             //Given
             Guid userId = Guid.NewGuid();
-            var userRequestModel = new GetUserQueryRequestModel { Id = userId };
+            var userRequestModel = new GetUserQueryRequest { Id = userId };
             var mockUserReadRepository = new Mock<IReadRepository<User>>();
-            var userQuery = new UserQuery(mockUserReadRepository.Object);
+            var userQuery = new GetUserQuery(mockUserReadRepository.Object);
             mockUserReadRepository.Setup(s => s.GetAsync(It.IsAny<Guid>())).ReturnsAsync(null as User);
 
             //When
-            await Exceptions<UserNotFoundException>.HandleAsync(async () => await userQuery.GetResponseAsync(userRequestModel),
+            await Exceptions<UserNotFoundException>.HandleAsync(async () => await userQuery.ExecuteAsync(userRequestModel),
                 (ex) => Assert.Equal("User not found", ex.Message));
 
             //Then

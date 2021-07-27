@@ -2,32 +2,29 @@ namespace users_test.Users_logic_tests.Command
 {
     using Xunit;
     using System;
-    using users_logic.User.Logic.Command;
     using Moq;
     using users_data.Repositories;
     using users_data.Entities;
-    using users_logic.User.Facades;
     using System.Threading.Tasks;
-    using users_logic.User.Logic.Command.Models.Request;
-    using users_logic.User.Logic.Command.Models.Response;
     using System.Collections.Generic;
     using users_logic.Exceptions.Command;
     using users_logic.Exceptions.Validation;
-    using users_logic.User.Exceptions.Validation;
+    using users_logic.Logic.Command.CreateUserCommand;
+    using users_logic.Facades;
 
     public class UserCommandCreateUserAsyncTests
     {
         private Mock<IWriteRepository<User>> mockUserWriteRepository;
         private Mock<IReadRepository<User>> mockUserReadRepository;
         private Mock<IUserLogicFacade> mockUserLogicFacade;
-        private UserCommand userCommand;
+        private CreateUserCommand createUserCommand;
 
         public UserCommandCreateUserAsyncTests()
         {
             this.mockUserWriteRepository = new Mock<IWriteRepository<User>>();
             this.mockUserReadRepository = new Mock<IReadRepository<User>>();
             this.mockUserLogicFacade = new Mock<IUserLogicFacade>();
-            this.userCommand = new UserCommand(mockUserWriteRepository.Object, mockUserReadRepository.Object, mockUserLogicFacade.Object);
+            this.createUserCommand = new CreateUserCommand(mockUserWriteRepository.Object, mockUserReadRepository.Object, mockUserLogicFacade.Object);
         }
 
         [Fact]
@@ -37,7 +34,7 @@ namespace users_test.Users_logic_tests.Command
             //When
             //Then
             await Exceptions<ArgumentNullException>.HandleAsync(async () =>
-                await this.userCommand.CreateUserAsync(null),
+                await this.createUserCommand.ExecuteAsync(null),
                 (ex) => Assert.Equal("request", ex.ParamName)
             );
         }
@@ -47,7 +44,7 @@ namespace users_test.Users_logic_tests.Command
         {
             //Given
             Guid responseId = Guid.NewGuid();
-            var createUserCommandRequest = new CreateUserCommandRequestModel
+            var createUserCommandRequest = new CreateUserCommandRequest
             {
                 FirstName = "Bob",
                 LastName = "Doe",
@@ -63,7 +60,7 @@ namespace users_test.Users_logic_tests.Command
             this.mockUserWriteRepository.Setup(s => s.CreateAsync(It.IsAny<User>())).ReturnsAsync(responseId);
 
             //When
-            CreateUserCommandResponseModel actualResponse = (CreateUserCommandResponseModel)await userCommand.CreateUserAsync(createUserCommandRequest);
+            CreateUserCommandResponse actualResponse = await createUserCommand.ExecuteAsync(createUserCommandRequest);
 
             //Then
             Assert.NotNull(actualResponse);
@@ -80,7 +77,7 @@ namespace users_test.Users_logic_tests.Command
         public async Task UserCommand_CreateUserAsync_TakesExistingEmailInCreateUserCommandRequest_ExpectsCommandRequestException()
         {
             //Given
-            var createUserCommandRequest = new CreateUserCommandRequestModel
+            var createUserCommandRequest = new CreateUserCommandRequest
             {
                 FirstName = "Bob",
                 LastName = "Doe",
@@ -95,7 +92,7 @@ namespace users_test.Users_logic_tests.Command
             //When
             //Then
             await Exceptions<EmailExistsException>.HandleAsync(async ()
-                => await userCommand.CreateUserAsync(createUserCommandRequest),
+                => await createUserCommand.ExecuteAsync(createUserCommandRequest),
                 (ex) => Assert.Equal("Email already exists", ex.Message)
             );
 
@@ -115,7 +112,7 @@ namespace users_test.Users_logic_tests.Command
         public async Task UserCommand_CreateUserAsync_TakesInvalidDateOfBirthInCreateUserCommandRequest_ExpectsCommandRequestException(int mockTestAge)
         {
             //Given
-            var createUserCommandRequest = new CreateUserCommandRequestModel
+            var createUserCommandRequest = new CreateUserCommandRequest
             {
                 FirstName = "Bob",
                 LastName = "Doe",
@@ -132,7 +129,7 @@ namespace users_test.Users_logic_tests.Command
             //When
             //Then
             await Exceptions<InvalidAgeException>.HandleAsync(async ()
-                => await this.userCommand.CreateUserAsync(createUserCommandRequest),
+                => await this.createUserCommand.ExecuteAsync(createUserCommandRequest),
                 (ex) => Assert.Equal("Ages 18 to 110 can only make a user!", ex.Message)
             );
 
@@ -147,7 +144,7 @@ namespace users_test.Users_logic_tests.Command
         public async Task UserCommand_CreateUserAsync_TakesCreateUserCommandRequest_ReturnsEmptyGuidExpectsCommandRequestException()
         {
             //Given
-            var createUserCommandRequest = new CreateUserCommandRequestModel
+            var createUserCommandRequest = new CreateUserCommandRequest
             {
                 FirstName = "Bob",
                 LastName = "Doe",
@@ -165,7 +162,7 @@ namespace users_test.Users_logic_tests.Command
             //When
             //Then
             await Exceptions<CommandResponseException>.HandleAsync(async ()
-                => await this.userCommand.CreateUserAsync(createUserCommandRequest),
+                => await this.createUserCommand.ExecuteAsync(createUserCommandRequest),
                 (ex) => Assert.Equal("Response Id was empty", ex.Message)
             );
 

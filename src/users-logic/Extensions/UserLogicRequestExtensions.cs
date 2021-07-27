@@ -1,14 +1,17 @@
 namespace users_logic.Extensions
 {
+    using System;
     using users_data.Entities;
-    using users_logic.User.Logic.Command.Models.Request.Common;
+    using users_logic.Logic.Command.CreateUserCommand;
+    using users_logic.Logic.Command.UpdateUserCommand;
 
     public static class UserLogicRequestExtensions
     {
-        public static User ToRecord(this BaseUserCommandRequestModel source, int age)
+        public static User ToRecord(this UpdateUserCommandRequest source, int age)
         {
             return new User
             {
+                Id = source.Id,
                 FirstName = source.FirstName,
                 LastName = source.LastName,
                 Email = source.Email,
@@ -17,11 +20,10 @@ namespace users_logic.Extensions
             };
         }
 
-        public static User ToRecord(this BaseUserCommandRequestWithIdModel source, int age)
+        public static User ToRecord(this CreateUserCommandRequest source, int age)
         {
             return new User
             {
-                Id = source.Id,
                 FirstName = source.FirstName,
                 LastName = source.LastName,
                 Email = source.Email,

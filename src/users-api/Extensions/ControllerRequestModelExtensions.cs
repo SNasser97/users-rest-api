@@ -3,14 +3,14 @@ namespace users_api.Extensions
     using System;
     using System.Globalization;
     using users_api.UserControllers.CommandControllers.Models.Request.Common;
-    using users_logic.User.Logic.Command.Models.Request;
-    using users_logic.User.Logic.Command.Models.Request.Common;
+    using users_logic.Logic.Command.CreateUserCommand;
+    using users_logic.Logic.Command.UpdateUserCommand;
 
     public static class ControllerRequestModelExtensions
     {
-        public static BaseUserCommandRequestModel ToUserCommandRequest(this BaseUserControllerRequestModel source)
+        public static CreateUserCommandRequest ToCommandRequest(this BaseUserControllerRequestModel source)
         {
-            return new CreateUserCommandRequestModel
+            return new CreateUserCommandRequest
             {
                 FirstName = source.FirstName,
                 LastName = source.LastName,
@@ -19,9 +19,9 @@ namespace users_api.Extensions
             };
         }
 
-        public static BaseUserCommandRequestWithIdModel ToUserCommandRequest(this BaseUserControllerRequestModel source, Guid routeId)
+        public static UpdateUserCommandRequest ToCommandRequest(this BaseUserControllerRequestModel source, Guid routeId)
         {
-            return new UpdateUserCommandRequestModel
+            return new UpdateUserCommandRequest
             {
                 Id = routeId,
                 FirstName = source.FirstName,

@@ -8,14 +8,14 @@ namespace users_api
     using users_data.Entities;
     using users_data.Repositories;
     using users_data.Repositories.InMemoryUserRepository;
-    using users_logic.User.Facades;
-    using users_logic.User.Logic.Command;
-    using users_logic.User.Logic.Command.Models.Response;
-    using users_logic.User.Logic.Query;
-    using users_logic.User.Logic.Query.Models.Request;
-    using users_logic.User.Logic.Query.Models.Response;
-    using users_logic.User.Parser;
-    using users_logic.User.Provider;
+    using users_logic.Facades;
+    using users_logic.Logic.Command.CreateUserCommand;
+    using users_logic.Logic.Command.DeleteUserCommand;
+    using users_logic.Logic.Command.UpdateUserCommand;
+    using users_logic.Logic.Query.GetUserQuery;
+    using users_logic.Logic.Query.GetUsersQuery;
+    using users_logic.Parser;
+    using users_logic.Provider;
 
     public class Startup
     {
@@ -58,8 +58,14 @@ namespace users_api
             services.AddSingleton<IRecordData<User>, InMemoryUsersRecordData>();
             services.AddScoped<IWriteRepository<User>, InMemoryUserWriteRepository>();
             services.AddScoped<IReadRepository<User>, InMemoryUserReadRepository>();
-            services.AddScoped<IUserQuery<GetUserQueryRequestModel, GetUserQueryResponseModel>, UserQuery>();
-            services.AddScoped<IUserCommand<BaseUserCommandResponseModel>, UserCommand>();
+            services.AddScoped<ICreateUserCommand, CreateUserCommand>();
+            services.AddScoped<IUpdateUserCommand, UpdateUserCommand>();
+            services.AddScoped<IDeleteUserCommand, DeleteUserCommand>();
+            services.AddScoped<IGetUserQuery, GetUserQuery>();
+            services.AddScoped<IGetUsersQuery, GetUsersQuery>();
+            // services.AddScoped<IReadRepository<User>, InMemoryUserReadRepository>();
+            // services.AddScoped<IUserQuery<GetUserQueryRequestModel, GetUserQueryResponseModel>, UserQuery>();
+            // services.AddScoped<IUserCommand<BaseUserCommandResponseModel>, UserCommand>();
             services.AddScoped<IDateTimeParser, DateTimeParser>();
             services.AddScoped<IDateTimeProvider, DateTimeProvider>();
             services.AddScoped<IUserLogicFacade, UserLogicFacade>();

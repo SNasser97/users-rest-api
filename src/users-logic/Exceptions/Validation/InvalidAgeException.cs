@@ -1,4 +1,4 @@
-namespace users_logic.User.Exceptions.Validation
+namespace users_logic.Exceptions.Validation
 {
     using System;
     using System.Runtime.Serialization;

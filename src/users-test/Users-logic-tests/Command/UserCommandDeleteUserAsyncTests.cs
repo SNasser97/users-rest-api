@@ -2,29 +2,28 @@ namespace users_test.Users_logic_tests.Command
 {
     using Xunit;
     using System;
-    using users_logic.User.Logic.Command;
     using Moq;
     using users_data.Repositories;
     using users_data.Entities;
-    using users_logic.User.Facades;
     using System.Threading.Tasks;
-    using users_logic.User.Logic.Command.Models.Request;
     using users_logic.Exceptions.Command;
-    using users_logic.Exceptions.User;
+    using users_logic.Exceptions.UserExceptions;
+    using users_logic.Logic.Command.DeleteUserCommand;
+    using users_logic.Facades;
 
     public class UserCommandDeleteUserAsyncTests
     {
         private Mock<IWriteRepository<User>> mockUserWriteRepository;
         private Mock<IReadRepository<User>> mockUserReadRepository;
         private Mock<IUserLogicFacade> mockUserLogicFacade;
-        private UserCommand userCommand;
+        private DeleteUserCommand deleteUserCommand;
 
         public UserCommandDeleteUserAsyncTests()
         {
             this.mockUserWriteRepository = new Mock<IWriteRepository<User>>();
             this.mockUserReadRepository = new Mock<IReadRepository<User>>();
             this.mockUserLogicFacade = new Mock<IUserLogicFacade>();
-            this.userCommand = new UserCommand(this.mockUserWriteRepository.Object, this.mockUserReadRepository.Object, this.mockUserLogicFacade.Object);
+            this.deleteUserCommand = new DeleteUserCommand(this.mockUserWriteRepository.Object, this.mockUserReadRepository.Object);
         }
 
         [Fact]
@@ -34,7 +33,7 @@ namespace users_test.Users_logic_tests.Command
             //When
             //Then
             await Exceptions<ArgumentNullException>.HandleAsync(async () =>
-                await this.userCommand.DeleteUserAsync(null),
+                await this.deleteUserCommand.ExecuteAsync(null),
                 (ex) => Assert.Equal("request", ex.ParamName)
             );
         }
@@ -46,7 +45,7 @@ namespace users_test.Users_logic_tests.Command
             //When
             //Then
             await Exceptions<CommandRequestException>.HandleAsync(async () =>
-                await this.userCommand.DeleteUserAsync(new DeleteUserCommandRequestModel()),
+                await this.deleteUserCommand.ExecuteAsync(new DeleteUserCommandRequest()),
                 (ex) => Assert.Equal("Request Id was empty", ex.Message)
             );
         }
@@ -56,7 +55,7 @@ namespace users_test.Users_logic_tests.Command
         {
             //Given
             Guid requestId = Guid.NewGuid();
-            var deleteUserCommandRequest = new DeleteUserCommandRequestModel { Id = requestId };
+            var deleteUserCommandRequest = new DeleteUserCommandRequest { Id = requestId };
             var userRecord = new User
             {
                 Id = requestId,
@@ -71,7 +70,7 @@ namespace users_test.Users_logic_tests.Command
             this.mockUserWriteRepository.Setup(s => s.DeleteAsync(It.IsAny<Guid>()));
 
             //When
-            await this.userCommand.DeleteUserAsync(deleteUserCommandRequest);
+            await this.deleteUserCommand.ExecuteAsync(deleteUserCommandRequest);
 
             //Then
             this.mockUserReadRepository.Verify(s => s.GetAsync(It.IsAny<Guid>()), Times.Once);
@@ -82,14 +81,14 @@ namespace users_test.Users_logic_tests.Command
         public async Task UserCommand_DeleteUserAsync_TakesDeleteUserCommandRequest_ThrowsUserNotFoundException()
         {
             //Given
-            var deleteUserCommandRequest = new DeleteUserCommandRequestModel { Id = Guid.NewGuid() };
+            var deleteUserCommandRequest = new DeleteUserCommandRequest { Id = Guid.NewGuid() };
 
             this.mockUserReadRepository.Setup(s => s.GetAsync(It.IsAny<Guid>())).ReturnsAsync(null as User);
             this.mockUserWriteRepository.Setup(s => s.DeleteAsync(It.IsAny<Guid>()));
 
             //When
             await Exceptions<UserNotFoundException>.HandleAsync(async () =>
-                await this.userCommand.DeleteUserAsync(deleteUserCommandRequest),
+                await this.deleteUserCommand.ExecuteAsync(deleteUserCommandRequest),
                 (ex) => Assert.Equal("User not found", ex.Message)
             );
 

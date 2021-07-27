@@ -5,39 +5,46 @@ namespace users_api.UserControllers.CommandControllers
     using Microsoft.AspNetCore.Mvc;
     using users_api.Extensions;
     using users_api.UserControllers.CommandControllers.Models.Request;
-    using users_logic.User.Logic.Command;
-    using users_logic.User.Logic.Command.Models.Request;
-    using users_logic.User.Logic.Command.Models.Response;
+    using users_logic.Logic.Command.CreateUserCommand;
+    using users_logic.Logic.Command.DeleteUserCommand;
+    using users_logic.Logic.Command.UpdateUserCommand;
 
     [ApiController]
     [Route("users")]
     public class UserCommandController : ControllerBase
     {
-        private readonly IUserCommand<BaseUserCommandResponseModel> userCommand;
+        private readonly ICreateUserCommand createUserCommand;
+        private readonly IUpdateUserCommand updateUserCommand;
+        private readonly IDeleteUserCommand deleteUserCommand;
 
-        public UserCommandController(IUserCommand<BaseUserCommandResponseModel> userCommand)
+        public UserCommandController(
+            ICreateUserCommand createUserCommand,
+            IUpdateUserCommand updateUserCommand,
+            IDeleteUserCommand deleteUserCommand)
         {
-            this.userCommand = userCommand ?? throw new ArgumentNullException(nameof(userCommand));
+            this.createUserCommand = createUserCommand ?? throw new ArgumentNullException(nameof(createUserCommand));
+            this.updateUserCommand = updateUserCommand ?? throw new ArgumentNullException(nameof(updateUserCommand));
+            this.deleteUserCommand = deleteUserCommand ?? throw new ArgumentNullException(nameof(deleteUserCommand));
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreateUserControllerRequestModel request)
         {
-            CreateUserCommandResponseModel response = (CreateUserCommandResponseModel)await this.userCommand.CreateUserAsync(request.ToUserCommandRequest());
+            CreateUserCommandResponse response = await this.createUserCommand.ExecuteAsync(request.ToCommandRequest());
             return this.Ok(response.Id);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, UpdateUserControllerRequestModel request)
         {
-            UpdateUserCommandResponseModel response = (UpdateUserCommandResponseModel)await this.userCommand.UpdateUserAsync(request.ToUserCommandRequest(id));
+            UpdateUserCommandResponse response = await this.updateUserCommand.ExecuteAsync(request.ToCommandRequest(id));
             return this.Ok(response.Id);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
         {
-            await this.userCommand.DeleteUserAsync(new DeleteUserCommandRequestModel { Id = id });
+            await this.deleteUserCommand.ExecuteAsync(new DeleteUserCommandRequest { Id = id });
             return this.NoContent();
         }
     }

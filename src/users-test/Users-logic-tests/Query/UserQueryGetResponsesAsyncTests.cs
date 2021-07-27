@@ -7,8 +7,8 @@ namespace users_test.Users_logic_tests.Query
     using System.Threading.Tasks;
     using users_data.Entities;
     using users_data.Repositories;
-    using users_logic.User.Logic.Query;
-    using users_logic.User.Logic.Query.Models.Response;
+    using users_logic.Logic.Query;
+    using users_logic.Logic.Query.GetUsersQuery;
     using Xunit;
 
     public class UserQueryGetResponsesAsyncTests
@@ -49,17 +49,17 @@ namespace users_test.Users_logic_tests.Query
             };
 
             var mockUserReadRepository = new Mock<IReadRepository<User>>();
-            var userQuery = new UserQuery(mockUserReadRepository.Object);
+            var userQuery = new GetUsersQuery(mockUserReadRepository.Object);
             mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(existingUserRecords);
 
             //When
-            IEnumerable<GetUserQueryResponseModel> actualUsersResponse = await userQuery.GetResponsesAsync();
+            IEnumerable<GetUserQueryResponse> actualUsersResponse = await userQuery.ExecuteAsync(null as GetUserQueryRequest);
 
             //Then
             Assert.NotNull(actualUsersResponse);
             Assert.NotEmpty(actualUsersResponse);
 
-            foreach (GetUserQueryResponseModel actualUserResponse in actualUsersResponse)
+            foreach (GetUserQueryResponse actualUserResponse in actualUsersResponse)
             {
                 User expectedUserMapped = existingUserRecords.FirstOrDefault(u => u.Id == actualUserResponse.Id);
                 Assert.NotNull(expectedUserMapped);
@@ -83,11 +83,11 @@ namespace users_test.Users_logic_tests.Query
         {
             //Given
             var mockUserReadRepository = new Mock<IReadRepository<User>>();
-            var userQuery = new UserQuery(mockUserReadRepository.Object);
+            var userQuery = new GetUsersQuery(mockUserReadRepository.Object);
             mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(Enumerable.Empty<User>());
 
             //When
-            IEnumerable<GetUserQueryResponseModel> actualUsersResponse = await userQuery.GetResponsesAsync();
+            IEnumerable<GetUserQueryResponse> actualUsersResponse = await userQuery.ExecuteAsync(null as GetUserQueryRequest);
 
             //Then
             Assert.NotNull(actualUsersResponse);

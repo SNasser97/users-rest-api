@@ -1,9 +1,9 @@
 namespace users_test.Users_logic_tests.Facades
 {
     using System;
-    using users_logic.User.Facades;
-    using users_logic.User.Parser;
-    using users_logic.User.Provider;
+    using users_logic.Facades;
+    using users_logic.Parser;
+    using users_logic.Provider;
     using Xunit;
 
     public class UserLogicFacadeTests
