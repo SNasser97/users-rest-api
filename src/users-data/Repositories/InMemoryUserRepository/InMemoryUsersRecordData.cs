@@ -5,10 +5,11 @@ namespace users_data.Repositories.InMemoryUserRepository
     using System.Collections.Generic;
     using users_data.Entities;
 
-    public class InMemoryUsersRecordData : IRecordData<BaseUserRecordWithId>
+    // Where InMemory of entity written to and read from
+    public class InMemoryUsersRecordData : IRecordData<User>
     {
-        public IDictionary<Guid, BaseUserRecordWithId> Users { get => this.users; }
+        public IDictionary<Guid, User> EntityStorage { get => this.users; }
 
-        private readonly IDictionary<Guid, BaseUserRecordWithId> users = new ConcurrentDictionary<Guid, BaseUserRecordWithId>();
+        private readonly IDictionary<Guid, User> users = new ConcurrentDictionary<Guid, User>();
     }
 }

@@ -14,15 +14,15 @@ namespace users_test.Users_logic_tests.Command
 
     public class UserCommandDeleteUserAsyncTests
     {
-        private Mock<IWriteRepository<BaseUserRecord, BaseUserRecordWithId>> mockUserWriteRepository;
-        private Mock<IReadRepository<BaseUserRecordWithId>> mockUserReadRepository;
+        private Mock<IWriteRepository<User>> mockUserWriteRepository;
+        private Mock<IReadRepository<User>> mockUserReadRepository;
         private Mock<IUserLogicFacade> mockUserLogicFacade;
         private UserCommand userCommand;
 
         public UserCommandDeleteUserAsyncTests()
         {
-            this.mockUserWriteRepository = new Mock<IWriteRepository<BaseUserRecord, BaseUserRecordWithId>>();
-            this.mockUserReadRepository = new Mock<IReadRepository<BaseUserRecordWithId>>();
+            this.mockUserWriteRepository = new Mock<IWriteRepository<User>>();
+            this.mockUserReadRepository = new Mock<IReadRepository<User>>();
             this.mockUserLogicFacade = new Mock<IUserLogicFacade>();
             this.userCommand = new UserCommand(this.mockUserWriteRepository.Object, this.mockUserReadRepository.Object, this.mockUserLogicFacade.Object);
         }
@@ -57,7 +57,7 @@ namespace users_test.Users_logic_tests.Command
             //Given
             Guid requestId = Guid.NewGuid();
             var deleteUserCommandRequest = new DeleteUserCommandRequestModel { Id = requestId };
-            var userRecord = new UserRecord
+            var userRecord = new User
             {
                 Id = requestId,
                 FirstName = "Bob",
@@ -84,7 +84,7 @@ namespace users_test.Users_logic_tests.Command
             //Given
             var deleteUserCommandRequest = new DeleteUserCommandRequestModel { Id = Guid.NewGuid() };
 
-            this.mockUserReadRepository.Setup(s => s.GetAsync(It.IsAny<Guid>())).ReturnsAsync(null as UserRecord);
+            this.mockUserReadRepository.Setup(s => s.GetAsync(It.IsAny<Guid>())).ReturnsAsync(null as User);
             this.mockUserWriteRepository.Setup(s => s.DeleteAsync(It.IsAny<Guid>()));
 
             //When

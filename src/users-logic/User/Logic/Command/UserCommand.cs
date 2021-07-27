@@ -17,13 +17,13 @@ namespace users_logic.User.Logic.Command
 
     public class UserCommand : IUserCommand<BaseUserCommandResponseModel>
     {
-        private readonly IWriteRepository<BaseUserRecord, BaseUserRecordWithId> userWriteRepository;
-        private readonly IReadRepository<BaseUserRecordWithId> userReadRepository;
+        private readonly IWriteRepository<User> userWriteRepository;
+        private readonly IReadRepository<User> userReadRepository;
         private readonly IUserLogicFacade userLogicFacade;
 
         public UserCommand(
-            IWriteRepository<BaseUserRecord, BaseUserRecordWithId> userWriteRepository,
-            IReadRepository<BaseUserRecordWithId> userReadRepository,
+            IWriteRepository<User> userWriteRepository,
+            IReadRepository<User> userReadRepository,
             IUserLogicFacade userLogicFacade)
         {
             this.userWriteRepository = userWriteRepository ?? throw new System.ArgumentNullException(nameof(userWriteRepository));
@@ -35,7 +35,7 @@ namespace users_logic.User.Logic.Command
         {
             UserLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
 
-            IEnumerable<BaseUserRecordWithId> records = await this.userReadRepository.GetAsync();
+            IEnumerable<User> records = await this.userReadRepository.GetAsync();
 
             await UserLogic.ThrowExceptionAsync<EmailExistsException>(async ()
                 => await this.userLogicFacade.DoesUserEmailAlreadyExistAsync(records, request.Email));
@@ -55,10 +55,10 @@ namespace users_logic.User.Logic.Command
             UserLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
             UserLogic.ThrowException<CommandRequestException>(() => request.Id == Guid.Empty);
 
-            UserRecord foundUserRecord = (UserRecord)await this.userReadRepository.GetAsync(request.Id);
+            User foundUserRecord = await this.userReadRepository.GetAsync(request.Id);
             UserLogic.ThrowException<UserNotFoundException>(() => foundUserRecord == null);
 
-            IEnumerable<BaseUserRecordWithId> userRecords = await this.userReadRepository.GetAsync();
+            IEnumerable<User> userRecords = await this.userReadRepository.GetAsync();
 
             await UserLogic.ThrowExceptionAsync<EmailExistsException>(async ()
                 => foundUserRecord.Email != request.Email && await this.userLogicFacade.DoesUserEmailAlreadyExistAsync(userRecords, request.Email));
@@ -78,7 +78,7 @@ namespace users_logic.User.Logic.Command
             UserLogic.ThrowException<ArgumentNullException>(() => request == null, nameof(request));
             UserLogic.ThrowException<CommandRequestException>(() => request.Id == Guid.Empty);
 
-            UserRecord recordExists = (UserRecord)await this.userReadRepository.GetAsync(request.Id);
+            User recordExists = await this.userReadRepository.GetAsync(request.Id);
 
             UserLogic.ThrowException<UserNotFoundException>(() => recordExists == null);
             await this.userWriteRepository.DeleteAsync(recordExists.Id);

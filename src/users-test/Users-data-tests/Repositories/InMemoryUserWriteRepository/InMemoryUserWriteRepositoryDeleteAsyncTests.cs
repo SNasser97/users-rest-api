@@ -18,7 +18,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
             //Given
             Guid userId = Guid.NewGuid();
 
-            var existingUser = new UserRecord
+            var existingUser = new User
             {
                 Id = userId,
                 FirstName = "Bob",
@@ -28,17 +28,17 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
                 Age = 23
             };
 
-            var users = new Dictionary<Guid, BaseUserRecordWithId>
+            var users = new Dictionary<Guid, User>
             {
-                { Guid.NewGuid(), new UserRecord() },
+                { Guid.NewGuid(), new User() },
                 { existingUser.Id, existingUser},
-                { Guid.NewGuid(), new UserRecord() },
-                { Guid.NewGuid(), new UserRecord() },
+                { Guid.NewGuid(), new User() },
+                { Guid.NewGuid(), new User() },
             };
 
-            var mockRecordData = new Mock<IRecordData<BaseUserRecordWithId>>();
+            var mockRecordData = new Mock<IRecordData<User>>();
             var usersWriteRepository = new InMemoryUserWriteRepository(mockRecordData.Object);
-            mockRecordData.SetupGet(s => s.Users).Returns(users);
+            mockRecordData.SetupGet(s => s.EntityStorage).Returns(users);
 
             //When
             await usersWriteRepository.DeleteAsync(userId);
@@ -49,18 +49,18 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
             int actualUsersValueCount = users.Values.Count;
             Assert.Equal(3, actualUsersValueCount);
 
-            KeyValuePair<Guid, BaseUserRecordWithId> actualUserRecord = users.FirstOrDefault(c => c.Key == userId);
-            Assert.Equal(new KeyValuePair<Guid, UserRecord>().Key, actualUserRecord.Key);
-            Assert.Equal(new KeyValuePair<Guid, UserRecord>().Value, actualUserRecord.Value);
+            KeyValuePair<Guid, User> actualUserRecord = users.FirstOrDefault(c => c.Key == userId);
+            Assert.Equal(new KeyValuePair<Guid, User>().Key, actualUserRecord.Key);
+            Assert.Equal(new KeyValuePair<Guid, User>().Value, actualUserRecord.Value);
             Assert.Null(actualUserRecord.Value);
-            mockRecordData.VerifyGet(s => s.Users, Times.Once);
+            mockRecordData.VerifyGet(s => s.EntityStorage, Times.Once);
         }
 
         [Fact]
         public async Task InMemoryUserWriteRepository_DeleteAsync_TakesNonExistingUserGuidAndDoesNotRemoveUser()
         {
             //Given
-            var existingUser = new UserRecord
+            var existingUser = new User
             {
                 Id = Guid.NewGuid(),
                 FirstName = "Bob",
@@ -70,17 +70,17 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
                 Age = 23
             };
 
-            var users = new Dictionary<Guid, BaseUserRecordWithId>
+            var users = new Dictionary<Guid, User>
             {
-                { Guid.NewGuid(), new UserRecord() },
+                { Guid.NewGuid(), new User() },
                 { existingUser.Id, existingUser},
-                { Guid.NewGuid(), new UserRecord() },
-                { Guid.NewGuid(), new UserRecord() },
+                { Guid.NewGuid(), new User() },
+                { Guid.NewGuid(), new User() },
             };
 
-            var mockRecordData = new Mock<IRecordData<BaseUserRecordWithId>>();
+            var mockRecordData = new Mock<IRecordData<User>>();
             var usersWriteRepository = new InMemoryUserWriteRepository(mockRecordData.Object);
-            mockRecordData.SetupGet(s => s.Users).Returns(users);
+            mockRecordData.SetupGet(s => s.EntityStorage).Returns(users);
 
             //When
             await usersWriteRepository.DeleteAsync(Guid.NewGuid());
@@ -91,7 +91,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
             int actualUsersValueCount = users.Values.Count;
             Assert.Equal(4, actualUsersValueCount);
 
-            mockRecordData.VerifyGet(s => s.Users, Times.Once);
+            mockRecordData.VerifyGet(s => s.EntityStorage, Times.Once);
         }
     }
 }

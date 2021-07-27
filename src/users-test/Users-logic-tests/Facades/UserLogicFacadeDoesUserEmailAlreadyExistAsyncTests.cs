@@ -18,9 +18,9 @@ namespace users_test.Users_logic_tests.Facades
             // Given
             string newEmail = "myunique@mail.com";
 
-            var users = new List<UserRecord>
+            var users = new List<User>
             {
-                new UserRecord
+                new User
                 {
                     Id = Guid.NewGuid(),
                     FirstName = "Bob",
@@ -30,7 +30,7 @@ namespace users_test.Users_logic_tests.Facades
                     Age = 23
                 },
 
-                new UserRecord
+                new User
                 {
                     Id = Guid.NewGuid(),
                     FirstName = "jo",
@@ -59,9 +59,9 @@ namespace users_test.Users_logic_tests.Facades
             // Given
             string newEmail = "thisEmailExists@email.com";
 
-            var users = new List<UserRecord>
+            var users = new List<User>
             {
-                new UserRecord
+                new User
                 {
                     Id = Guid.NewGuid(),
                     FirstName = "Bob",
@@ -71,7 +71,7 @@ namespace users_test.Users_logic_tests.Facades
                     Age = 23
                 },
 
-                new UserRecord
+                new User
                 {
                     Id = Guid.NewGuid(),
                     FirstName = "jo",

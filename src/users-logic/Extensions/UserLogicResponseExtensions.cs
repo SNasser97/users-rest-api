@@ -7,7 +7,7 @@ namespace users_logic.Extensions
 
     public static class UserLogicResponseExtensions
     {
-        public static GetUserQueryResponseModel ToResponseModel(this BaseUserRecordWithId source)
+        public static GetUserQueryResponseModel ToResponseModel(this User source)
         {
             return new GetUserQueryResponseModel
             {

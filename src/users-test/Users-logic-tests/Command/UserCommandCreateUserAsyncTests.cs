@@ -17,15 +17,15 @@ namespace users_test.Users_logic_tests.Command
 
     public class UserCommandCreateUserAsyncTests
     {
-        private Mock<IWriteRepository<BaseUserRecord, BaseUserRecordWithId>> mockUserWriteRepository;
-        private Mock<IReadRepository<BaseUserRecordWithId>> mockUserReadRepository;
+        private Mock<IWriteRepository<User>> mockUserWriteRepository;
+        private Mock<IReadRepository<User>> mockUserReadRepository;
         private Mock<IUserLogicFacade> mockUserLogicFacade;
         private UserCommand userCommand;
 
         public UserCommandCreateUserAsyncTests()
         {
-            this.mockUserWriteRepository = new Mock<IWriteRepository<BaseUserRecord, BaseUserRecordWithId>>();
-            this.mockUserReadRepository = new Mock<IReadRepository<BaseUserRecordWithId>>();
+            this.mockUserWriteRepository = new Mock<IWriteRepository<User>>();
+            this.mockUserReadRepository = new Mock<IReadRepository<User>>();
             this.mockUserLogicFacade = new Mock<IUserLogicFacade>();
             this.userCommand = new UserCommand(mockUserWriteRepository.Object, mockUserReadRepository.Object, mockUserLogicFacade.Object);
         }
@@ -55,12 +55,12 @@ namespace users_test.Users_logic_tests.Command
                 DateOfBirth = new DateTime(1992, 6, 12)
             };
 
-            this.mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(null as IEnumerable<UserRecord>);
-            this.mockUserLogicFacade.Setup(s => s.DoesUserEmailAlreadyExistAsync(null as IEnumerable<UserRecord>, createUserCommandRequest.Email))
+            this.mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(null as IEnumerable<User>);
+            this.mockUserLogicFacade.Setup(s => s.DoesUserEmailAlreadyExistAsync(null as IEnumerable<User>, createUserCommandRequest.Email))
                 .ReturnsAsync(false);
             this.mockUserLogicFacade.Setup(s => s.GetCalculatedUsersAgeAsync(It.IsAny<DateTime>())).ReturnsAsync(21);
             this.mockUserLogicFacade.Setup(s => s.IsAgeValidAsync(It.IsAny<int>())).ReturnsAsync(true);
-            this.mockUserWriteRepository.Setup(s => s.CreateAsync(It.IsAny<CreateUserRecord>())).ReturnsAsync(responseId);
+            this.mockUserWriteRepository.Setup(s => s.CreateAsync(It.IsAny<User>())).ReturnsAsync(responseId);
 
             //When
             CreateUserCommandResponseModel actualResponse = (CreateUserCommandResponseModel)await userCommand.CreateUserAsync(createUserCommandRequest);
@@ -70,10 +70,10 @@ namespace users_test.Users_logic_tests.Command
             Assert.True(actualResponse.Id != Guid.Empty);
 
             this.mockUserReadRepository.Verify(s => s.GetAsync(), Times.Once);
-            this.mockUserLogicFacade.Verify(s => s.DoesUserEmailAlreadyExistAsync(It.IsAny<IEnumerable<UserRecord>>(), It.IsAny<string>()), Times.Once);
+            this.mockUserLogicFacade.Verify(s => s.DoesUserEmailAlreadyExistAsync(It.IsAny<IEnumerable<User>>(), It.IsAny<string>()), Times.Once);
             this.mockUserLogicFacade.Verify(s => s.GetCalculatedUsersAgeAsync(It.IsAny<DateTime>()), Times.Once);
             this.mockUserLogicFacade.Verify(s => s.IsAgeValidAsync(It.IsAny<int>()), Times.Once);
-            this.mockUserWriteRepository.Verify(s => s.CreateAsync(It.IsAny<CreateUserRecord>()), Times.Once);
+            this.mockUserWriteRepository.Verify(s => s.CreateAsync(It.IsAny<User>()), Times.Once);
         }
 
         [Fact]
@@ -88,8 +88,8 @@ namespace users_test.Users_logic_tests.Command
                 DateOfBirth = new DateTime(1992, 6, 12)
             };
 
-            this.mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(It.IsAny<IEnumerable<UserRecord>>());
-            this.mockUserLogicFacade.Setup(s => s.DoesUserEmailAlreadyExistAsync(It.IsAny<IEnumerable<UserRecord>>(), createUserCommandRequest.Email))
+            this.mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(It.IsAny<IEnumerable<User>>());
+            this.mockUserLogicFacade.Setup(s => s.DoesUserEmailAlreadyExistAsync(It.IsAny<IEnumerable<User>>(), createUserCommandRequest.Email))
                 .ReturnsAsync(true);
 
             //When
@@ -100,10 +100,10 @@ namespace users_test.Users_logic_tests.Command
             );
 
             this.mockUserReadRepository.Verify(s => s.GetAsync(), Times.Once);
-            this.mockUserLogicFacade.Verify(s => s.DoesUserEmailAlreadyExistAsync(It.IsAny<IEnumerable<UserRecord>>(), It.IsAny<string>()), Times.Once);
+            this.mockUserLogicFacade.Verify(s => s.DoesUserEmailAlreadyExistAsync(It.IsAny<IEnumerable<User>>(), It.IsAny<string>()), Times.Once);
             this.mockUserLogicFacade.Verify(s => s.GetCalculatedUsersAgeAsync(It.IsAny<DateTime>()), Times.Never);
             this.mockUserLogicFacade.Verify(s => s.IsAgeValidAsync(It.IsAny<int>()), Times.Never);
-            this.mockUserWriteRepository.Verify(s => s.CreateAsync(It.IsAny<CreateUserRecord>()), Times.Never);
+            this.mockUserWriteRepository.Verify(s => s.CreateAsync(It.IsAny<User>()), Times.Never);
         }
 
         [Theory]
@@ -123,8 +123,8 @@ namespace users_test.Users_logic_tests.Command
                 DateOfBirth = new DateTime(1992, 6, 12)
             };
 
-            this.mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(It.IsAny<IEnumerable<UserRecord>>());
-            this.mockUserLogicFacade.Setup(s => s.DoesUserEmailAlreadyExistAsync(It.IsAny<IEnumerable<UserRecord>>(), createUserCommandRequest.Email))
+            this.mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(It.IsAny<IEnumerable<User>>());
+            this.mockUserLogicFacade.Setup(s => s.DoesUserEmailAlreadyExistAsync(It.IsAny<IEnumerable<User>>(), createUserCommandRequest.Email))
                 .ReturnsAsync(false);
             this.mockUserLogicFacade.Setup(s => s.GetCalculatedUsersAgeAsync(It.IsAny<DateTime>())).ReturnsAsync(mockTestAge);
             this.mockUserLogicFacade.Setup(s => s.IsAgeValidAsync(It.IsAny<int>())).ReturnsAsync(false);
@@ -137,10 +137,10 @@ namespace users_test.Users_logic_tests.Command
             );
 
             this.mockUserReadRepository.Verify(s => s.GetAsync(), Times.Once);
-            this.mockUserLogicFacade.Verify(s => s.DoesUserEmailAlreadyExistAsync(It.IsAny<IEnumerable<UserRecord>>(), It.IsAny<string>()), Times.Once);
+            this.mockUserLogicFacade.Verify(s => s.DoesUserEmailAlreadyExistAsync(It.IsAny<IEnumerable<User>>(), It.IsAny<string>()), Times.Once);
             this.mockUserLogicFacade.Verify(s => s.GetCalculatedUsersAgeAsync(It.IsAny<DateTime>()), Times.Once);
             this.mockUserLogicFacade.Verify(s => s.IsAgeValidAsync(It.IsAny<int>()), Times.Once);
-            this.mockUserWriteRepository.Verify(s => s.CreateAsync(It.IsAny<CreateUserRecord>()), Times.Never);
+            this.mockUserWriteRepository.Verify(s => s.CreateAsync(It.IsAny<User>()), Times.Never);
         }
 
         [Fact]
@@ -155,12 +155,12 @@ namespace users_test.Users_logic_tests.Command
                 DateOfBirth = new DateTime(1992, 6, 12)
             };
 
-            this.mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(It.IsAny<IEnumerable<UserRecord>>());
-            this.mockUserLogicFacade.Setup(s => s.DoesUserEmailAlreadyExistAsync(It.IsAny<IEnumerable<UserRecord>>(), createUserCommandRequest.Email))
+            this.mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(It.IsAny<IEnumerable<User>>());
+            this.mockUserLogicFacade.Setup(s => s.DoesUserEmailAlreadyExistAsync(It.IsAny<IEnumerable<User>>(), createUserCommandRequest.Email))
                 .ReturnsAsync(false);
             this.mockUserLogicFacade.Setup(s => s.GetCalculatedUsersAgeAsync(It.IsAny<DateTime>())).ReturnsAsync(21);
             this.mockUserLogicFacade.Setup(s => s.IsAgeValidAsync(It.IsAny<int>())).ReturnsAsync(true);
-            this.mockUserWriteRepository.Setup(s => s.CreateAsync(It.IsAny<UserRecord>())).ReturnsAsync(Guid.Empty);
+            this.mockUserWriteRepository.Setup(s => s.CreateAsync(It.IsAny<User>())).ReturnsAsync(Guid.Empty);
 
             //When
             //Then
@@ -170,10 +170,10 @@ namespace users_test.Users_logic_tests.Command
             );
 
             this.mockUserReadRepository.Verify(s => s.GetAsync(), Times.Once);
-            this.mockUserLogicFacade.Verify(s => s.DoesUserEmailAlreadyExistAsync(It.IsAny<IEnumerable<UserRecord>>(), It.IsAny<string>()), Times.Once);
+            this.mockUserLogicFacade.Verify(s => s.DoesUserEmailAlreadyExistAsync(It.IsAny<IEnumerable<User>>(), It.IsAny<string>()), Times.Once);
             this.mockUserLogicFacade.Verify(s => s.GetCalculatedUsersAgeAsync(It.IsAny<DateTime>()), Times.Once);
             this.mockUserLogicFacade.Verify(s => s.IsAgeValidAsync(It.IsAny<int>()), Times.Once);
-            this.mockUserWriteRepository.Verify(s => s.CreateAsync(It.IsAny<CreateUserRecord>()), Times.Once);
+            this.mockUserWriteRepository.Verify(s => s.CreateAsync(It.IsAny<User>()), Times.Once);
         }
     }
 }

@@ -5,9 +5,9 @@ namespace users_data.Extensions
 
     public static class ToUserRecordExtensions
     {
-        public static UserRecord ToUserRecord(this BaseUserRecord record, Guid id)
+        public static User ToUserRecord(this User record, Guid id)
         {
-            return new UserRecord
+            return new User
             {
                 Id = id,
                 FirstName = record.FirstName,
@@ -18,7 +18,7 @@ namespace users_data.Extensions
             };
         }
 
-        public static void UpdateUserRecord(this BaseUserRecord user, ref BaseUserRecordWithId userUpdated)
+        public static void UpdateUserRecord(this User user, ref User userUpdated)
         {
             user.FirstName = userUpdated.FirstName;
             user.LastName = userUpdated.LastName;

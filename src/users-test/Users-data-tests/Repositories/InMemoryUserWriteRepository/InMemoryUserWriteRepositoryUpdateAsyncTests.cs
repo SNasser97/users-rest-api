@@ -16,7 +16,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
         public async Task InMemoryUserWriteRepository_UpdateAsync_TakesUserRecordandReturnsExistingGuid()
         {
             //Given
-            var userToUpdate = new UpdateUserRecord
+            var userToUpdate = new User
             {
                 Id = Guid.NewGuid(),
                 FirstName = "Bobby",
@@ -26,7 +26,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
                 Age = 19
             };
 
-            var existingUser = new UserRecord
+            var existingUser = new User
             {
                 Id = userToUpdate.Id,
                 FirstName = "Bob",
@@ -36,15 +36,15 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
                 Age = 23
             };
 
-            var users = new Dictionary<Guid, BaseUserRecordWithId>
+            var users = new Dictionary<Guid, User>
             {
                 { existingUser.Id, existingUser},
-                { Guid.NewGuid(), new UserRecord() }
+                { Guid.NewGuid(), new User() }
             };
 
-            var mockRecordData = new Mock<IRecordData<BaseUserRecordWithId>>();
+            var mockRecordData = new Mock<IRecordData<User>>();
             var usersWriteRepository = new InMemoryUserWriteRepository(mockRecordData.Object);
-            mockRecordData.SetupGet(s => s.Users).Returns(users);
+            mockRecordData.SetupGet(s => s.EntityStorage).Returns(users);
 
             //When
             Guid actualGuid = await usersWriteRepository.UpdateAsync(userToUpdate);
@@ -55,11 +55,11 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
             Assert.Equal(userToUpdate.Id, actualGuid);
             Assert.Equal(existingUser.Id, actualGuid);
 
-            KeyValuePair<Guid, BaseUserRecordWithId> actualKeyValuePairUpdated = users.FirstOrDefault(u => u.Key == actualGuid);
-            Assert.NotEqual(new KeyValuePair<Guid, BaseUserRecordWithId>(), actualKeyValuePairUpdated);
+            KeyValuePair<Guid, User> actualKeyValuePairUpdated = users.FirstOrDefault(u => u.Key == actualGuid);
+            Assert.NotEqual(new KeyValuePair<Guid, User>(), actualKeyValuePairUpdated);
             Assert.NotNull(actualKeyValuePairUpdated.Value);
 
-            BaseUserRecordWithId actualUserRecordUpdated = actualKeyValuePairUpdated.Value;
+            User actualUserRecordUpdated = actualKeyValuePairUpdated.Value;
             Assert.Equal(actualUserRecordUpdated.Id, actualGuid);
             Assert.Equal("Bobby", actualUserRecordUpdated.FirstName);
             Assert.Equal("Doenuts", actualUserRecordUpdated.LastName);
@@ -70,14 +70,14 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
             int actualUsersValueCount = users.Values.Count;
             Assert.Equal(2, actualUsersValueCount);
 
-            mockRecordData.SetupGet(s => s.Users).Returns(users);
+            mockRecordData.SetupGet(s => s.EntityStorage).Returns(users);
         }
 
         [Fact]
         public async Task InMemoryUserWriteRepository_UpdateAsync_TakesUserRecordReturnsEmptyGuid()
         {
             //Given
-            var noneExistingUser = new UpdateUserRecord
+            var noneExistingUser = new User
             {
                 Id = Guid.NewGuid(),
                 FirstName = "Bobby",
@@ -87,7 +87,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
                 Age = 23
             };
 
-            var existingUser = new UserRecord
+            var existingUser = new User
             {
                 Id = Guid.NewGuid(),
                 FirstName = "Bob",
@@ -97,15 +97,15 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
                 Age = 23
             };
 
-            var users = new Dictionary<Guid, BaseUserRecordWithId>
+            var users = new Dictionary<Guid, User>
             {
                 { existingUser.Id, existingUser},
-                { Guid.NewGuid(), new UserRecord() }
+                { Guid.NewGuid(), new User() }
             };
 
-            var mockRecordData = new Mock<IRecordData<BaseUserRecordWithId>>();
+            var mockRecordData = new Mock<IRecordData<User>>();
             var usersWriteRepository = new InMemoryUserWriteRepository(mockRecordData.Object);
-            mockRecordData.SetupGet(s => s.Users).Returns(users);
+            mockRecordData.SetupGet(s => s.EntityStorage).Returns(users);
 
             //When
             Guid actualGuid = await usersWriteRepository.UpdateAsync(noneExistingUser);

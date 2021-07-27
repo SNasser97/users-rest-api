@@ -20,19 +20,19 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
             Guid userTwo = Guid.NewGuid();
             Guid userThree = Guid.NewGuid();
 
-            var expectedUsersData = new Dictionary<Guid, BaseUserRecordWithId>
+            var expectedUsersData = new Dictionary<Guid, User>
             {
-                { userOne , new UserRecord { Id = userOne, FirstName = "Bob", LastName = "Doe", Email = "b.doe@hotmail.co.uk", DateOfBirth = DateTime.Now, Age = 21 } },
-                { userTwo, new UserRecord { Id = userTwo, FirstName = "Tony", LastName = "Slark", Email = "t.slark@yahoomail.com", DateOfBirth = DateTime.Now, Age = 45 } },
-                { userThree, new UserRecord { Id = userThree, FirstName = "Mary", LastName = "Poppins", Email = "m.poppins@outlook.com", DateOfBirth = DateTime.Now, Age = 24 } }
+                { userOne , new User { Id = userOne, FirstName = "Bob", LastName = "Doe", Email = "b.doe@hotmail.co.uk", DateOfBirth = DateTime.Now, Age = 21 } },
+                { userTwo, new User { Id = userTwo, FirstName = "Tony", LastName = "Slark", Email = "t.slark@yahoomail.com", DateOfBirth = DateTime.Now, Age = 45 } },
+                { userThree, new User { Id = userThree, FirstName = "Mary", LastName = "Poppins", Email = "m.poppins@outlook.com", DateOfBirth = DateTime.Now, Age = 24 } }
             };
 
-            var mockRecordData = new Mock<IRecordData<BaseUserRecordWithId>>();
+            var mockRecordData = new Mock<IRecordData<User>>();
             var userReadRepository = new InMemoryUserReadRepository(mockRecordData.Object);
-            mockRecordData.SetupGet(s => s.Users).Returns(expectedUsersData);
+            mockRecordData.SetupGet(s => s.EntityStorage).Returns(expectedUsersData);
 
             //When
-            IEnumerable<BaseUserRecordWithId> actualUsers = await userReadRepository.GetAsync();
+            IEnumerable<User> actualUsers = await userReadRepository.GetAsync();
 
             //Then
             Assert.NotNull(actualUsers);
@@ -40,12 +40,12 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
             int actualUsersInList = actualUsers.Count();
             Assert.Equal(3, actualUsersInList);
 
-            foreach (UserRecord actualUser in actualUsers)
+            foreach (User actualUser in actualUsers)
             {
-                KeyValuePair<Guid, BaseUserRecordWithId> expected = expectedUsersData.FirstOrDefault(u => u.Key == actualUser.Id);
-                Assert.NotEqual(new KeyValuePair<Guid, BaseUserRecordWithId>(), expected);
+                KeyValuePair<Guid, User> expected = expectedUsersData.FirstOrDefault(u => u.Key == actualUser.Id);
+                Assert.NotEqual(new KeyValuePair<Guid, User>(), expected);
 
-                BaseUserRecordWithId expectedUser = expected.Value;
+                User expectedUser = expected.Value;
                 Assert.NotNull(expected.Value);
                 Assert.Equal(expectedUser.Id, actualUser.Id);
                 Assert.Equal(expectedUser.FirstName, actualUser.FirstName);
@@ -60,21 +60,21 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
         public async Task InMemoryUserReadRepository_GetAsync_ReturnsEmptyUsersList()
         {
             //Given
-            var expectedUsersData = new Dictionary<Guid, BaseUserRecordWithId>();
+            var expectedUsersData = new Dictionary<Guid, User>();
 
-            var mockRecordData = new Mock<IRecordData<BaseUserRecordWithId>>();
+            var mockRecordData = new Mock<IRecordData<User>>();
             var userReadRepository = new InMemoryUserReadRepository(mockRecordData.Object);
-            mockRecordData.SetupGet(s => s.Users).Returns(expectedUsersData);
+            mockRecordData.SetupGet(s => s.EntityStorage).Returns(expectedUsersData);
 
             //When
-            IEnumerable<BaseUserRecordWithId> actualUsers = await userReadRepository.GetAsync();
+            IEnumerable<User> actualUsers = await userReadRepository.GetAsync();
 
             //Then
             Assert.Empty(actualUsers);
             int actualUsersInList = actualUsers.Count();
             Assert.Equal(0, actualUsersInList);
 
-            mockRecordData.VerifyGet(s => s.Users, Times.Once);
+            mockRecordData.VerifyGet(s => s.EntityStorage, Times.Once);
         }
     }
 }

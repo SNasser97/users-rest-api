@@ -6,41 +6,37 @@
     using users_data.Entities;
     using users_data.Extensions;
 
-    public class InMemoryUserWriteRepository : IWriteRepository<BaseUserRecord, BaseUserRecordWithId>
+    public class InMemoryUserWriteRepository : IWriteRepository<User>
     {
-        private readonly IRecordData<BaseUserRecordWithId> recordData;
+        private readonly IRecordData<User> recordData;
 
-        public InMemoryUserWriteRepository(IRecordData<BaseUserRecordWithId> recordData)
+        public InMemoryUserWriteRepository(IRecordData<User> recordData)
         {
             this.recordData = recordData ?? throw new ArgumentNullException(nameof(recordData));
         }
 
-        public async Task<Guid> CreateAsync(BaseUserRecord record)
+        public async Task<Guid> CreateAsync(User record)
         {
-            Guid recordId = Guid.NewGuid();
-
-            UserRecord userRecord = record.ToUserRecord(recordId);
-
-            if (this.recordData.Users.TryAdd(userRecord.Id, userRecord))
+            if (this.recordData.EntityStorage.TryAdd(record.Id, record))
             {
-                return await Task.FromResult(userRecord.Id);
+                return await Task.FromResult(record.Id);
             }
 
-            return await Task.FromResult(Guid.Empty);
+            return Guid.Empty;
         }
 
         public async Task DeleteAsync(Guid id)
-            => await Task.FromResult(this.recordData.Users.Remove(id));
+            => await Task.FromResult(this.recordData.EntityStorage.Remove(id));
 
-        public async Task<Guid> UpdateAsync(BaseUserRecordWithId record)
+        public async Task<Guid> UpdateAsync(User record)
         {
-            if (this.recordData.Users.TryGetValue(record.Id, out BaseUserRecordWithId found))
+            if (this.recordData.EntityStorage.TryGetValue(record.Id, out User found))
             {
                 found.UpdateUserRecord(ref record);
                 return await Task.FromResult(found.Id);
             };
 
-            return await Task.FromResult(Guid.Empty);
+            return Guid.Empty;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
         public async Task InMemoryUserWriteRepository_CreateAsync_ReturnsAGuid()
         {
             //Given
-            var newUser = new CreateUserRecord
+            var newUser = new User
             {
                 FirstName = "Bob",
                 LastName = "Doe",
@@ -25,15 +25,15 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
                 Age = 24
             };
 
-            var users = new Dictionary<Guid, BaseUserRecordWithId>
+            var users = new Dictionary<Guid, User>
             {
-                { Guid.NewGuid(), new UserRecord() },
-                { Guid.NewGuid(), new UserRecord() },
-                { Guid.NewGuid(), new UserRecord() },
+                { Guid.NewGuid(), new User() },
+                { Guid.NewGuid(), new User() },
+                { Guid.NewGuid(), new User() },
             };
 
-            var mockRecordData = new Mock<IRecordData<BaseUserRecordWithId>>();
-            mockRecordData.SetupGet(s => s.Users).Returns(users);
+            var mockRecordData = new Mock<IRecordData<User>>();
+            mockRecordData.SetupGet(s => s.EntityStorage).Returns(users);
 
             var usersWriteRepository = new InMemoryUserWriteRepository(mockRecordData.Object);
             //When
@@ -43,12 +43,12 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
             Assert.True(actualGuid != Guid.Empty);
             Assert.Equal(4, users.Count());
 
-            KeyValuePair<Guid, BaseUserRecordWithId> actualUserKeyValuePair = users.FirstOrDefault(u => u.Key == actualGuid);
-            Assert.NotEqual(default(KeyValuePair<Guid, BaseUserRecordWithId>), actualUserKeyValuePair);
+            KeyValuePair<Guid, User> actualUserKeyValuePair = users.FirstOrDefault(u => u.Key == actualGuid);
+            Assert.NotEqual(default(KeyValuePair<Guid, User>), actualUserKeyValuePair);
             Assert.True(actualUserKeyValuePair.Key != Guid.Empty);
             Assert.Equal(actualUserKeyValuePair.Key, actualGuid);
 
-            UserRecord actualNewUser = (UserRecord)actualUserKeyValuePair.Value;
+            User actualNewUser = actualUserKeyValuePair.Value;
             Assert.NotNull(actualUserKeyValuePair.Value);
             Assert.Equal(newUser.FirstName, actualNewUser.FirstName);
             Assert.Equal(newUser.LastName, actualNewUser.LastName);
@@ -56,7 +56,7 @@ namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
             Assert.Equal(newUser.DateOfBirth, actualNewUser.DateOfBirth);
             Assert.Equal(newUser.Age, actualNewUser.Age);
 
-            mockRecordData.VerifyGet(s => s.Users, Times.Once);
+            mockRecordData.VerifyGet(s => s.EntityStorage, Times.Once);
         }
     }
 }

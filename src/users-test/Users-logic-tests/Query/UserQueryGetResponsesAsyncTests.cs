@@ -17,9 +17,9 @@ namespace users_test.Users_logic_tests.Query
         public async Task UserQuery_GetResponsesAsync_ReturnsGetUsersQueryResponseModel()
         {
             //Given
-            var existingUserRecords = new List<UserRecord>
+            var existingUserRecords = new List<User>
             {
-                new UserRecord
+                new User
                 {
                     Id = Guid.NewGuid(),
                     FirstName = "Bob",
@@ -28,7 +28,7 @@ namespace users_test.Users_logic_tests.Query
                     DateOfBirth = new DateTime(1997, 06, 12),
                     Age = 23
                 },
-                new UserRecord
+                new User
                 {
                     Id = Guid.NewGuid(),
                     FirstName = "John",
@@ -37,7 +37,7 @@ namespace users_test.Users_logic_tests.Query
                     DateOfBirth = new DateTime(2001, 11, 01),
                     Age = 19
                 },
-                new UserRecord
+                new User
                 {
                     Id = Guid.NewGuid(),
                     FirstName = "Mary",
@@ -48,7 +48,7 @@ namespace users_test.Users_logic_tests.Query
                 }
             };
 
-            var mockUserReadRepository = new Mock<IReadRepository<BaseUserRecordWithId>>();
+            var mockUserReadRepository = new Mock<IReadRepository<User>>();
             var userQuery = new UserQuery(mockUserReadRepository.Object);
             mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(existingUserRecords);
 
@@ -61,7 +61,7 @@ namespace users_test.Users_logic_tests.Query
 
             foreach (GetUserQueryResponseModel actualUserResponse in actualUsersResponse)
             {
-                BaseUserRecordWithId expectedUserMapped = existingUserRecords.FirstOrDefault(u => u.Id == actualUserResponse.Id);
+                User expectedUserMapped = existingUserRecords.FirstOrDefault(u => u.Id == actualUserResponse.Id);
                 Assert.NotNull(expectedUserMapped);
                 Assert.Equal(expectedUserMapped.FirstName, actualUserResponse.FirstName);
                 Assert.Equal(expectedUserMapped.LastName, actualUserResponse.LastName);
@@ -82,9 +82,9 @@ namespace users_test.Users_logic_tests.Query
         public async Task UserQuery_GetResponsesAsync_ReturnsEmptyGetUsersQueryResponseModel()
         {
             //Given
-            var mockUserReadRepository = new Mock<IReadRepository<BaseUserRecordWithId>>();
+            var mockUserReadRepository = new Mock<IReadRepository<User>>();
             var userQuery = new UserQuery(mockUserReadRepository.Object);
-            mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(Enumerable.Empty<BaseUserRecordWithId>());
+            mockUserReadRepository.Setup(s => s.GetAsync()).ReturnsAsync(Enumerable.Empty<User>());
 
             //When
             IEnumerable<GetUserQueryResponseModel> actualUsersResponse = await userQuery.GetResponsesAsync();
