@@ -3,11 +3,11 @@
     using System;
     using System.Threading.Tasks;
 
-    public interface IWriteRepository<TRecord, T2Record>
+    public interface IWriteRepository<TRecord, TRecordUpdate>
     {
         Task<Guid> CreateAsync(TRecord record);
 
-        Task<Guid> UpdateAsync(T2Record record);
+        Task<Guid> UpdateAsync(TRecordUpdate record);
 
         Task DeleteAsync(Guid id);
     }
