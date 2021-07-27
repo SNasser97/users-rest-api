@@ -55,9 +55,9 @@ namespace users_api
         private void AddUserDependencies(IServiceCollection services)
         {
             // Where IRecordData contains user data which user write + read access
-            services.AddSingleton<IRecordData<BaseUserRecordWithId>, InMemoryUsersRecordData>();
-            services.AddScoped<IWriteRepository<BaseUserRecord, BaseUserRecordWithId>, InMemoryUserWriteRepository>();
-            services.AddScoped<IReadRepository<BaseUserRecordWithId>, InMemoryUserReadRepository>();
+            services.AddSingleton<IRecordData<User>, InMemoryUsersRecordData>();
+            services.AddScoped<IWriteRepository<User>, InMemoryUserWriteRepository>();
+            services.AddScoped<IReadRepository<User>, InMemoryUserReadRepository>();
             services.AddScoped<IUserQuery<GetUserQueryRequestModel, GetUserQueryResponseModel>, UserQuery>();
             services.AddScoped<IUserCommand<BaseUserCommandResponseModel>, UserCommand>();
             services.AddScoped<IDateTimeParser, DateTimeParser>();
