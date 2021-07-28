@@ -2,7 +2,7 @@ namespace users_api.Extensions
 {
     using System;
     using System.Globalization;
-    using users_api.UserControllers.CommandControllers.Models.Request.Common;
+    using users_api.UserControllers.Common;
     using users_logic.Logic.Command.CreateUserCommand;
     using users_logic.Logic.Command.UpdateUserCommand;
 

@@ -1,4 +1,4 @@
-namespace users_api.UserControllers.CommandControllers.Models.Request.Common
+namespace users_api.UserControllers.Common
 {
     using System.ComponentModel.DataAnnotations;
     using Microsoft.AspNetCore.Mvc;

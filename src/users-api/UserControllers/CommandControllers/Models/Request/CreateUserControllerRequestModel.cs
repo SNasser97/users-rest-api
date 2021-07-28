@@ -1,6 +1,6 @@
 namespace users_api.UserControllers.CommandControllers.Models.Request
 {
-    using users_api.UserControllers.CommandControllers.Models.Request.Common;
+    using users_api.UserControllers.Common;
 
     public class CreateUserControllerRequestModel : BaseUserControllerRequestModel
     {
