@@ -1,6 +1,5 @@
 namespace users_logic.Extensions
 {
-    using System;
     using users_data.Entities;
     using users_logic.Logic.Command.CreateUserCommand;
     using users_logic.Logic.Command.UpdateUserCommand;
