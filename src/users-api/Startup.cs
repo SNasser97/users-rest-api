@@ -63,9 +63,6 @@ namespace users_api
             services.AddScoped<IDeleteUserCommand, DeleteUserCommand>();
             services.AddScoped<IGetUserQuery, GetUserQuery>();
             services.AddScoped<IGetUsersQuery, GetUsersQuery>();
-            // services.AddScoped<IReadRepository<User>, InMemoryUserReadRepository>();
-            // services.AddScoped<IUserQuery<GetUserQueryRequestModel, GetUserQueryResponseModel>, UserQuery>();
-            // services.AddScoped<IUserCommand<BaseUserCommandResponseModel>, UserCommand>();
             services.AddScoped<IDateTimeParser, DateTimeParser>();
             services.AddScoped<IDateTimeProvider, DateTimeProvider>();
             services.AddScoped<IUserLogicFacade, UserLogicFacade>();
