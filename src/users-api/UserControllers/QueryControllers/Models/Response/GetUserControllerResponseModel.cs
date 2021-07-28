@@ -1,9 +1,8 @@
 namespace users_api.UserControllers.QueryControllers.Models.Response
 {
     using System;
-    using users_api.UserControllers.CommandControllers.Models.Response.Common;
 
-    public class GetUserControllerResponseModel : BaseUserControllerResponseErrorModel
+    public class GetUserControllerResponseModel
     {
         public Guid Id { get; set; }
 
@@ -13,7 +12,7 @@ namespace users_api.UserControllers.QueryControllers.Models.Response
 
         public string Email { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        public string DateOfBirth { get; set; }
 
         public int Age { get; set; }
     }

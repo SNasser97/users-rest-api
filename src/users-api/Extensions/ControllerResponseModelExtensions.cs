@@ -1,6 +1,7 @@
 namespace users_api.Extensions
 {
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
     using users_api.UserControllers.QueryControllers.Models.Response;
@@ -19,7 +20,7 @@ namespace users_api.Extensions
                 FirstName = source.FirstName,
                 LastName = source.LastName,
                 Email = source.Email,
-                DateOfBirth = source.DateOfBirth,
+                DateOfBirth = source.DateOfBirth.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
                 Age = source.Age
             };
         }
