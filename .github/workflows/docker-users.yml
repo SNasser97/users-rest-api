@@ -28,4 +28,4 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Run user build
         run: |
-          docker build -t users-api -f users-rest/api/Dockerfile .
+          docker build -t users-api -f ../Dockerfile .
