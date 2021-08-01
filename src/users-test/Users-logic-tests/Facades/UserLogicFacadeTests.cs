@@ -29,7 +29,6 @@ namespace users_test.Users_logic_tests.Facades
                 => new UserLogicFacade(new DateTimeProvider(), null));
 
             //Then
-            Assert.True(false);
             Assert.Equal("dateTimeParser", ex.ParamName);
         }
     }
