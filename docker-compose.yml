@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   users-api:
-    image: ${DOCKER_REGISTRY-}users-api
+    image: users-api
     container_name: users-api
     ports:
       - 8080:80
