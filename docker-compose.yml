@@ -6,6 +6,9 @@ services:
     container_name: users-api
     ports:
       - 8080:80
+    depends_on: 
+      - mysql
+      - redis
     build:
       context: .
       dockerfile: Dockerfile
@@ -34,8 +37,6 @@ services:
     restart: always
     ports: 
       - 6379:6379
-    depends_on: 
-      - mysql
     volumes:
       - redis-users:/var/lib/redis
     networks: 
