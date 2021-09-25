@@ -13,9 +13,9 @@ services:
       context: .
       dockerfile: Dockerfile
     environment: 
-      MYSQL_CONNECTION: "Server=172.28.1.3;Uid=admin;Pwd=root;Database=users_db;"
+      MYSQL_CONNECTION: "Server=mysql;Uid=admin;Pwd=secret;Database=users_db;"
       DB_NAME: "users_db"
-      REDIS_CONNECTION: "172.28.1.4"
+      REDIS_CONNECTION: "users-redis"
   mysql:
     image: mysql:5.7
     container_name: users-mysql
@@ -29,9 +29,7 @@ services:
       MYSQL_ROOT_PASSWORD: "root"
     volumes: 
       - mysql_users:/var/lib/mysql
-    networks:
-      node_net:
-        ipv4_address: 172.28.1.3
+      - ./src/users-data/Repositories/MySQL/Scripts:/docker-entrypoint-initdb.d
   redis:
     image: redis:alpine
     container_name: users-redis
@@ -40,17 +38,7 @@ services:
       - 6379:6379
     volumes:
       - redis-users:/var/lib/redis
-    networks: 
-      node_net:
-        ipv4_address: 172.28.1.4
 
 volumes: 
   mysql_users:
   redis-users:
-
-networks:
-  node_net:
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.28.0.1/16
