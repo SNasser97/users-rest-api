@@ -1,5 +1,7 @@
 namespace users_api
 {
+    using System;
+    using System.Collections.Generic;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -8,6 +10,7 @@ namespace users_api
     using users_data.Entities;
     using users_data.Repositories;
     using users_data.Repositories.InMemoryUserRepository;
+    using users_data.Repositories.MySQL;
     using users_logic.Facades;
     using users_logic.Logic.Command.CreateUserCommand;
     using users_logic.Logic.Command.DeleteUserCommand;
@@ -19,6 +22,12 @@ namespace users_api
 
     public class Startup
     {
+
+        private Lazy<string> mysqlConnection = new Lazy<string>(Environment.GetEnvironmentVariable("MYSQL_CONNECTION"));
+        private Lazy<string> mysqlDatabase = new Lazy<string>(Environment.GetEnvironmentVariable("MYSQL_DATABASE"));
+        private Lazy<string> mysqlUser = new Lazy<string>(Environment.GetEnvironmentVariable("MYSQL_USER"));
+        private Lazy<string> mysqlPassword = new Lazy<string>(Environment.GetEnvironmentVariable("MYSQL_PASSWORD"));
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -41,6 +50,12 @@ namespace users_api
             }
 
             // app.UseHttpsRedirection();
+            // For when running sql and redis only
+            //string conn = Environment.GetEnvironmentVariable("MYSQL_CONNECTION");
+            if (string.IsNullOrWhiteSpace(mysqlConnection.Value))
+            {
+                Environment.SetEnvironmentVariable("MYSQL_CONNECTION", $"Server=localhost;Uid={mysqlUser.Value};Pwd={mysqlPassword.Value};Database={mysqlDatabase.Value};");
+            }
 
             app.UseRouting();
 
