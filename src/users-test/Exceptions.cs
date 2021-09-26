@@ -32,5 +32,18 @@
                 error(ex);
             }
         }
+
+        public static async Task HandleAsync(Func<Task> func)
+        {
+            try
+            {
+                await func();
+                // should continue..
+            }
+            catch (Exception ex)
+            {
+                throw new XunitException($"Should not throw: {ex.Message}");
+            }
+        }
     }
 }
