@@ -1,16 +1,16 @@
 namespace users_api
 {
     using System;
-    using System.Collections.Generic;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using users_data.Entities;
+    using users_data.Manager;
     using users_data.Repositories;
-    using users_data.Repositories.InMemoryUserRepository;
     using users_data.Repositories.MySQL;
+    using users_data.Repositories.MySQL.MySqlManagers;
     using users_logic.Facades;
     using users_logic.Logic.Command.CreateUserCommand;
     using users_logic.Logic.Command.DeleteUserCommand;
@@ -27,6 +27,7 @@ namespace users_api
         private Lazy<string> mysqlDatabase = new Lazy<string>(Environment.GetEnvironmentVariable("MYSQL_DATABASE"));
         private Lazy<string> mysqlUser = new Lazy<string>(Environment.GetEnvironmentVariable("MYSQL_USER"));
         private Lazy<string> mysqlPassword = new Lazy<string>(Environment.GetEnvironmentVariable("MYSQL_PASSWORD"));
+        private Lazy<string> mysqlRootPassword = new Lazy<string>(Environment.GetEnvironmentVariable("MYSQL_ROOT_PASSWORD"));
 
         public Startup(IConfiguration configuration)
         {
@@ -54,7 +55,7 @@ namespace users_api
             //string conn = Environment.GetEnvironmentVariable("MYSQL_CONNECTION");
             if (string.IsNullOrWhiteSpace(mysqlConnection.Value))
             {
-                Environment.SetEnvironmentVariable("MYSQL_CONNECTION", $"Server=localhost;Uid={mysqlUser.Value};Pwd={mysqlPassword.Value};Database={mysqlDatabase.Value};");
+                Environment.SetEnvironmentVariable("MYSQL_CONNECTION", $"Server=localhost;Uid=admin;Pwd=secret;Database=users_db;");
             }
 
             app.UseRouting();
@@ -70,9 +71,12 @@ namespace users_api
         private void AddUserDependencies(IServiceCollection services)
         {
             // Where IRecordData contains user data which user write + read access
-            services.AddSingleton<IRecordData<User>, InMemoryUsersRecordData>();
-            services.AddScoped<IWriteRepository<User>, InMemoryUserWriteRepository>();
-            services.AddScoped<IReadRepository<User>, InMemoryUserReadRepository>();
+            // services.AddSingleton<IRecordData<User>, InMemoryUsersRecordData>();
+            // services.AddScoped<IWriteRepository<User>, InMemoryUserWriteRepository>();
+            // services.AddScoped<IReadRepository<User>, InMemoryUserReadRepository>();
+            services.AddSingleton<IDbConnectionManager, MySqlConnectionManager>();
+            services.AddSingleton<IWriteRepository<User>, MySqlUserWriteRepository>();
+            services.AddSingleton<IReadRepository<User>, MySqlUserReadRepository>();
             services.AddScoped<ICreateUserCommand, CreateUserCommand>();
             services.AddScoped<IUpdateUserCommand, UpdateUserCommand>();
             services.AddScoped<IDeleteUserCommand, DeleteUserCommand>();
