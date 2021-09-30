@@ -29,8 +29,8 @@ jobs:
 
       # Runs a set of commands using the runners shell
       - name: Start docker containers
-        run: docker-compose -f . up -d --build
+        run: docker-compose -f ./docker-compose.yml up -d --build
         
       - name: Stop containers
         if: always()
-        run: docker-compose -f . down 
+        run: docker-compose -f ./docker-compose.yml down 
