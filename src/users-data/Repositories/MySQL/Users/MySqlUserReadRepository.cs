@@ -48,7 +48,7 @@ namespace users_data.Repositories.MySQL
             return await Task.FromResult(Enumerable.Empty<User>());
         }
 
-        public async Task<User> GetAsync(Guid id)
+        public Task<User> GetAsync(Guid id)
         {
             throw new NotImplementedException();
         }
