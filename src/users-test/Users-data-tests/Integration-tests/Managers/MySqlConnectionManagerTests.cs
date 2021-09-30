@@ -1,4 +1,4 @@
-namespace users_test.Users_data_tests.Repositories.Managers
+namespace users_test.Users_data_tests.Integration_tests.Managers
 {
     using System;
     using System.Data;
