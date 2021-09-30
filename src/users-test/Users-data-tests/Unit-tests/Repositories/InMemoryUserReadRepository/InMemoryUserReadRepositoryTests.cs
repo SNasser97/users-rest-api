@@ -1,4 +1,4 @@
-﻿namespace users_test.Users_data_tests.Repositories.InMemoryUserReadRepository
+﻿namespace users_test.Users_data_tests.UnitTests.Repositories.InMemoryUserReadRepository
 {
     using System;
     using Xunit;

@@ -1,4 +1,4 @@
-namespace users_test.Users_logic_tests.Facades
+namespace users_test.Users_logic_tests.UnitTests.Facades
 {
     using System;
     using users_logic.Facades;

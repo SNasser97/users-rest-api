@@ -1,4 +1,4 @@
-namespace users_test.Users_logic_tests.Query
+namespace users_test.Users_logic_tests.UnitTests.Query
 {
     using Moq;
     using System;

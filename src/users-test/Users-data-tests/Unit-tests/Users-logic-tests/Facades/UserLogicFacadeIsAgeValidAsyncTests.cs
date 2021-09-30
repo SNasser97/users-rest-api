@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-namespace users_test.Users_logic_tests.Facades
+namespace users_test.Users_logic_tests.UnitTests.Facades
 {
     using System.Threading.Tasks;
     using Moq;

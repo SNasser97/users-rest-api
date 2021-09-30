@@ -1,4 +1,4 @@
-namespace users_test.Users_logic_tests.Command
+namespace users_test.Users_logic_tests.UnitTests.Command
 {
     using Xunit;
     using System;
