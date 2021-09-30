@@ -1,4 +1,4 @@
-﻿namespace users_test
+﻿namespace users_test.Helper
 {
     using System;
     using System.Threading.Tasks;
