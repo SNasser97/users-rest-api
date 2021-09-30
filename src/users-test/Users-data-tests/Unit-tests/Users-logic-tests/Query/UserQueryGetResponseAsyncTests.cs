@@ -1,4 +1,4 @@
-namespace users_test.Users_logic_tests.Query
+namespace users_test.Users_logic_tests.UnitTests.Query
 {
     using System;
     using System.Collections.Generic;
@@ -10,6 +10,7 @@ namespace users_test.Users_logic_tests.Query
     using users_logic.Exceptions.UserExceptions;
     using users_logic.Logic.Query;
     using users_logic.Logic.Query.GetUserQuery;
+    using users_test.Helper;
     using Xunit;
 
     public class UserQueryGetResponseAsyncTests

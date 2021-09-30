@@ -1,4 +1,4 @@
-namespace users_test.Users_data_tests.Repositories.InMemoryUserWriteRepository
+namespace users_test.Users_data_tests.UnitTests.Repositories.InMemoryUserWriteRepository
 {
     using System;
     using System.Collections.Generic;
