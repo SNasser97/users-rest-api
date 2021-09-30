@@ -1,12 +1,12 @@
-namespace users_test.Users_data_tests.Integration_tests.Managers
+namespace users_integration_test.Managers.Managers
 {
     using System;
-    using System.Data;
     using System.Data.Common;
     using System.Threading.Tasks;
     using MySql.Data.MySqlClient;
     using users_data.Repositories.MySQL.MySqlManagers;
     using Xunit;
+    using users_test.Helper;
 
     public class MySqlConnectionManagerTests
     {
