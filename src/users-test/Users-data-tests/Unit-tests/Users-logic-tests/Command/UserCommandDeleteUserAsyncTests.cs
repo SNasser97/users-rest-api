@@ -10,6 +10,7 @@ namespace users_test.Users_logic_tests.UnitTests.Command
     using users_logic.Exceptions.UserExceptions;
     using users_logic.Logic.Command.DeleteUserCommand;
     using users_logic.Facades;
+    using users_test.Helper;
 
     public class UserCommandDeleteUserAsyncTests
     {
