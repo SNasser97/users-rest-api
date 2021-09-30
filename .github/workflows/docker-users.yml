@@ -29,14 +29,14 @@ jobs:
 
       # Runs a set of commands using the runners shell
       # Runs all containers, builds donet image + tests (ignores sql tests)
-      - name: Start docker containers
+      - name: Start containers
         run: docker-compose -f ./docker-compose.yml up -d --build
       # run dotnet + runs tests (all)
-      - name: Start dotnet
+      - name: Start dotnet restore
         run: dotnet restore
-      - name: Build
+      - name: Build dotnet api
         run: dotnet build --no-restore
-      - name: Test
+      - name: Test dotnet api
         run: dotnet test --no-build --verbosity normal
       - name: Stop containers
         if: always()
