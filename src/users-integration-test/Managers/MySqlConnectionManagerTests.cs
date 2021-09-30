@@ -29,7 +29,7 @@ namespace users_integration_test.Managers.Managers
 
             // Then
             Assert.True(string.IsNullOrWhiteSpace(actualConnection.Database));
-            Assert.Equal("Closed", actualConnection.State.ToString());
+            Assert.Equal("Open", actualConnection.State.ToString());
             Assert.NotNull(actualConnection);
 
             await Exceptions<MySqlException>.HandleAsync(async () =>
