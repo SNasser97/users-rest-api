@@ -31,13 +31,13 @@ jobs:
       # Runs all containers, builds donet image + tests (ignores sql tests)
       - name: Start containers
         run: docker-compose -f ./docker-compose.yml up -d --build
-      # run dotnet + runs tests (all)
+      # run dotnet + runs tests (integrations)
       - name: Start dotnet restore
         run: dotnet restore
       - name: Build dotnet api
         run: dotnet build --no-restore
-      - name: Test dotnet api
-        run: dotnet test --no-build --verbosity normal
+      - name: Test dotnet api (integration)
+        run: dotnet test ./src/users-integration-test/users-integration-test.csproj -no-build --verbosity normal
       - name: Stop containers
         if: always()
         run: docker-compose -f ./docker-compose.yml down 
