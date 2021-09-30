@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "users-logic", "src\users-lo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "users-test", "src\users-test\users-test.csproj", "{4EB1AA6E-512F-4366-9C64-6356748EE90E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F96A9C73-D917-478F-9F05-EE6574112E0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "users-integration-test", "src\users-integration-test\users-integration-test.csproj", "{BFBD7896-7BF4-4784-A903-2F8D5C1D3CCA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,11 +37,18 @@ Global
 		{4EB1AA6E-512F-4366-9C64-6356748EE90E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4EB1AA6E-512F-4366-9C64-6356748EE90E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4EB1AA6E-512F-4366-9C64-6356748EE90E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFBD7896-7BF4-4784-A903-2F8D5C1D3CCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFBD7896-7BF4-4784-A903-2F8D5C1D3CCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFBD7896-7BF4-4784-A903-2F8D5C1D3CCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFBD7896-7BF4-4784-A903-2F8D5C1D3CCA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A5C2467C-1927-4729-8908-9A1024DA7BB5}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BFBD7896-7BF4-4784-A903-2F8D5C1D3CCA} = {F96A9C73-D917-478F-9F05-EE6574112E0E}
 	EndGlobalSection
 EndGlobal
