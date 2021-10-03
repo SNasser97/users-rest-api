@@ -92,7 +92,7 @@ namespace users_integration_test.Managers.Managers
         {
             // Ignore the above tests if we're building the dotnet api image
             bool isDotNetImageBeingBuilt = await this.ExceptionMessageOn<TConnectionEntity, TException>(entity, message);
-            Skip.If(isDotNetImageBeingBuilt, "Only run on dev machine");
+            Skip.If(isDotNetImageBeingBuilt, "Run docker-compose on local machine");
         }
     }
 }
