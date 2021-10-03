@@ -37,7 +37,7 @@ jobs:
       - name: Build dotnet api
         run: dotnet build --no-restore
       - name: Test dotnet api (integration)
-        run: dotnet test ./src/users-integration-test/users-integration-test.csproj
+        run: dotnet test ./src/users-integration-test/users-integration-test.csproj --logger:"console;verbosity=detailed"
       - name: Stop containers
         if: always()
         run: docker-compose -f ./docker-compose.yml down 
