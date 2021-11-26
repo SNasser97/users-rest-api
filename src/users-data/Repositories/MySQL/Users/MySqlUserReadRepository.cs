@@ -2,6 +2,7 @@ namespace users_data.Repositories.MySQL
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Data.Common;
     using System.Linq;
     using System.Text.Json;
@@ -9,14 +10,17 @@ namespace users_data.Repositories.MySQL
     using MySql.Data.MySqlClient;
     using users_data.Entities;
     using users_data.Manager;
+    using users_data.Repositories.MySQL.MySqlDataMapper;
 
     public class MySqlUserReadRepository : IReadRepository<User>
     {
         private readonly IDbConnectionManager connectionManager;
+        private readonly ISqlDataMapper<User> sqlDataMapper;
 
-        public MySqlUserReadRepository(IDbConnectionManager connectionManager)
+        public MySqlUserReadRepository(IDbConnectionManager connectionManager, ISqlDataMapper<User> sqlDataMapper)
         {
             this.connectionManager = connectionManager;
+            this.sqlDataMapper = sqlDataMapper;
         }
 
         public async Task<IEnumerable<User>> GetAsync()
@@ -25,37 +29,30 @@ namespace users_data.Repositories.MySQL
             using (mySqlConnection)
             {
                 await mySqlConnection.OpenAsync();
-                Console.WriteLine($"conn state use (0 is closed ~ 1 is open) => {mySqlConnection.State}");
-
-                // Console.WriteLine($"conn state open (0 is closed ~ 1 is open) => {connection.State}");
-
                 MySqlCommand cmd = mySqlConnection.CreateCommand();
-                cmd.CommandText = "SELECT * FROM `users_db`.users";
+                // Debugging
+                cmd.CommandText = "SELECT * FROM `users_db`.users LIMIT 1";
+                var li = new List<User>();
                 using (DbDataReader reader = await cmd.ExecuteReaderAsync())
                 {
                     while (await reader.ReadAsync() && reader.HasRows)
                     {
-                        Console.WriteLine("yes data found");
-                        // Console.WriteLine($"{reader.GetString(c)}");
-                        Console.WriteLine($"{JsonSerializer.Serialize(this.displayer(reader))}");
+                        li.Add(this.sqlDataMapper.MapDataToEntity(reader));
                     }
-
-                    Console.WriteLine("no data found");
                 }
+
+                // Debugging
+                Console.WriteLine("Collection => {0}", JsonSerializer.Serialize(li));
+                Console.WriteLine("Size => {0}", li.Count);
+                Console.WriteLine("Timestamp => {0}", DateTime.Now);
             }
 
-            Console.WriteLine($"conn state (0 is closed ~ 1 is open) => {mySqlConnection.State}");
             return await Task.FromResult(Enumerable.Empty<User>());
         }
 
         public Task<User> GetAsync(Guid id)
         {
             throw new NotImplementedException();
-        }
-
-        private object[] displayer(DbDataReader reader)
-        {
-            return new object[] { reader["Id"].ToString(), reader["Firstname"].ToString(), reader["Lastname"].ToString(), reader["Email"].ToString(), reader["DateOfBirth"].ToString(), reader["Age"].ToString() };
         }
     }
 }
