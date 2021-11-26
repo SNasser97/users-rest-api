@@ -6,10 +6,13 @@ namespace users_api
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using users_data.DataMapper.Setters.Common;
     using users_data.Entities;
     using users_data.Manager;
     using users_data.Repositories;
     using users_data.Repositories.MySQL;
+    using users_data.Repositories.MySQL.MySqlDataMapper;
+    using users_data.Repositories.MySQL.MySqlDataMapper.Setters;
     using users_data.Repositories.MySQL.MySqlManagers;
     using users_logic.Facades;
     using users_logic.Logic.Command.CreateUserCommand;
@@ -74,6 +77,8 @@ namespace users_api
             // services.AddSingleton<IRecordData<User>, InMemoryUsersRecordData>();
             // services.AddScoped<IWriteRepository<User>, InMemoryUserWriteRepository>();
             // services.AddScoped<IReadRepository<User>, InMemoryUserReadRepository>();
+            services.AddSingleton<ISqlDataMapper<User>, MySqlDataMapper<User>>();
+            services.AddSingleton<ITypeSetter, MySqlDataToTypeSetter>();
             services.AddSingleton<IDbConnectionManager, MySqlConnectionManager>();
             services.AddSingleton<IWriteRepository<User>, MySqlUserWriteRepository>();
             services.AddSingleton<IReadRepository<User>, MySqlUserReadRepository>();
