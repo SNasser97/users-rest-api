@@ -13,8 +13,8 @@ namespace users_logic.Extensions
             return new GetUserQueryResponse
             {
                 Id = source.Id,
-                FirstName = source.FirstName,
-                LastName = source.LastName,
+                FirstName = source.Firstname,
+                LastName = source.Lastname,
                 Email = source.Email,
                 DateOfBirth = source.DateOfBirth,
                 Age = source.Age

@@ -22,9 +22,9 @@ namespace users_test.Users_data_tests.UnitTests.Repositories.InMemoryUserReadRep
 
             var expectedUsersData = new Dictionary<Guid, User>
             {
-                { userOne , new User { Id = userOne, FirstName = "Bob", LastName = "Doe", Email = "b.doe@hotmail.co.uk", DateOfBirth = DateTime.Now, Age = 21 } },
-                { userTwo, new User { Id = userTwo, FirstName = "Tony", LastName = "Slark", Email = "t.slark@yahoomail.com", DateOfBirth = DateTime.Now, Age = 45 } },
-                { userThree, new User { Id = userThree, FirstName = "Mary", LastName = "Poppins", Email = "m.poppins@outlook.com", DateOfBirth = DateTime.Now, Age = 24 } }
+                { userOne , new User { Id = userOne, Firstname = "Bob", Lastname = "Doe", Email = "b.doe@hotmail.co.uk", DateOfBirth = DateTime.Now, Age = 21 } },
+                { userTwo, new User { Id = userTwo, Firstname = "Tony", Lastname = "Slark", Email = "t.slark@yahoomail.com", DateOfBirth = DateTime.Now, Age = 45 } },
+                { userThree, new User { Id = userThree, Firstname = "Mary", Lastname = "Poppins", Email = "m.poppins@outlook.com", DateOfBirth = DateTime.Now, Age = 24 } }
             };
 
             var mockRecordData = new Mock<IRecordData<User>>();
@@ -48,8 +48,8 @@ namespace users_test.Users_data_tests.UnitTests.Repositories.InMemoryUserReadRep
                 User expectedUser = expected.Value;
                 Assert.NotNull(expected.Value);
                 Assert.Equal(expectedUser.Id, actualUser.Id);
-                Assert.Equal(expectedUser.FirstName, actualUser.FirstName);
-                Assert.Equal(expectedUser.LastName, actualUser.LastName);
+                Assert.Equal(expectedUser.Firstname, actualUser.Firstname);
+                Assert.Equal(expectedUser.Lastname, actualUser.Lastname);
                 Assert.Equal(expectedUser.Email, actualUser.Email);
                 Assert.Equal(expectedUser.DateOfBirth, actualUser.DateOfBirth);
                 Assert.Equal(expectedUser.Age, actualUser.Age);

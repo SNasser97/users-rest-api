@@ -31,8 +31,8 @@ namespace users_test.Users_logic_tests.UnitTests.Query
             var existingUser = new User
             {
                 Id = userId,
-                FirstName = "Bob",
-                LastName = "Doe",
+                Firstname = "Bob",
+                Lastname = "Doe",
                 Email = "b.doe@email.co.uk",
                 DateOfBirth = new DateTime(1992, 06, 04),
                 Age = 37
@@ -49,8 +49,8 @@ namespace users_test.Users_logic_tests.UnitTests.Query
             //Then
             Assert.Equal(userRequestModel.Id, actualUserResponse.Id);
             Assert.Equal(existingUser.Id, actualUserResponse.Id);
-            Assert.Equal(existingUser.FirstName, actualUserResponse.FirstName);
-            Assert.Equal(existingUser.LastName, actualUserResponse.LastName);
+            Assert.Equal(existingUser.Firstname, actualUserResponse.FirstName);
+            Assert.Equal(existingUser.Lastname, actualUserResponse.LastName);
             Assert.Equal(existingUser.Email, actualUserResponse.Email);
             Assert.Equal(existingUser.DateOfBirth, actualUserResponse.DateOfBirth);
             Assert.Equal(existingUser.Age, actualUserResponse.Age);

@@ -21,8 +21,8 @@ namespace users_test.Users_data_tests.UnitTests.Repositories.InMemoryUserWriteRe
             var existingUser = new User
             {
                 Id = userId,
-                FirstName = "Bob",
-                LastName = "Doe",
+                Firstname = "Bob",
+                Lastname = "Doe",
                 Email = "bdoe@mail.com",
                 DateOfBirth = new DateTime(1997, 12, 06),
                 Age = 23
@@ -63,8 +63,8 @@ namespace users_test.Users_data_tests.UnitTests.Repositories.InMemoryUserWriteRe
             var existingUser = new User
             {
                 Id = Guid.NewGuid(),
-                FirstName = "Bob",
-                LastName = "Doe",
+                Firstname = "Bob",
+                Lastname = "Doe",
                 Email = "bdoe@mail.com",
                 DateOfBirth = new DateTime(1997, 12, 06),
                 Age = 23

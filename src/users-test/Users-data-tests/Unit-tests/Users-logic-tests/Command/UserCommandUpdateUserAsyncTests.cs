@@ -37,8 +37,8 @@ namespace users_test.Users_logic_tests.UnitTests.Command
             new User
             {
                 Id = UserCommandUpdateUserAsyncTests.mockRequestId,
-                FirstName = "Billy",
-                LastName = "Boe",
+                Firstname = "Billy",
+                Lastname = "Boe",
                 Email = "b.boe@mail.co.uk",
                 DateOfBirth = new DateTime(2002, 12, 01),
                 Age = 20
@@ -46,8 +46,8 @@ namespace users_test.Users_logic_tests.UnitTests.Command
             new User
             {
                 Id = Guid.NewGuid(),
-                FirstName = "James",
-                LastName = "huaah",
+                Firstname = "James",
+                Lastname = "huaah",
                 Email = "j.haa@email.com",
                 DateOfBirth = new DateTime(1990, 12, 01),
                 Age = 28

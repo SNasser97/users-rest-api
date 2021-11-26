@@ -23,8 +23,8 @@ namespace users_test.Users_logic_tests.UnitTests.Facades
                 new User
                 {
                     Id = Guid.NewGuid(),
-                    FirstName = "Bob",
-                    LastName = "Doe",
+                    Firstname = "Bob",
+                    Lastname = "Doe",
                     Email = "bobo@email.com",
                     DateOfBirth = new DateTime(1997, 12, 06),
                     Age = 23
@@ -33,8 +33,8 @@ namespace users_test.Users_logic_tests.UnitTests.Facades
                 new User
                 {
                     Id = Guid.NewGuid(),
-                    FirstName = "jo",
-                    LastName = "marx",
+                    Firstname = "jo",
+                    Lastname = "marx",
                     Email = "jo.marx@email.com",
                     DateOfBirth = new DateTime(1984, 05, 21),
                     Age = 45
@@ -64,8 +64,8 @@ namespace users_test.Users_logic_tests.UnitTests.Facades
                 new User
                 {
                     Id = Guid.NewGuid(),
-                    FirstName = "Bob",
-                    LastName = "Doe",
+                    Firstname = "Bob",
+                    Lastname = "Doe",
                     Email = "bobo@email.com",
                     DateOfBirth = new DateTime(1997, 12, 06),
                     Age = 23
@@ -74,8 +74,8 @@ namespace users_test.Users_logic_tests.UnitTests.Facades
                 new User
                 {
                     Id = Guid.NewGuid(),
-                    FirstName = "jo",
-                    LastName = "marx",
+                    Firstname = "jo",
+                    Lastname = "marx",
                     Email = "thisEmailExists@email.com",
                     DateOfBirth = new DateTime(1984, 05, 21),
                     Age = 45

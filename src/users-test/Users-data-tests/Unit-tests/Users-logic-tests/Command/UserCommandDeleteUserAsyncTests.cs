@@ -60,8 +60,8 @@ namespace users_test.Users_logic_tests.UnitTests.Command
             var userRecord = new User
             {
                 Id = requestId,
-                FirstName = "Bob",
-                LastName = "Doe",
+                Firstname = "Bob",
+                Lastname = "Doe",
                 Email = "b.doe@email.com",
                 DateOfBirth = new DateTime(1992, 12, 01),
                 Age = 28

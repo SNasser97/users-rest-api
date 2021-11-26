@@ -18,8 +18,8 @@ namespace users_test.Users_data_tests.UnitTests.Repositories.InMemoryUserWriteRe
             //Given
             var newUser = new User
             {
-                FirstName = "Bob",
-                LastName = "Doe",
+                Firstname = "Bob",
+                Lastname = "Doe",
                 Email = "bdoe@mail.com",
                 DateOfBirth = new DateTime(1997, 12, 06),
                 Age = 24
@@ -50,8 +50,8 @@ namespace users_test.Users_data_tests.UnitTests.Repositories.InMemoryUserWriteRe
 
             User actualNewUser = actualUserKeyValuePair.Value;
             Assert.NotNull(actualUserKeyValuePair.Value);
-            Assert.Equal(newUser.FirstName, actualNewUser.FirstName);
-            Assert.Equal(newUser.LastName, actualNewUser.LastName);
+            Assert.Equal(newUser.Firstname, actualNewUser.Firstname);
+            Assert.Equal(newUser.Lastname, actualNewUser.Lastname);
             Assert.Equal(newUser.Email, actualNewUser.Email);
             Assert.Equal(newUser.DateOfBirth, actualNewUser.DateOfBirth);
             Assert.Equal(newUser.Age, actualNewUser.Age);
