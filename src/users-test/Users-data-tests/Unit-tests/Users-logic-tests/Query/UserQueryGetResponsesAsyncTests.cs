@@ -22,8 +22,8 @@ namespace users_test.Users_logic_tests.UnitTests.Query
                 new User
                 {
                     Id = Guid.NewGuid(),
-                    FirstName = "Bob",
-                    LastName = "Doe",
+                    Firstname = "Bob",
+                    Lastname = "Doe",
                     Email = "b.doe@email.com",
                     DateOfBirth = new DateTime(1997, 06, 12),
                     Age = 23
@@ -31,8 +31,8 @@ namespace users_test.Users_logic_tests.UnitTests.Query
                 new User
                 {
                     Id = Guid.NewGuid(),
-                    FirstName = "John",
-                    LastName = "Marx",
+                    Firstname = "John",
+                    Lastname = "Marx",
                     Email = "j.marx@yahoo.com",
                     DateOfBirth = new DateTime(2001, 11, 01),
                     Age = 19
@@ -40,8 +40,8 @@ namespace users_test.Users_logic_tests.UnitTests.Query
                 new User
                 {
                     Id = Guid.NewGuid(),
-                    FirstName = "Mary",
-                    LastName = "Waltz",
+                    Firstname = "Mary",
+                    Lastname = "Waltz",
                     Email = "mary_waltz@live.co.uk",
                     DateOfBirth = new DateTime(1987, 08, 28),
                     Age = 54
@@ -63,8 +63,8 @@ namespace users_test.Users_logic_tests.UnitTests.Query
             {
                 User expectedUserMapped = existingUserRecords.FirstOrDefault(u => u.Id == actualUserResponse.Id);
                 Assert.NotNull(expectedUserMapped);
-                Assert.Equal(expectedUserMapped.FirstName, actualUserResponse.FirstName);
-                Assert.Equal(expectedUserMapped.LastName, actualUserResponse.LastName);
+                Assert.Equal(expectedUserMapped.Firstname, actualUserResponse.FirstName);
+                Assert.Equal(expectedUserMapped.Lastname, actualUserResponse.LastName);
                 Assert.Equal(expectedUserMapped.Email, actualUserResponse.Email);
                 Assert.Equal(expectedUserMapped.DateOfBirth, actualUserResponse.DateOfBirth);
                 Assert.Equal(expectedUserMapped.Age, actualUserResponse.Age);

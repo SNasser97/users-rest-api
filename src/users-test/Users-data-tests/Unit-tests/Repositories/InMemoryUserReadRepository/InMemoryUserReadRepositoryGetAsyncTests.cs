@@ -19,8 +19,8 @@ namespace users_test.Users_data_tests.UnitTests.Repositories.InMemoryUserReadRep
             var expectedUser = new User
             {
                 Id = Guid.NewGuid(),
-                FirstName = "Bob",
-                LastName = "Doe",
+                Firstname = "Bob",
+                Lastname = "Doe",
                 Email = "bdoe@mail.com",
                 DateOfBirth = DateTime.Now,
                 Age = 23
@@ -44,8 +44,8 @@ namespace users_test.Users_data_tests.UnitTests.Repositories.InMemoryUserReadRep
             //Then
             Assert.NotNull(actualUser);
             Assert.Equal(expectedUser.Id, actualUser.Id);
-            Assert.Equal(expectedUser.FirstName, actualUser.FirstName);
-            Assert.Equal(expectedUser.LastName, actualUser.LastName);
+            Assert.Equal(expectedUser.Firstname, actualUser.Firstname);
+            Assert.Equal(expectedUser.Lastname, actualUser.Lastname);
             Assert.Equal(expectedUser.Email, actualUser.Email);
             Assert.Equal(expectedUser.DateOfBirth, actualUser.DateOfBirth);
             Assert.Equal(expectedUser.Age, actualUser.Age);

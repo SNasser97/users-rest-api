@@ -11,8 +11,8 @@ namespace users_logic.Extensions
             return new User
             {
                 Id = source.Id,
-                FirstName = source.FirstName,
-                LastName = source.LastName,
+                Firstname = source.FirstName,
+                Lastname = source.LastName,
                 Email = source.Email,
                 DateOfBirth = source.DateOfBirth,
                 Age = age
@@ -23,8 +23,8 @@ namespace users_logic.Extensions
         {
             return new User
             {
-                FirstName = source.FirstName,
-                LastName = source.LastName,
+                Firstname = source.FirstName,
+                Lastname = source.LastName,
                 Email = source.Email,
                 DateOfBirth = source.DateOfBirth,
                 Age = age

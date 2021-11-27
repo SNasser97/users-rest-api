@@ -19,8 +19,8 @@ namespace users_test.Users_data_tests.UnitTests.Repositories.InMemoryUserWriteRe
             var userToUpdate = new User
             {
                 Id = Guid.NewGuid(),
-                FirstName = "Bobby",
-                LastName = "Doenuts",
+                Firstname = "Bobby",
+                Lastname = "Doenuts",
                 Email = "bobby.doenuts@mail.com",
                 DateOfBirth = new DateTime(2001, 12, 06),
                 Age = 19
@@ -29,8 +29,8 @@ namespace users_test.Users_data_tests.UnitTests.Repositories.InMemoryUserWriteRe
             var existingUser = new User
             {
                 Id = userToUpdate.Id,
-                FirstName = "Bob",
-                LastName = "Doe",
+                Firstname = "Bob",
+                Lastname = "Doe",
                 Email = "bdoe@mail.com",
                 DateOfBirth = new DateTime(1997, 12, 06),
                 Age = 23
@@ -61,8 +61,8 @@ namespace users_test.Users_data_tests.UnitTests.Repositories.InMemoryUserWriteRe
 
             User actualUserRecordUpdated = actualKeyValuePairUpdated.Value;
             Assert.Equal(actualUserRecordUpdated.Id, actualGuid);
-            Assert.Equal("Bobby", actualUserRecordUpdated.FirstName);
-            Assert.Equal("Doenuts", actualUserRecordUpdated.LastName);
+            Assert.Equal("Bobby", actualUserRecordUpdated.Firstname);
+            Assert.Equal("Doenuts", actualUserRecordUpdated.Lastname);
             Assert.Equal("bobby.doenuts@mail.com", actualUserRecordUpdated.Email);
             Assert.Equal(new DateTime(2001, 12, 06), actualUserRecordUpdated.DateOfBirth);
             Assert.Equal(19, actualUserRecordUpdated.Age);
@@ -80,8 +80,8 @@ namespace users_test.Users_data_tests.UnitTests.Repositories.InMemoryUserWriteRe
             var noneExistingUser = new User
             {
                 Id = Guid.NewGuid(),
-                FirstName = "Bobby",
-                LastName = "Doenuts",
+                Firstname = "Bobby",
+                Lastname = "Doenuts",
                 Email = "bobby.doenuts@mail.com",
                 DateOfBirth = new DateTime(2001, 12, 06),
                 Age = 23
@@ -90,8 +90,8 @@ namespace users_test.Users_data_tests.UnitTests.Repositories.InMemoryUserWriteRe
             var existingUser = new User
             {
                 Id = Guid.NewGuid(),
-                FirstName = "Bob",
-                LastName = "Doe",
+                Firstname = "Bob",
+                Lastname = "Doe",
                 Email = "bdoe@mail.com",
                 DateOfBirth = new DateTime(1997, 12, 06),
                 Age = 23
@@ -112,8 +112,8 @@ namespace users_test.Users_data_tests.UnitTests.Repositories.InMemoryUserWriteRe
 
             //Then
             Assert.True(actualGuid == Guid.Empty);
-            Assert.Equal("Bob", existingUser.FirstName);
-            Assert.Equal("Doe", existingUser.LastName);
+            Assert.Equal("Bob", existingUser.Firstname);
+            Assert.Equal("Doe", existingUser.Lastname);
             Assert.Equal("bdoe@mail.com", existingUser.Email);
             Assert.Equal(new DateTime(1997, 12, 06), existingUser.DateOfBirth);
             Assert.Equal(23, existingUser.Age);
