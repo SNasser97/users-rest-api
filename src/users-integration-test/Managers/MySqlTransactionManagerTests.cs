@@ -24,9 +24,9 @@ namespace users_integration_test.Managers
                 Assert.False(string.IsNullOrWhiteSpace(sqlTransaction.Connection.ConnectionString));
 
                 (string actualServer, string actualUid, string actualDb) = this.GetConnectionValues(sqlTransaction.Connection.ConnectionString.Split(';'));
-                Assert.True(actualServer.Contains("localhost"));
-                Assert.True(actualUid.Contains("admin"));
-                Assert.True(actualDb.Contains("users_db"));
+                Assert.Contains("localhost", actualServer);
+                Assert.Contains("admin", actualUid);
+                Assert.Contains("users_db", actualDb);
                 return await Task.FromResult(Guid.NewGuid());
             });
 
@@ -42,7 +42,7 @@ namespace users_integration_test.Managers
             await Exceptions<MySqlException>.HandleAsync(async () =>
             {
                 await transactionManager.ExecuteTransactionAsync(async (transaction) => await Task.FromResult(Guid.NewGuid()));
-            }, (ex) => Assert.True(true == ex.Message.Contains("Access denied for user")));
+            }, (ex) => Assert.Contains("Access denied for user", ex.Message));
         }
 
         private Tuple<string, string, string> GetConnectionValues(string[] values)
