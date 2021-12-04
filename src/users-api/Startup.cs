@@ -80,6 +80,7 @@ namespace users_api
             services.AddSingleton<ISqlDataMapper<User>, MySqlDataMapper<User>>();
             services.AddSingleton<ITypeSetter, MySqlDataToTypeSetter>();
             services.AddSingleton<IDbConnectionManager, MySqlConnectionManager>();
+            services.AddSingleton<IDbTransactionManager, MySqlTransactionManager>();
             services.AddSingleton<IWriteRepository<User>, MySqlUserWriteRepository>();
             services.AddSingleton<IReadRepository<User>, MySqlUserReadRepository>();
             services.AddScoped<ICreateUserCommand, CreateUserCommand>();
