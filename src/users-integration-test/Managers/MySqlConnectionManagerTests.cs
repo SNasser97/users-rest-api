@@ -10,7 +10,6 @@ namespace users_integration_test.Managers.Managers
     public class MySqlConnectionManagerTests
     {
         private string connectionErrorMessage = "Access denied for user";
-        private string noMySqlConnectionMessage = "Unable to connect to any of the specified MySQL hosts.";
         private Lazy<string> connectionStringTestValue = new Lazy<string>(Environment.GetEnvironmentVariable("MYSQL_CONNECTION") ?? $"Server=localhost;Uid=admin;Pwd=secret;Database=users_db;");
 
         [Fact]
@@ -35,7 +34,7 @@ namespace users_integration_test.Managers.Managers
                 {
                     await actualConnection.OpenAsync();
                 }
-            }, (ex) => Assert.True(true == ex.Message.Contains(connectionErrorMessage)));
+            }, (ex) => Assert.Contains(connectionErrorMessage, ex.Message));
         }
 
         [Fact]
